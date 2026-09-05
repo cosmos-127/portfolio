@@ -123,7 +123,7 @@ export function Skills() {
     <section
       ref={sectionRef}
       id="skills"
-      className="py-28 md:py-36 bg-transparent border-t border-border-light/60 relative"
+      className="py-28 md:py-36 bg-transparent section-divider-shimmer relative"
     >
       <div className="max-w-6xl mx-auto px-6 relative z-10">
         {/* Section Header */}
@@ -164,8 +164,8 @@ export function Skills() {
                         {group.category}
                       </span>
                     </div>
-                    <div className="p-1.5 rounded-lg bg-white/60 border border-white/80 group-hover:bg-primary/10 group-hover:border-primary/30 transition-colors duration-300">
-                      <Icon className="w-3.5 h-3.5 text-text-muted group-hover:text-primary transition-colors duration-300" />
+                    <div className="p-1.5 rounded-lg bg-white/60 border border-white/80 group-hover:bg-primary/10 group-hover:border-primary/30 transition-all duration-300">
+                      <Icon className="w-3.5 h-3.5 text-text-muted group-hover:text-primary group-hover:rotate-12 group-hover:scale-110 transition-all duration-300" />
                     </div>
                   </div>
 

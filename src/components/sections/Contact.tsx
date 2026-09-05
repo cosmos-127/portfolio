@@ -100,22 +100,25 @@ export function Contact() {
       // 2. Channel rows stagger
       if (channelsRef.current) {
         const channels = Array.from(channelsRef.current.children);
-        gsap.fromTo(
-          channels,
-          { opacity: 0, y: 18 },
-          {
-            scrollTrigger: {
-              trigger: channelsRef.current,
-              start: "top 84%",
-              toggleActions: "play none none reverse",
-            },
-            opacity: 1,
-            y: 0,
-            duration: 0.5,
-            stagger: 0.08,
-            ease: "power3.out",
-          }
-        );
+        channels.forEach((channel, i) => {
+          gsap.fromTo(
+            channel,
+            { opacity: 0, x: i % 2 === 0 ? -28 : 28, y: 8 },
+            {
+              scrollTrigger: {
+                trigger: channelsRef.current,
+                start: "top 84%",
+                toggleActions: "play none none reverse",
+              },
+              opacity: 1,
+              x: 0,
+              y: 0,
+              duration: 0.55,
+              delay: i * 0.09,
+              ease: "power3.out",
+            }
+          );
+        });
       }
 
       // 3. Quick terminal query bar entrance
@@ -147,7 +150,7 @@ export function Contact() {
   };
 
   return (
-    <section ref={sectionRef} id="contact" className="py-32 bg-transparent border-t border-border-light/60 relative overflow-hidden">
+    <section ref={sectionRef} id="contact" className="py-32 bg-transparent section-divider-shimmer relative overflow-hidden">
       <div className="max-w-6xl mx-auto px-6 relative z-10">
         
         {/* Section Header */}

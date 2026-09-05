@@ -141,14 +141,14 @@ export function Writing() {
   }, [mediumUsername]);
 
   return (
-    <section ref={sectionRef} id="writing" className="py-32 bg-transparent border-t border-border-light/60 relative">
+    <section ref={sectionRef} id="writing" className="py-32 bg-transparent section-divider-shimmer relative">
       <div className="max-w-6xl mx-auto px-6 relative z-10">
         
         {/* Section Header */}
         <div ref={headerRef} className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16">
           <div>
             <div className="flex items-center gap-2 text-xs font-mono text-primary font-bold tracking-widest uppercase mb-3">
-              <span>[04]</span>
+              <span>[03]</span>
               <span className="w-8 h-px bg-primary/40" />
               <span>{"//"} TECHNICAL WRITING</span>
             </div>
@@ -175,7 +175,17 @@ export function Writing() {
               key={article.title}
               data-cursor="read"
               data-cursor-label="READ ↗"
-              className="glass-card glass-card-hover glow-card rounded-2xl p-6 sm:p-7 flex flex-col justify-between group relative overflow-hidden"
+              className="glass-card glass-card-hover glow-card rounded-2xl p-6 sm:p-7 flex flex-col justify-between group relative overflow-hidden transition-transform duration-200 ease-out"
+              style={{ transformStyle: "preserve-3d", perspective: "800px" }}
+              onMouseMove={(e) => {
+                const rect = e.currentTarget.getBoundingClientRect();
+                const x = (e.clientX - rect.left) / rect.width - 0.5;
+                const y = (e.clientY - rect.top) / rect.height - 0.5;
+                e.currentTarget.style.transform = `rotateY(${x * 6}deg) rotateX(${-y * 6}deg) scale3d(1.01, 1.01, 1.01)`;
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = "rotateY(0deg) rotateX(0deg) scale3d(1, 1, 1)";
+              }}
             >
               {/* Subtle top specular sheen highlight */}
               <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent" />

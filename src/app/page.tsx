@@ -11,7 +11,10 @@ import { Writing } from "@/components/sections/Writing";
 import { Contact } from "@/components/sections/Contact";
 import { MouseSpotlight } from "@/components/global/MouseSpotlight";
 import { CustomCursor } from "@/components/global/CustomCursor";
+import { TickerStrip } from "@/components/global/TickerStrip";
 
+
+import { useEffect } from "react";
 
 const UnifiedAISpatialCanvas = dynamic(
   () =>
@@ -22,6 +25,15 @@ const UnifiedAISpatialCanvas = dynamic(
 );
 
 export default function Home() {
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      if ("scrollRestoration" in window.history) {
+        window.history.scrollRestoration = "manual";
+      }
+      window.scrollTo(0, 0);
+    }
+  }, []);
+
   return (
     <>
       <CustomCursor />
@@ -31,6 +43,7 @@ export default function Home() {
       <Navbar />
       <main className="flex-1 relative z-10 overflow-x-clip">
         <Hero />
+        <TickerStrip />
         <Projects />
         <Skills />
         <Writing />

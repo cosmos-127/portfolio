@@ -67,7 +67,7 @@ export function About() {
     <section
       ref={sectionRef}
       id="about"
-      className="py-28 md:py-36 bg-transparent border-t border-border-light/60 relative overflow-hidden min-h-[90vh] flex items-center"
+      className="py-28 md:py-36 bg-transparent section-divider-shimmer relative overflow-hidden min-h-[90vh] flex items-center"
     >
       <div className="max-w-6xl mx-auto px-6 relative z-10 w-full">
         

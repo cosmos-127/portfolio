@@ -1052,7 +1052,7 @@ export function Projects() {
                 <Sparkles className="w-3.5 h-3.5" />
                 <span>SYSTEM ARCHITECTURE</span>
                 <span className="w-6 h-px bg-primary/40" />
-                <span className="text-[10px] text-text-muted">03</span>
+                <span className="text-[10px] text-text-muted">01</span>
               </div>
 
               {/* Static Main Headline with Editorial Serif Polish */}
@@ -1340,7 +1340,7 @@ export function Projects() {
             <Sparkles className="w-3.5 h-3.5" />
             <span>SYSTEM ARCHITECTURE</span>
             <span className="w-6 h-px bg-primary/40" />
-            <span>[03]</span>
+            <span>[01]</span>
           </div>
           <h2 className="font-gued font-bold text-2xl sm:text-3xl text-text-main tracking-tight leading-snug">
             Systems designed to solve <span className="font-serif italic font-normal text-primary tracking-normal">real AI bottlenecks</span>

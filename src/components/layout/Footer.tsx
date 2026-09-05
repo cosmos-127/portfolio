@@ -1,16 +1,48 @@
 "use client";
 
+import { useRef } from "react";
 import Link from "next/link";
 import { ArrowUp } from "lucide-react";
+import gsap from "gsap";
+import ScrollTrigger from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
+
+gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 export function Footer() {
+  const footerRef = useRef<HTMLElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+
+  useGSAP(
+    () => {
+      if (contentRef.current) {
+        gsap.fromTo(
+          contentRef.current,
+          { opacity: 0, y: 20 },
+          {
+            scrollTrigger: {
+              trigger: footerRef.current,
+              start: "top 94%",
+              toggleActions: "play none none reverse",
+            },
+            opacity: 1,
+            y: 0,
+            duration: 0.6,
+            ease: "power3.out",
+          }
+        );
+      }
+    },
+    { scope: footerRef }
+  );
+
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return (
-    <footer className="w-full border-t border-white/70 bg-white/50 backdrop-blur-md py-12">
-      <div className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6 text-xs font-mono text-text-muted">
+    <footer ref={footerRef} className="w-full border-t border-white/70 bg-white/50 backdrop-blur-md py-12">
+      <div ref={contentRef} className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6 text-xs font-mono text-text-muted">
         
         {/* Left info */}
         <div className="flex items-center gap-3">
@@ -40,11 +72,11 @@ export function Footer() {
 
           <button
             onClick={scrollToTop}
-            className="p-2 rounded-full glass-pill hover:border-primary hover:text-primary transition-colors cursor-pointer shadow-2xs"
+            className="group p-2 rounded-full glass-pill hover:border-primary hover:text-primary transition-all cursor-pointer shadow-2xs"
             aria-label="Back to top"
             title="Back to top"
           >
-            <ArrowUp className="w-3.5 h-3.5" />
+            <ArrowUp className="w-3.5 h-3.5 group-hover:-translate-y-0.5 transition-transform duration-200" />
           </button>
         </div>
 

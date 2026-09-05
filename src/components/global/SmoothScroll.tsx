@@ -29,7 +29,7 @@ function LenisScrollManager() {
     };
 
     gsap.ticker.add(onTick);
-    gsap.ticker.lagSmoothing(0);
+    gsap.ticker.lagSmoothing(500, 33);
 
     // 3. Keep Lenis dimensions synced with ScrollTrigger refreshes
     const onScrollTriggerRefresh = () => {
@@ -37,25 +37,31 @@ function LenisScrollManager() {
     };
     ScrollTrigger.addEventListener("refresh", onScrollTriggerRefresh);
 
+    // 0. Force scroll to top on reload and disable native browser scroll restoration
+    if (typeof window !== "undefined") {
+      if ("scrollRestoration" in window.history) {
+        window.history.scrollRestoration = "manual";
+      }
+      window.scrollTo(0, 0);
+      lenis.scrollTo(0, { immediate: true });
+
+      // Clean URL hash on reload so browser doesn't anchor-scroll down
+      if (window.location.hash) {
+        window.history.replaceState(null, "", window.location.pathname);
+      }
+    }
+
+    const handleBeforeUnload = () => {
+      window.scrollTo(0, 0);
+    };
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
     // Initial refresh after fonts & layout have settled
     const refreshTimer = setTimeout(() => {
       ScrollTrigger.refresh();
-    }, 120);
-
-    // 4. Handle initial deep-link hash on page mount (e.g. #about, #projects)
-    if (typeof window !== "undefined" && window.location.hash) {
-      const hash = window.location.hash;
-      const initialEl = document.querySelector(hash);
-      if (initialEl) {
-        setTimeout(() => {
-          lenis.scrollTo(initialEl as HTMLElement, {
-            offset: -72,
-            duration: 1.2,
-            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-          });
-        }, 200);
-      }
-    }
+      window.scrollTo(0, 0);
+      lenis.scrollTo(0, { immediate: true });
+    }, 100);
 
     // 5. Global buttery smooth scrolling for in-page anchor links (#about, #projects, #contact, etc.)
     const handleAnchorClick = (e: MouseEvent) => {
@@ -93,33 +99,15 @@ function LenisScrollManager() {
       gsap.ticker.remove(onTick);
       ScrollTrigger.removeEventListener("refresh", onScrollTriggerRefresh);
       document.removeEventListener("click", handleAnchorClick);
+      window.removeEventListener("beforeunload", handleBeforeUnload);
     };
   }, [lenis]);
 
   return null;
 }
 
-/**
- * Hardware-accelerated top reading progress bar driven directly by Lenis scroll progress
- */
-function LenisReadingBar() {
-  const barRef = useRef<HTMLDivElement>(null);
 
-  useLenis((lenis) => {
-    if (barRef.current) {
-      barRef.current.style.transform = `scaleX(${lenis.progress})`;
-    }
-  });
 
-  return (
-    <div
-      ref={barRef}
-      className="fixed top-0 left-0 right-0 h-[2.5px] bg-primary z-[100] origin-left pointer-events-none will-change-transform"
-      style={{ transform: "scaleX(0)" }}
-      aria-hidden="true"
-    />
-  );
-}
 
 /**
  * Root Smooth Scroll Provider using Lenis
@@ -140,7 +128,6 @@ export function SmoothScrollProvider({ children }: { children: React.ReactNode }
       }}
     >
       <LenisScrollManager />
-      <LenisReadingBar />
 
       {/* Ambient noise texture overlay */}
       <div className="noise-overlay" aria-hidden="true" />
