@@ -92,6 +92,7 @@ export function Skills() {
             y: 0,
             duration: 0.6,
             ease: "power3.out",
+            clearProps: "transform",
           }
         );
       }
@@ -112,6 +113,7 @@ export function Skills() {
             duration: 0.65,
             stagger: 0.12,
             ease: "power3.out",
+            clearProps: "transform",
           }
         );
       }
@@ -153,7 +155,7 @@ export function Skills() {
                 className="group relative flex flex-col glass-card glass-card-hover glow-card rounded-2xl p-6 sm:p-7 justify-between overflow-hidden"
               >
                 {/* Subtle top specular sheen highlight */}
-                <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent" />
+                <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent pointer-events-none z-20" />
 
                 <div>
                   {/* Glassmorphic Header */}

@@ -6,12 +6,14 @@ import { ArrowUp } from "lucide-react";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
+import { useLenis } from "lenis/react";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 export function Footer() {
   const footerRef = useRef<HTMLElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
+  const lenis = useLenis();
 
   useGSAP(
     () => {
@@ -29,6 +31,7 @@ export function Footer() {
             y: 0,
             duration: 0.6,
             ease: "power3.out",
+            clearProps: "transform",
           }
         );
       }
@@ -37,11 +40,18 @@ export function Footer() {
   );
 
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    if (lenis) {
+      lenis.scrollTo(0, {
+        duration: 1.2,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      });
+    } else {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
   };
 
   return (
-    <footer ref={footerRef} className="w-full border-t border-white/70 bg-white/50 backdrop-blur-md py-12">
+    <footer ref={footerRef} className="w-full section-divider-shimmer bg-white/50 backdrop-blur-md py-12">
       <div ref={contentRef} className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6 text-xs font-mono text-text-muted">
         
         {/* Left info */}

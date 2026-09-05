@@ -1,11 +1,12 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useSyncExternalStore } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { useLenis } from "lenis/react";
 import { cn } from "@/lib/utils";
-import { Menu, X, ArrowUpRight } from "lucide-react";
+import { Menu, X, ArrowUpRight, Command, Volume2, VolumeX } from "lucide-react";
+import { isSoundEnabled, toggleSound, subscribeSound, playTick } from "@/lib/sound";
 
 const NAV_LINKS = [
   { name: "About", href: "#about" },
@@ -19,6 +20,7 @@ export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState("");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const soundActive = useSyncExternalStore(subscribeSound, isSoundEnabled, () => true);
 
   const progressBarRef = useRef<HTMLDivElement>(null);
 
@@ -74,10 +76,10 @@ export function Navbar() {
       >
         <div
           className={cn(
-            "max-w-5xl mx-auto transition-all duration-300 pointer-events-auto rounded-full px-4 sm:px-5 py-2 sm:py-2.5 flex items-center justify-between border bg-white/95 backdrop-blur-md",
+            "max-w-5xl mx-auto transition-all duration-300 pointer-events-auto rounded-full px-4 sm:px-5 py-2 sm:py-2.5 flex items-center justify-between glass-panel",
             scrolled
-              ? "border-border-strong/60 shadow-md shadow-black/[0.05]"
-              : "border-border-light shadow-xs"
+              ? "border-white shadow-lg shadow-black/[0.06]"
+              : "shadow-xs"
           )}
         >
           {/* Logo */}
@@ -101,6 +103,7 @@ export function Navbar() {
                 <Link
                   key={link.name}
                   href={link.href}
+                  onClick={() => playTick()}
                   className={cn(
                     "relative px-3 py-1.5 rounded-full transition-colors duration-200",
                     isActive
@@ -122,7 +125,41 @@ export function Navbar() {
           </nav>
 
           {/* Right Actions */}
-          <div className="flex items-center gap-2 shrink-0">
+          <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+            {/* Audio Micro-Haptic Toggle */}
+            <button
+              onClick={() => {
+                toggleSound();
+              }}
+              className={cn(
+                "p-1.5 sm:p-2 rounded-full border transition-colors cursor-pointer",
+                soundActive
+                  ? "bg-primary/10 border-primary/30 text-primary hover:bg-primary/20"
+                  : "bg-surface border-border-light text-text-muted hover:text-text-main"
+              )}
+              title={soundActive ? "Mute Micro-Haptic Audio" : "Enable Micro-Haptic Audio"}
+              aria-label="Toggle Audio Effects"
+            >
+              {soundActive ? (
+                <Volume2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-primary" />
+              ) : (
+                <VolumeX className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+              )}
+            </button>
+
+            {/* Command Palette Trigger Button */}
+            <button
+              onClick={() => {
+                playTick();
+                window.dispatchEvent(new CustomEvent("portfolio:open-palette"));
+              }}
+              className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-mono rounded-full bg-surface border border-border-light text-text-muted hover:text-text-main hover:border-border-strong transition-colors cursor-pointer"
+              title="Open Command Palette (Cmd + K / Ctrl + K)"
+            >
+              <Command className="w-3 h-3 text-primary" />
+              <span className="hidden xs:inline text-[11px]">K</span>
+            </button>
+
             {/* Get in touch CTA */}
             <Link
               href="#contact"
@@ -148,15 +185,28 @@ export function Navbar() {
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.2 }}
-            className="fixed inset-x-3 sm:inset-x-4 top-16 sm:top-20 z-40 md:hidden bg-white/95 backdrop-blur-xl border border-border-light rounded-2xl shadow-xl p-5 sm:p-6"
+            initial={{ opacity: 0, y: -16, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -12, scale: 0.98 }}
+            transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+            className="fixed inset-x-3 sm:inset-x-4 top-16 sm:top-20 z-40 md:hidden glass-card rounded-2xl shadow-2xl p-5 sm:p-6 relative overflow-hidden will-change-transform"
           >
+            {/* Subtle top specular sheen highlight */}
+            <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent pointer-events-none z-20" />
             <div className="flex flex-col gap-3 font-mono text-sm">
-              <div className="pb-3 border-b border-border-light text-xs text-text-muted">
-                NAVIGATION
+              <div className="flex items-center justify-between pb-3 border-b border-border-light text-xs text-text-muted">
+                <span>NAVIGATION</span>
+                <button
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    playTick();
+                    window.dispatchEvent(new CustomEvent("portfolio:open-palette"));
+                  }}
+                  className="inline-flex items-center gap-1.5 text-primary text-[11px] font-semibold"
+                >
+                  <Command className="w-3 h-3" />
+                  <span>Search (⌘K)</span>
+                </button>
               </div>
               {NAV_LINKS.map((link) => (
                 <Link
@@ -174,7 +224,22 @@ export function Navbar() {
                   <span className="text-xs text-text-muted font-light">→</span>
                 </Link>
               ))}
-              <div className="pt-3 border-t border-border-light mt-1">
+              <div className="pt-3 border-t border-border-light mt-1 flex flex-col gap-2">
+                <button
+                  onClick={() => {
+                    toggleSound();
+                  }}
+                  className="w-full flex items-center justify-between px-3 py-2 rounded-lg bg-surface border border-border-light text-xs text-text-main font-mono"
+                >
+                  <span className="flex items-center gap-2">
+                    {soundActive ? <Volume2 className="w-3.5 h-3.5 text-primary" /> : <VolumeX className="w-3.5 h-3.5" />}
+                    <span>Micro-Haptics</span>
+                  </span>
+                  <span className={soundActive ? "text-emerald-600 font-bold" : "text-text-muted"}>
+                    {soundActive ? "ENABLED" : "MUTED"}
+                  </span>
+                </button>
+
                 <Link
                   href="#contact"
                   onClick={() => setMobileMenuOpen(false)}

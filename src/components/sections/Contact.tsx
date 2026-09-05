@@ -15,6 +15,7 @@ import {
 import { GithubIcon, LinkedinIcon } from "@/components/ui/icons";
 import { cn } from "@/lib/utils";
 import { useAvailability } from "@/lib/useAvailability";
+import { playChime } from "@/lib/sound";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
@@ -93,6 +94,7 @@ export function Contact() {
             duration: 0.6,
             stagger: 0.14,
             ease: "power3.out",
+            clearProps: "transform",
           }
         );
       }
@@ -116,6 +118,7 @@ export function Contact() {
               duration: 0.55,
               delay: i * 0.09,
               ease: "power3.out",
+              clearProps: "transform",
             }
           );
         });
@@ -136,6 +139,7 @@ export function Contact() {
             y: 0,
             duration: 0.5,
             ease: "power3.out",
+            clearProps: "transform",
           }
         );
       }
@@ -146,6 +150,7 @@ export function Contact() {
   const handleCopy = (text: string, identifier: string) => {
     navigator.clipboard.writeText(text);
     setCopiedField(identifier);
+    playChime();
     setTimeout(() => setCopiedField(null), 2500);
   };
 
@@ -171,9 +176,9 @@ export function Contact() {
 
           {/* Telemetry & Availability Badge Card with Mouse-Tracking Sheen */}
           <div ref={telemetryRef} className="lg:col-span-5 flex flex-col justify-end">
-            <div className="p-6 rounded-2xl glass-card glow-card relative overflow-hidden font-mono text-xs space-y-3">
+            <div className="p-6 rounded-2xl glass-card glass-card-hover glow-card relative overflow-hidden font-mono text-xs space-y-3">
               {/* Top specular reflection */}
-              <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent" />
+              <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent pointer-events-none z-20" />
 
               <div className="flex items-center justify-between text-text-muted pb-2 border-b border-white/60">
                 <span>SYSTEM TELEMETRY</span>
@@ -219,9 +224,9 @@ export function Contact() {
         </div>
 
         {/* Interactive Channel List inside Frosted Glass Container with Mouse-Tracking Sheen */}
-        <div ref={channelsRef} className="glass-card glow-card rounded-2xl p-2 sm:p-3 relative overflow-hidden flex flex-col gap-1">
+        <div ref={channelsRef} className="glass-card glass-card-hover glow-card rounded-2xl p-2 sm:p-3 relative overflow-hidden flex flex-col gap-1">
           {/* Top specular reflection */}
-          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent" />
+          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent pointer-events-none z-20" />
 
           {CONTACT_CHANNELS.map((channel) => {
             const Icon = channel.icon;
@@ -305,7 +310,9 @@ export function Contact() {
         </div>
 
         {/* Terminal Curl Footer Widget with Mouse-Tracking Sheen */}
-        <div ref={terminalRef} className="mt-10 p-4 rounded-2xl glass-card glow-card relative overflow-hidden flex flex-col sm:flex-row sm:items-center justify-between gap-4 font-mono text-xs text-text-muted">
+        <div ref={terminalRef} className="mt-10 p-4 rounded-2xl glass-card glass-card-hover glow-card relative overflow-hidden flex flex-col sm:flex-row sm:items-center justify-between gap-4 font-mono text-xs text-text-muted">
+          {/* Top specular reflection */}
+          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent pointer-events-none z-20" />
           <div className="flex items-center gap-2">
             <Terminal className="w-4 h-4 text-primary" />
             <span>QUICK QUERY:</span>

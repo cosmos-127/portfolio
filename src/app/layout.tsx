@@ -32,8 +32,48 @@ const plusJakartaSans = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://cosmos127.dev"),
   title: "Gagan — Generalist AI Engineer | Agents, LLMs & Production Systems",
-  description: "Portfolio of Gagan, an AI Engineer building agentic workflows (LangGraph, ReWOO, ReAct), GraphRAG, MCP tool servers, and production LLM deployments.",
+  description:
+    "Portfolio of Gagan, an AI Engineer specializing in compound AI architectures, autonomous agent workflows (LangGraph, ReWOO, ReAct), GraphRAG, Model Context Protocol (MCP), and production model serving with vLLM.",
+  keywords: [
+    "AI Engineer",
+    "LLMOps",
+    "Autonomous Agents",
+    "LangGraph",
+    "GraphRAG",
+    "Model Context Protocol",
+    "MCP",
+    "vLLM Production Serving",
+    "ReWOO",
+    "ReAct",
+    "Trino SQL",
+    "Neo4j Knowledge Graph",
+    "FastMCP",
+    "Gagan",
+  ],
+  authors: [{ name: "Gagan", url: "https://github.com/cosmos-127" }],
+  creator: "Gagan",
+  openGraph: {
+    title: "Gagan — Generalist AI Engineer | Agents, LLMs & Production Systems",
+    description:
+      "Building AI systems that reason, retrieve & act. Compound AI systems, agentic workflows, GraphRAG, MCP, and high-throughput vLLM serving.",
+    url: "https://cosmos127.dev",
+    siteName: "Gagan — AI Engineer",
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Gagan — Generalist AI Engineer | Agents, LLMs & Production Systems",
+    description:
+      "Building AI systems that reason, retrieve & act. Compound AI systems, agentic workflows, GraphRAG, MCP, and high-throughput vLLM serving.",
+    creator: "@cosmos_127",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({

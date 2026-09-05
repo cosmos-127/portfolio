@@ -2,6 +2,8 @@
 
 import { useRef, useState, useEffect, useCallback } from "react";
 import Link from "next/link";
+import Image, { type StaticImageData } from "next/image";
+import llmarkImage from "@/assets/llmark-landing-page.png";
 import {
   ExternalLink,
   Globe,
@@ -33,7 +35,7 @@ interface ProjectItem {
   gitUrl: string;
   websiteUrl?: string;
   websiteLabel?: string;
-  image?: string;
+  image?: string | StaticImageData;
 }
 
 const PROJECTS: ProjectItem[] = [
@@ -48,7 +50,7 @@ const PROJECTS: ProjectItem[] = [
     gitUrl: "https://github.com/cosmos-127/llmark",
     websiteUrl: "https://llmark.netlify.app/",
     websiteLabel: "Live App ↗",
-    image: "",
+    image: llmarkImage,
   },
   {
     id: "mcp-server",
@@ -97,7 +99,7 @@ const STEP_ANGLE_DEG = 26; // Degrees of angular spacing per facet
 const STEP_ANGLE_RAD = (STEP_ANGLE_DEG * Math.PI) / 180;
 
 /**
- * Shared Project Card with 3D Curvature Shading, Specular Sheen, and Interactive Mouse Parallax
+ * Shared Project Card with 3D Curvature Shading and Specular Sheen
  */
 function ProjectCard({
   project,
@@ -108,21 +110,6 @@ function ProjectCard({
   isActive?: boolean;
   allowLinks?: boolean;
 }) {
-  const [tilt, setTilt] = useState({ x: 0, y: 0 });
-
-  // Subtle interactive 3D card parallax when active
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!isActive) return;
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = (e.clientX - rect.left) / rect.width - 0.5;
-    const y = (e.clientY - rect.top) / rect.height - 0.5;
-    setTilt({ x: x * 8, y: -y * 8 });
-  };
-
-  const handleMouseLeave = () => {
-    setTilt({ x: 0, y: 0 });
-  };
-
   const handleLinkClick = (e: React.MouseEvent) => {
     if (!isActive || !allowLinks) {
       e.preventDefault();
@@ -131,27 +118,18 @@ function ProjectCard({
 
   return (
     <div
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
       className={cn(
-        "glow-card rounded-2xl p-6 sm:p-7 flex flex-col justify-between relative group w-full mx-auto select-none",
-        "border transition-all duration-300 overflow-hidden",
-        isActive
-          ? "bg-white/80 backdrop-blur-xl border-white/95 ring-1 ring-primary/25"
-          : "bg-white/65 backdrop-blur-md border-white/75 hover:border-white/90 hover:bg-white/75"
+        "glass-card glass-card-hover glow-card rounded-2xl p-6 sm:p-7 flex flex-col justify-between relative group w-full mx-auto select-none overflow-hidden",
+        isActive && "active-glass-card ring-1 ring-primary/30"
       )}
       style={{
-        boxShadow: isActive
-          ? "0 20px 40px -15px rgba(0, 0, 0, 0.08), inset 0 1px 0 0 rgba(255, 255, 255, 1)"
-          : "0 10px 30px -10px rgba(0, 0, 0, 0.04), inset 0 1px 0 0 rgba(255, 255, 255, 0.9)",
         height: "540px",
         maxWidth: "700px",
-        transform: isActive
-          ? `perspective(1000px) rotateY(${tilt.x}deg) rotateX(${tilt.y}deg)`
-          : undefined,
-        transition: "transform 0.15s ease-out, border-color 0.2s, box-shadow 0.2s",
+        transition: "border-color 0.2s, box-shadow 0.2s",
       }}
     >
+      {/* Subtle top specular sheen highlight */}
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent pointer-events-none z-20" />
       {/* 3D Cylindrical Curvature Ambient Occlusion & Shadow Overlay */}
       <div
         className={cn(
@@ -205,13 +183,15 @@ function ProjectCard({
 
         {/* Card Visual Area - 16:9 Aspect Ratio & Contained Inside Card */}
         {project.image ? (
-          /* User-provided PNG preview */
+          /* User-provided preview image */
           <div className="w-full max-w-[540px] aspect-video max-h-[260px] sm:max-h-[275px] rounded-xl overflow-hidden border border-border-light bg-zinc-950 mb-2 relative mx-auto group/img">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
+            <Image
               src={project.image}
               alt={project.title}
-              className="w-full h-full object-cover"
+              fill
+              sizes="(max-width: 768px) 100vw, 540px"
+              className="object-cover object-top"
+              loading="lazy"
             />
             {project.websiteUrl && (
               <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center">
@@ -230,7 +210,12 @@ function ProjectCard({
           </div>
         ) : project.id === "llmark" ? (
           /* LLMark: High-performance Inference Telemetry Visualizer & Direct Deployment CTA */
-          <div className="w-full max-w-[540px] aspect-video max-h-[260px] sm:max-h-[275px] rounded-xl overflow-hidden border border-border-light bg-zinc-950 mb-2 p-3.5 sm:p-4 flex flex-col justify-between font-mono text-xs mx-auto shadow-inner">
+          <div className="w-full max-w-[540px] aspect-video max-h-[260px] sm:max-h-[275px] rounded-xl overflow-hidden border border-border-light bg-zinc-950 mb-2 p-3.5 sm:p-4 flex flex-col justify-between font-mono text-xs mx-auto shadow-inner relative">
+            {/* Ambient subtle scan-line when active */}
+            {isActive && (
+              <div className="pointer-events-none absolute inset-x-0 top-0 h-[1.5px] bg-gradient-to-r from-transparent via-emerald-400 to-transparent z-20 animate-data-flow" />
+            )}
+
             {/* Mini Browser Header */}
             <div className="flex items-center justify-between pb-2 border-b border-zinc-800 font-mono text-[10px] text-zinc-400 shrink-0">
               <div className="flex items-center gap-1.5">
@@ -249,11 +234,12 @@ function ProjectCard({
 
             {/* Telemetry Metrics Panel */}
             <div className="grid grid-cols-2 gap-2.5 sm:gap-3 py-2 my-auto text-xs">
-              <div className="p-2.5 sm:p-3 rounded-lg bg-zinc-900/90 border border-zinc-800 flex flex-col justify-center">
-                <span className="text-zinc-400 text-[10px] sm:text-[11px] font-sans">
-                  TTFT Latency
+              <div className="p-2.5 sm:p-3 rounded-lg bg-zinc-900/90 border border-zinc-800 flex flex-col justify-center relative overflow-hidden group/tile">
+                <span className="text-zinc-400 text-[10px] sm:text-[11px] font-sans flex items-center justify-between">
+                  <span>TTFT Latency</span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400/80 animate-ping" />
                 </span>
-                <span className="text-emerald-400 font-bold text-sm sm:text-base">
+                <span className="text-emerald-400 font-bold text-sm sm:text-base animate-telemetry-pulse">
                   142 ms{" "}
                   <span className="text-[10px] text-zinc-500 font-normal">
                     p95
@@ -264,7 +250,7 @@ function ProjectCard({
                 <span className="text-zinc-400 text-[10px] sm:text-[11px] font-sans">
                   Token Throughput
                 </span>
-                <span className="text-primary font-bold text-sm sm:text-base">
+                <span className="text-primary font-bold text-sm sm:text-base animate-telemetry-pulse">
                   124.8 tok/s
                 </span>
               </div>
@@ -286,11 +272,14 @@ function ProjectCard({
               </div>
             </div>
 
-            {/* Direct Deployment Bar inside Visualizer */}
-            <div className="pt-2.5 border-t border-zinc-800 flex items-center justify-between text-xs">
-              <span className="text-zinc-400 text-[11px] hidden sm:inline-block">
-                Inference Telemetry Suite
-              </span>
+            {/* Direct Deployment Bar inside Visualizer with Throughput Activity Line */}
+            <div className="pt-2 border-t border-zinc-800 flex items-center justify-between text-xs">
+              <div className="flex items-center gap-2 text-zinc-400 text-[11px] hidden sm:flex">
+                <span className="w-24 h-1 bg-zinc-800 rounded-full overflow-hidden relative inline-block">
+                  <span className="absolute inset-0 bg-gradient-to-r from-primary via-emerald-400 to-primary animate-data-flow" />
+                </span>
+                <span>Inference Stream Active</span>
+              </div>
               <Link
                 href={project.websiteUrl!}
                 target="_blank"
@@ -307,35 +296,41 @@ function ProjectCard({
           </div>
         ) : project.id === "mcp-server" ? (
           /* MCP Tool Server: 16:9 Contained FastMCP Protocol Visualizer */
-          <div className="w-full max-w-[540px] aspect-video max-h-[260px] sm:max-h-[275px] rounded-xl overflow-hidden border border-border-light bg-surface mb-2 p-3.5 sm:p-4 flex flex-col justify-between font-mono text-xs mx-auto">
+          <div className="w-full max-w-[540px] aspect-video max-h-[260px] sm:max-h-[275px] rounded-xl overflow-hidden border border-white/80 bg-white/35 backdrop-blur-md mb-2 p-3.5 sm:p-4 flex flex-col justify-between font-mono text-xs mx-auto relative shadow-2xs">
+            {isActive && (
+              <div className="pointer-events-none absolute inset-x-0 top-0 h-[1.5px] bg-gradient-to-r from-transparent via-primary to-transparent z-20 animate-data-flow" />
+            )}
+
             <div className="flex items-center justify-between pb-2 border-b border-border-light/80 text-[11px] text-text-muted">
               <div className="flex items-center gap-1.5">
                 <Server className="w-3.5 h-3.5 text-primary" />
                 <span className="truncate">mcp://gateway:8080/tools</span>
               </div>
-              <span className="text-emerald-600 font-bold shrink-0">
-                ● ACTIVE GATEWAY
+              <span className="text-emerald-600 font-bold shrink-0 flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                ACTIVE GATEWAY
               </span>
             </div>
 
             <div className="py-2 space-y-2 text-xs">
-              <div className="p-2 rounded-lg bg-white border border-border-light flex items-center justify-between">
+              <div className="p-2 rounded-lg bg-white/60 border border-white/85 flex items-center justify-between shadow-2xs">
                 <span className="text-text-muted font-sans text-xs">
                   Tool Protocol:
                 </span>
-                <span className="text-primary font-bold text-xs">
+                <span className="text-primary font-bold text-xs flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-primary/60 animate-ping" />
                   FastMCP JSON-RPC 2.0
                 </span>
               </div>
-              <div className="p-2 rounded-lg bg-white border border-border-light flex items-center justify-between">
+              <div className="p-2 rounded-lg bg-white/60 border border-white/85 flex items-center justify-between shadow-2xs">
                 <span className="text-text-muted font-sans text-xs">
                   Schema Contract:
                 </span>
-                <code className="text-text-main font-mono text-[11px]">
+                <code className="text-text-main font-mono text-[11px] px-1.5 py-0.5 rounded bg-surface/80 border border-border-light/60">
                   JSONSchema(strict=True)
                 </code>
               </div>
-              <div className="p-2 rounded-lg bg-white border border-border-light flex items-center justify-between">
+              <div className="p-2 rounded-lg bg-white/60 border border-white/85 flex items-center justify-between shadow-2xs">
                 <span className="text-text-muted font-sans text-xs">
                   Serialization:
                 </span>
@@ -347,34 +342,45 @@ function ProjectCard({
 
             <div className="pt-2 border-t border-border-light/80 flex items-center justify-between text-[11px] text-text-muted">
               <span>Target Flow</span>
-              <span className="text-text-main font-semibold">
-                LangGraph &bull; ReAct Fleet
+              <span className="text-text-main font-semibold flex items-center gap-1">
+                <span>LangGraph</span>
+                <span className="text-primary font-bold">&bull;</span>
+                <span>ReAct Fleet</span>
               </span>
             </div>
           </div>
         ) : project.id === "graphrag-explorer" ? (
           /* GraphRAG Explorer: 16:9 Contained Knowledge Graph Visualizer */
-          <div className="w-full max-w-[540px] aspect-video max-h-[260px] sm:max-h-[275px] rounded-xl overflow-hidden border border-border-light bg-surface mb-2 p-3.5 sm:p-4 flex flex-col justify-between font-mono text-xs mx-auto">
+          <div className="w-full max-w-[540px] aspect-video max-h-[260px] sm:max-h-[275px] rounded-xl overflow-hidden border border-white/80 bg-white/35 backdrop-blur-md mb-2 p-3.5 sm:p-4 flex flex-col justify-between font-mono text-xs mx-auto relative shadow-2xs">
+            {isActive && (
+              <div className="pointer-events-none absolute inset-x-0 top-0 h-[1.5px] bg-gradient-to-r from-transparent via-amber-500 to-transparent z-20 animate-data-flow" />
+            )}
+
             <div className="flex items-center justify-between pb-2 border-b border-border-light/80 text-[11px] text-text-muted">
               <div className="flex items-center gap-1.5">
                 <Network className="w-3.5 h-3.5 text-primary" />
                 <span className="truncate">graphrag://neo4j/hybrid-retrieval</span>
               </div>
-              <span className="text-amber-600 font-bold shrink-0">
-                ● TRAVERSAL
+              <span className="text-amber-600 font-bold shrink-0 flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
+                TRAVERSAL
               </span>
             </div>
 
             <div className="py-2 space-y-2 text-xs">
-              <div className="p-2 rounded-lg bg-white border border-border-light flex items-center justify-between">
+              <div className="p-2 rounded-lg bg-white/60 border border-white/85 flex items-center justify-between shadow-2xs relative overflow-hidden">
                 <span className="text-text-muted font-sans text-xs">
                   Multi-Hop Traversal:
                 </span>
-                <span className="text-text-main font-semibold text-[11px]">
-                  Entity &rarr; [rel:owns] &rarr; Concept
+                <span className="text-text-main font-semibold text-[11px] flex items-center gap-1 font-mono">
+                  <span className="text-primary">Entity</span>
+                  <span className="text-text-muted">&rarr;</span>
+                  <span className="text-amber-700 bg-amber-50/80 px-1 rounded border border-amber-200/60">[rel:owns]</span>
+                  <span className="text-text-muted">&rarr;</span>
+                  <span className="text-emerald-700">Concept</span>
                 </span>
               </div>
-              <div className="p-2 rounded-lg bg-white border border-border-light flex items-center justify-between">
+              <div className="p-2 rounded-lg bg-white/60 border border-white/85 flex items-center justify-between shadow-2xs">
                 <span className="text-text-muted font-sans text-xs">
                   Chunk Fragmentation:
                 </span>
@@ -382,7 +388,7 @@ function ProjectCard({
                   Eliminated (Triples)
                 </span>
               </div>
-              <div className="p-2 rounded-lg bg-white border border-border-light flex items-center justify-between">
+              <div className="p-2 rounded-lg bg-white/60 border border-white/85 flex items-center justify-between shadow-2xs">
                 <span className="text-text-muted font-sans text-xs">
                   Index Engine:
                 </span>
@@ -401,27 +407,33 @@ function ProjectCard({
           </div>
         ) : (
           /* Federated AI Analyst: 16:9 Contained ReWOO + Trino Visualizer */
-          <div className="w-full max-w-[540px] aspect-video max-h-[260px] sm:max-h-[275px] rounded-xl overflow-hidden border border-border-light bg-surface mb-2 p-3.5 sm:p-4 flex flex-col justify-between font-mono text-xs mx-auto">
+          <div className="w-full max-w-[540px] aspect-video max-h-[260px] sm:max-h-[275px] rounded-xl overflow-hidden border border-white/80 bg-white/35 backdrop-blur-md mb-2 p-3.5 sm:p-4 flex flex-col justify-between font-mono text-xs mx-auto relative shadow-2xs">
+            {isActive && (
+              <div className="pointer-events-none absolute inset-x-0 top-0 h-[1.5px] bg-gradient-to-r from-transparent via-purple-500 to-transparent z-20 animate-data-flow" />
+            )}
+
             <div className="flex items-center justify-between pb-2 border-b border-border-light/80 text-[11px] text-text-muted">
               <div className="flex items-center gap-1.5">
                 <Database className="w-3.5 h-3.5 text-primary" />
                 <span className="truncate">rewoo://trino/distributed-sql</span>
               </div>
-              <span className="text-purple-600 font-bold shrink-0">
-                ● FEDERATED
+              <span className="text-purple-600 font-bold shrink-0 flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-purple-500 animate-pulse" />
+                FEDERATED
               </span>
             </div>
 
             <div className="py-2 space-y-2 text-xs">
-              <div className="p-2 rounded-lg bg-white border border-border-light flex items-center justify-between">
+              <div className="p-2 rounded-lg bg-white/60 border border-white/85 flex items-center justify-between shadow-2xs">
                 <span className="text-text-muted font-sans text-xs">
                   Orchestration:
                 </span>
-                <span className="text-primary font-bold text-xs">
-                  ReWOO Parallel Flow
+                <span className="text-primary font-bold text-xs flex items-center gap-1">
+                  <span>ReWOO Parallel Flow</span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-primary animate-ping" />
                 </span>
               </div>
-              <div className="p-2 rounded-lg bg-white border border-border-light flex items-center justify-between">
+              <div className="p-2 rounded-lg bg-white border border-border-light flex items-center justify-between shadow-2xs">
                 <span className="text-text-muted font-sans text-xs">
                   Data Movement:
                 </span>
@@ -429,7 +441,7 @@ function ProjectCard({
                   0 bytes (In-situ)
                 </span>
               </div>
-              <div className="p-2 rounded-lg bg-white border border-border-light flex items-center justify-between">
+              <div className="p-2 rounded-lg bg-white border border-border-light flex items-center justify-between shadow-2xs">
                 <span className="text-text-muted font-sans text-xs">
                   Runtime:
                 </span>
@@ -676,6 +688,8 @@ export function Projects() {
 
   const lenis = useLenis();
 
+  const overlayRefs = useRef<(HTMLElement | null)[]>([]);
+
   // Desktop 3D Cylindrical Drum update function
   const updateDrum = useCallback((continuous: number) => {
     // Current drum rotation angle in degrees
@@ -737,9 +751,11 @@ export function Projects() {
         pointerEvents: absDelta < 0.75 ? "auto" : "none",
       });
 
-      const overlay = card.querySelector(
-        ".drum-curvature-overlay"
-      ) as HTMLElement | null;
+      let overlay = overlayRefs.current[i];
+      if (!overlay) {
+        overlay = card.querySelector(".drum-curvature-overlay") as HTMLElement | null;
+        overlayRefs.current[i] = overlay;
+      }
       if (overlay) {
         overlay.style.opacity = `${Math.min(0.5, absDelta * 0.42)}`;
       }
@@ -752,6 +768,13 @@ export function Projects() {
       const clamped = Math.max(0, Math.min(PROJECTS.length - 1, targetIdx));
       activeIndexRef.current = clamped;
       setActiveIndex(clamped);
+
+      // Dispatch 3D canvas resonance ripple
+      if (typeof window !== "undefined") {
+        window.dispatchEvent(
+          new CustomEvent("portfolio:project-step", { detail: { index: clamped } })
+        );
+      }
 
       // Synchronize Left Column Progress Bar
       if (progressBarRef.current) {
@@ -893,6 +916,7 @@ export function Projects() {
             // Sync if user dragged the native scrollbar directly
             if (!isLockedRef.current) {
               const continuous = self.progress * (cards.length - 1);
+              updateDrum(continuous);
               const targetIdx = Math.min(
                 cards.length - 1,
                 Math.max(0, Math.round(continuous))
@@ -900,7 +924,13 @@ export function Projects() {
               if (targetIdx !== activeIndexRef.current) {
                 activeIndexRef.current = targetIdx;
                 setActiveIndex(targetIdx);
-                updateDrum(targetIdx);
+                if (typeof window !== "undefined") {
+                  window.dispatchEvent(
+                    new CustomEvent("portfolio:project-step", {
+                      detail: { index: targetIdx },
+                    })
+                  );
+                }
               }
             }
           },
@@ -1069,7 +1099,9 @@ export function Projects() {
               </p>
 
               {/* Real-time 3D Drum Telemetry & Angle Dial with Mouse-Tracking Border Sheen */}
-              <div className="mb-6 p-4 rounded-2xl glass-card glow-card font-mono text-[11px] space-y-2.5">
+              <div className="mb-6 p-4 rounded-2xl glass-card glass-card-hover glow-card font-mono text-[11px] space-y-2.5 relative overflow-hidden">
+                {/* Subtle top specular sheen highlight */}
+                <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent pointer-events-none z-20" />
                 <div className="flex items-center justify-between text-text-muted">
                   <div className="flex items-center gap-1.5">
                     <Compass
@@ -1188,8 +1220,6 @@ export function Projects() {
             onPointerMove={handlePointerMove}
             onPointerUp={handlePointerUp}
             onPointerCancel={handlePointerUp}
-            data-cursor="drag"
-            data-cursor-label="DRAG 3D"
             className={cn(
               "flex-1 h-[780px] lg:h-[860px] max-w-[860px] relative flex items-center justify-center select-none",
               isDragging ? "cursor-grabbing" : "cursor-grab"

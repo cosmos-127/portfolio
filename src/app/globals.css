@@ -68,9 +68,8 @@ html.lenis body {
 .bg-grid-blueprint {
   background-size: 32px 32px;
   background-image: 
-    linear-gradient(to right, rgba(0, 0, 0, 0.03) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
-  background-attachment: fixed;
+    linear-gradient(to right, rgba(0, 0, 0, 0.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.035) 1px, transparent 1px);
 }
 
 /* Animated gradient section divider line */
@@ -131,56 +130,93 @@ html.lenis body {
 /* Marquee infinite scroll animation */
 @keyframes marquee {
   0% {
-    transform: translateX(0%);
+    transform: translate3d(0, 0, 0);
   }
   100% {
-    transform: translateX(-50%);
+    transform: translate3d(-50%, 0, 0);
   }
 }
 
 .animate-marquee {
   display: flex;
   width: max-content;
-  animation: marquee 28s linear infinite;
+  will-change: transform;
+  animation: marquee 32s linear infinite;
 }
 
 .animate-marquee:hover {
   animation-play-state: paused;
 }
 
-/* Refined Glassmorphism System (Light-theme optimized with Apple/Linear sheen) */
+
+/* Refined Whitish Strong Frosted Glassmorphism System */
 .glass-panel {
-  background: rgba(255, 255, 255, 0.72);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.48) 0%, rgba(255, 255, 255, 0.28) 100%);
+  backdrop-filter: blur(40px) saturate(200%) contrast(104%);
+  -webkit-backdrop-filter: blur(40px) saturate(200%) contrast(104%);
   border: 1px solid rgba(255, 255, 255, 0.85);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.03), inset 0 1px 0 0 rgba(255, 255, 255, 0.9);
+  box-shadow: 
+    0 16px 36px -10px rgba(0, 0, 0, 0.05),
+    0 0 0 1px rgba(215, 222, 232, 0.50),
+    inset 0 1.5px 1px 0 rgba(255, 255, 255, 1),
+    inset 0 -1px 1px 0 rgba(255, 255, 255, 0.30);
 }
 
 .glass-card {
-  background: rgba(255, 255, 255, 0.65);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.46) 0%, rgba(255, 255, 255, 0.24) 100%);
+  backdrop-filter: blur(48px) saturate(210%) contrast(104%);
+  -webkit-backdrop-filter: blur(48px) saturate(210%) contrast(104%);
   border: 1px solid rgba(255, 255, 255, 0.85);
-  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.04), inset 0 1px 0 0 rgba(255, 255, 255, 0.95);
+  box-shadow: 
+    0 18px 42px -12px rgba(0, 0, 0, 0.065),
+    0 6px 16px -4px rgba(0, 0, 0, 0.03),
+    0 0 0 1px rgba(215, 222, 232, 0.55),
+    inset 0 1.5px 1.5px 0 rgba(255, 255, 255, 1),
+    inset 0 -1px 1px 0 rgba(255, 255, 255, 0.35);
 }
 
 .glass-card-hover {
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: background 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .glass-card-hover:hover {
-  background: rgba(255, 255, 255, 0.85);
-  border-color: rgba(230, 57, 70, 0.3);
-  box-shadow: 0 18px 40px -10px rgba(0, 0, 0, 0.07), 0 0 24px -6px rgba(230, 57, 70, 0.08), inset 0 1px 0 0 rgba(255, 255, 255, 1);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.60) 0%, rgba(255, 255, 255, 0.36) 100%);
+  border-color: rgba(255, 255, 255, 1);
+  box-shadow: 
+    0 24px 50px -12px rgba(0, 0, 0, 0.08),
+    0 8px 20px -4px rgba(0, 0, 0, 0.04),
+    0 0 0 1px rgba(230, 57, 70, 0.30),
+    0 0 28px -4px rgba(230, 57, 70, 0.14),
+    inset 0 2px 1.5px 0 rgba(255, 255, 255, 1),
+    inset 0 -1px 1px 0 rgba(255, 255, 255, 0.45);
+}
+
+.active-glass-card {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.62) 0%, rgba(255, 255, 255, 0.38) 100%) !important;
+  border-color: rgba(255, 255, 255, 1) !important;
+  backdrop-filter: blur(54px) saturate(220%) contrast(105%) !important;
+  -webkit-backdrop-filter: blur(54px) saturate(220%) contrast(105%) !important;
+  box-shadow: 
+    0 28px 56px -14px rgba(0, 0, 0, 0.09),
+    0 10px 24px -4px rgba(0, 0, 0, 0.04),
+    0 0 0 1px rgba(230, 57, 70, 0.38),
+    0 0 32px -4px rgba(230, 57, 70, 0.18),
+    inset 0 2px 1.5px 0 rgba(255, 255, 255, 1),
+    inset 0 -1px 1px 0 rgba(255, 255, 255, 0.50) !important;
 }
 
 .glass-pill {
-  background: rgba(255, 255, 255, 0.75);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.85);
-  box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.02), inset 0 1px 0 0 rgba(255, 255, 255, 0.9);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.60) 0%, rgba(255, 255, 255, 0.38) 100%);
+  backdrop-filter: blur(24px) saturate(190%);
+  -webkit-backdrop-filter: blur(24px) saturate(190%);
+  border: 1px solid rgba(255, 255, 255, 0.88);
+  box-shadow: 
+    0 2px 8px 0 rgba(0, 0, 0, 0.03),
+    0 0 0 1px rgba(215, 222, 232, 0.45),
+    inset 0 1px 0.5px 0 rgba(255, 255, 255, 1);
 }
 
 /* Smooth noise effect */
@@ -193,6 +229,10 @@ html.lenis body {
   height: 100vh;
   opacity: 0.025;
   z-index: 9999;
+  contain: strict;
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
 }
 
@@ -205,49 +245,72 @@ html.lenis body {
   transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* 1. Precision 1px Specular Border Glint (Hot-center white to crimson gradient) */
+/* 1. Precision 1px Specular Border Glint (Hot-center white to crimson gradient from Mouse + Gyroscope Proximity) */
 .glow-card::before {
   content: "";
   position: absolute;
   inset: -1px;
   border-radius: inherit;
   padding: 1px;
-  background: radial-gradient(
-    420px circle at var(--glow-x, -999px) var(--glow-y, -999px),
-    #ffffff 0%,
-    rgba(230, 57, 70, 0.92) 18%,
-    rgba(230, 57, 70, 0.35) 42%,
-    transparent 72%
-  );
+  background: 
+    radial-gradient(
+      460px circle at var(--gyro-x, -999px) var(--gyro-y, -999px),
+      rgba(255, 255, 255, 0.95) 0%,
+      rgba(230, 57, 70, 0.95) 18%,
+      rgba(230, 57, 70, 0.45) 42%,
+      transparent 72%
+    ),
+    radial-gradient(
+      420px circle at var(--glow-x, -999px) var(--glow-y, -999px),
+      #ffffff 0%,
+      rgba(230, 57, 70, 0.92) 18%,
+      rgba(230, 57, 70, 0.35) 42%,
+      transparent 72%
+    );
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
   pointer-events: none;
-  opacity: var(--glow-opacity, 0);
-  transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  opacity: max(var(--glow-opacity, 0), var(--gyro-opacity, 0));
+  transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   z-index: 25;
 }
 
-/* 2. Soft Ambient Radial Spotlight within frosted glass cavity */
+/* 2. Soft Ambient Radial Spotlight within frosted glass cavity (Mouse spotlight + 3D Gyroscope proximity aura) */
 .glow-card::after {
   content: "";
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background: radial-gradient(
-    520px circle at var(--glow-x, -999px) var(--glow-y, -999px),
-    rgba(230, 57, 70, 0.08) 0%,
-    rgba(230, 57, 70, 0.02) 40%,
-    transparent 70%
-  );
+  background: 
+    radial-gradient(
+      560px circle at var(--gyro-x, -999px) var(--gyro-y, -999px),
+      rgba(230, 57, 70, 0.13) 0%,
+      rgba(230, 57, 70, 0.05) 36%,
+      rgba(230, 57, 70, 0.015) 58%,
+      transparent 75%
+    ),
+    radial-gradient(
+      520px circle at var(--glow-x, -999px) var(--glow-y, -999px),
+      rgba(230, 57, 70, 0.08) 0%,
+      rgba(230, 57, 70, 0.02) 40%,
+      transparent 70%
+    );
   pointer-events: none;
-  opacity: var(--glow-opacity, 0);
-  transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  opacity: max(var(--glow-opacity, 0), var(--gyro-opacity, 0));
+  transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   z-index: 1;
 }
 
-.glow-card:hover {
-  box-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.06), 0 0 24px -4px rgba(230, 57, 70, 0.12), inset 0 1px 0 0 rgba(255, 255, 255, 1);
+.glow-card:hover,
+.glow-card[data-gyro-near="true"] {
+  box-shadow: 
+    0 26px 54px -12px rgba(0, 0, 0, 0.09),
+    0 10px 24px -4px rgba(0, 0, 0, 0.04),
+    0 0 0 1px rgba(230, 57, 70, 0.30),
+    0 0 28px -4px rgba(230, 57, 70, 0.16),
+    inset 0 2px 1.5px 0 rgba(255, 255, 255, 1),
+    inset 0 -1px 1px 0 rgba(255, 255, 255, 0.45);
 }
 
 /* ==========================================================================
@@ -262,6 +325,68 @@ html.lenis body {
   body.custom-cursor-active .cursor-grab,
   body.custom-cursor-active .cursor-grabbing {
     cursor: none !important;
+  }
+}
+
+/* ==========================================================================
+   Brand Text Selection Colors
+   ========================================================================== */
+::selection {
+  background-color: #e63946;
+  color: #ffffff;
+}
+
+::-moz-selection {
+  background-color: #e63946;
+  color: #ffffff;
+}
+
+/* ==========================================================================
+   Visualizer Keyframes & Animations
+   ========================================================================== */
+@keyframes telemetry-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(0.98); }
+}
+
+@keyframes data-flow-x {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(240%); }
+}
+
+@keyframes float-subtle {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+.animate-telemetry-pulse {
+  animation: telemetry-pulse 2.8s ease-in-out infinite;
+}
+
+.animate-data-flow {
+  animation: data-flow-x 2.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.animate-float-subtle {
+  animation: float-subtle 3.4s ease-in-out infinite;
+}
+
+
+/* ==========================================================================
+   Accessibility: Respect prefers-reduced-motion
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
 

@@ -3,7 +3,7 @@
 import { useEffect, useState, useRef, useSyncExternalStore, useCallback } from "react";
 import { motion, useSpring, AnimatePresence } from "framer-motion";
 
-type CursorMode = "default" | "pointer" | "drag" | "view" | "read" | "copy" | "text" | "hidden";
+type CursorMode = "default" | "pointer" | "view" | "read" | "copy" | "text" | "hidden";
 
 interface Ripple {
   id: number;
@@ -47,8 +47,8 @@ export function CustomCursor() {
   const dotY = useSpring(-100, { stiffness: 1400, damping: 55 });
 
   // Outer ring / pill: organic smooth follow with natural inertia
-  const ringX = useSpring(-100, { stiffness: 380, damping: 30 });
-  const ringY = useSpring(-100, { stiffness: 380, damping: 30 });
+  const ringX = useSpring(-100, { stiffness: 440, damping: 32 });
+  const ringY = useSpring(-100, { stiffness: 440, damping: 32 });
 
   const activeGlowCardRef = useRef<HTMLElement | null>(null);
   const pointerPosRef = useRef({ x: -100, y: -100 });
@@ -65,6 +65,7 @@ export function CustomCursor() {
     if (!isFinePointer) return;
 
     let hasAddedBodyClass = false;
+    let isInitialized = false;
 
     const handlePointerMove = (e: PointerEvent) => {
       // If a touch event was received, hide cursor gracefully
@@ -82,13 +83,22 @@ export function CustomCursor() {
         hasAddedBodyClass = true;
       }
 
-      setIsVisible(true);
       const x = e.clientX;
       const y = e.clientY;
       pointerPosRef.current = { x, y };
 
-      dotX.set(x);
-      dotY.set(y);
+      if (!isInitialized) {
+        isInitialized = true;
+        dotX.jump(x);
+        dotY.jump(y);
+        ringX.jump(x);
+        ringY.jump(y);
+      } else {
+        dotX.set(x);
+        dotY.set(y);
+      }
+
+      setIsVisible(true);
 
       // 1. Delegated mouse-tracking border sheen for .glow-card elements
       const target = e.target as HTMLElement | null;
@@ -198,7 +208,7 @@ export function CustomCursor() {
 
   if (!isFinePointer) return null;
 
-  const isExpandedPill = mode === "drag" || mode === "view" || mode === "read" || mode === "copy";
+  const isExpandedPill = mode === "view" || mode === "read" || mode === "copy";
 
   return (
     <div
@@ -254,9 +264,7 @@ export function CustomCursor() {
         }}
         animate={{
           width:
-            mode === "drag"
-              ? 102
-              : mode === "view" || mode === "read"
+            mode === "view" || mode === "read"
               ? 90
               : mode === "copy"
               ? 82
@@ -266,7 +274,7 @@ export function CustomCursor() {
               ? 0
               : 32,
           height:
-            mode === "drag" || mode === "view" || mode === "read" || mode === "copy"
+            mode === "view" || mode === "read" || mode === "copy"
               ? 34
               : mode === "pointer"
               ? 46
@@ -300,19 +308,6 @@ export function CustomCursor() {
         }}
       >
         <AnimatePresence mode="wait">
-          {mode === "drag" && (
-            <motion.span
-              key="drag"
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.8 }}
-              transition={{ duration: 0.15 }}
-              className="text-primary font-bold flex items-center gap-1.5"
-            >
-              <span>▲▼</span>
-              <span>{customLabel || "DRAG 3D"}</span>
-            </motion.span>
-          )}
 
           {(mode === "view" || mode === "read") && (
             <motion.span

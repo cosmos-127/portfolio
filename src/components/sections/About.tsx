@@ -37,6 +37,7 @@ export function About() {
             y: 0,
             duration: 0.6,
             ease: "power3.out",
+            clearProps: "transform",
           }
         );
       }
@@ -56,6 +57,7 @@ export function About() {
             y: 0,
             duration: 0.65,
             ease: "power3.out",
+            clearProps: "transform",
           }
         );
       }
@@ -92,9 +94,9 @@ export function About() {
           <div className="lg:col-span-6 flex flex-col gap-8 max-w-xl">
 
             {/* Glassmorphic Career Trajectory Card with Mouse-Tracking Sheen */}
-            <div ref={timelineRef} className="glass-card glow-card rounded-2xl p-6 sm:p-7 space-y-6 relative overflow-hidden">
+            <div ref={timelineRef} className="glass-card glass-card-hover glow-card rounded-2xl p-6 sm:p-7 space-y-6 relative overflow-hidden">
               {/* Subtle top specular sheen highlight */}
-              <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent" />
+              <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent pointer-events-none z-20" />
               
               {/* Floating Timeline Header */}
               <div className="flex flex-wrap items-center justify-between gap-2 pb-3.5 border-b border-white/60 font-mono text-xs">
@@ -170,7 +172,7 @@ export function About() {
                 </div>
 
                 {/* 3. Current Role (Strategy) */}
-                <div className="relative group p-2.5 -mx-2 rounded-xl bg-white/50 border border-white/80 shadow-2xs transition-all duration-200 hover:bg-white/70">
+                <div className="relative group p-3 -mx-2 rounded-xl glass-panel shadow-2xs transition-all duration-200 hover:bg-white/85">
                   {/* Active glowing beacon node */}
                   <span className="absolute -left-[31px] sm:-left-[35px] top-4 flex h-3.5 w-3.5 items-center justify-center">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-40" />

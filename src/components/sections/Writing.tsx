@@ -80,6 +80,7 @@ export function Writing() {
             y: 0,
             duration: 0.6,
             ease: "power3.out",
+            clearProps: "transform",
           }
         );
       }
@@ -100,6 +101,7 @@ export function Writing() {
             duration: 0.65,
             stagger: 0.12,
             ease: "power3.out",
+            clearProps: "transform",
           }
         );
       }
@@ -175,20 +177,29 @@ export function Writing() {
               key={article.title}
               data-cursor="read"
               data-cursor-label="READ ↗"
-              className="glass-card glass-card-hover glow-card rounded-2xl p-6 sm:p-7 flex flex-col justify-between group relative overflow-hidden transition-transform duration-200 ease-out"
-              style={{ transformStyle: "preserve-3d", perspective: "800px" }}
+              className="glass-card glass-card-hover glow-card rounded-2xl p-6 sm:p-7 flex flex-col justify-between group relative overflow-hidden will-change-transform select-none"
+              style={{
+                transform:
+                  "perspective(800px) rotateY(var(--card-tilt-y, 0deg)) rotateX(var(--card-tilt-x, 0deg)) scale3d(var(--card-scale, 1), var(--card-scale, 1), 1)",
+                transition:
+                  "transform 0.18s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s, box-shadow 0.2s",
+              }}
               onMouseMove={(e) => {
                 const rect = e.currentTarget.getBoundingClientRect();
                 const x = (e.clientX - rect.left) / rect.width - 0.5;
                 const y = (e.clientY - rect.top) / rect.height - 0.5;
-                e.currentTarget.style.transform = `rotateY(${x * 6}deg) rotateX(${-y * 6}deg) scale3d(1.01, 1.01, 1.01)`;
+                e.currentTarget.style.setProperty("--card-tilt-y", `${(x * 7).toFixed(2)}deg`);
+                e.currentTarget.style.setProperty("--card-tilt-x", `${(-y * 7).toFixed(2)}deg`);
+                e.currentTarget.style.setProperty("--card-scale", "1.012");
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.transform = "rotateY(0deg) rotateX(0deg) scale3d(1, 1, 1)";
+                e.currentTarget.style.setProperty("--card-tilt-y", "0deg");
+                e.currentTarget.style.setProperty("--card-tilt-x", "0deg");
+                e.currentTarget.style.setProperty("--card-scale", "1");
               }}
             >
               {/* Subtle top specular sheen highlight */}
-              <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent" />
+              <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent pointer-events-none z-20" />
 
               <div>
                 {/* Badge Row */}

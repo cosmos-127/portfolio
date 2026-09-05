@@ -19,18 +19,34 @@ const TICKER_ITEMS = [
 
 export function TickerStrip({ className = "" }: TickerStripProps) {
   return (
-    <div className={`w-full overflow-hidden border-y border-white/70 bg-white/40 backdrop-blur-md py-3.5 select-none shadow-[0_4px_20px_-4px_rgba(0,0,0,0.02)] ${className}`}>
-      <div className="flex animate-marquee items-center gap-12 whitespace-nowrap text-xs font-mono tracking-widest text-text-muted">
-        {[...TICKER_ITEMS, ...TICKER_ITEMS, ...TICKER_ITEMS].map((item, idx) => {
-          const Icon = item.icon;
-          return (
-            <div key={idx} className="flex items-center gap-3">
-              <Icon className="h-3.5 w-3.5 text-primary" />
-              <span>{item.text}</span>
-              <span className="text-border-strong font-light">/</span>
-            </div>
-          );
-        })}
+    <div className={`w-full overflow-hidden border-y border-white/85 bg-white/40 backdrop-blur-xl py-3.5 select-none shadow-[0_4px_20px_-4px_rgba(0,0,0,0.03)] relative ${className}`}>
+      {/* Subtle top specular sheen highlight */}
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent pointer-events-none z-20" />
+      <div className="flex w-max animate-marquee will-change-transform">
+        <div className="flex items-center gap-10 whitespace-nowrap text-xs font-mono tracking-widest text-text-muted shrink-0 pr-10">
+          {TICKER_ITEMS.map((item, idx) => {
+            const Icon = item.icon;
+            return (
+              <div key={`track1-${idx}`} className="flex items-center gap-3">
+                <Icon className="h-3.5 w-3.5 text-primary" />
+                <span>{item.text}</span>
+                <span className="text-border-strong font-light">/</span>
+              </div>
+            );
+          })}
+        </div>
+        <div className="flex items-center gap-10 whitespace-nowrap text-xs font-mono tracking-widest text-text-muted shrink-0 pr-10" aria-hidden="true">
+          {TICKER_ITEMS.map((item, idx) => {
+            const Icon = item.icon;
+            return (
+              <div key={`track2-${idx}`} className="flex items-center gap-3">
+                <Icon className="h-3.5 w-3.5 text-primary" />
+                <span>{item.text}</span>
+                <span className="text-border-strong font-light">/</span>
+              </div>
+            );
+          })}
+        </div>
       </div>
     </div>
   );
