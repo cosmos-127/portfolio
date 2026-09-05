@@ -1,26 +1,235 @@
 @import "tailwindcss";
 
+/* ==========================================================================
+   Lenis Smooth Scrolling Core
+   ========================================================================== */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: clip;
+}
+
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
+}
+
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --surface: #f8f9fa;
+  --surface-hover: #f1f3f5;
+  --primary: #e63946;
+  --primary-glow: rgba(230, 57, 70, 0.15);
+  --primary-subtle: rgba(230, 57, 70, 0.06);
+  --text-main: #0a0a0a;
+  --text-muted: #525866;
+  --border-light: #e5e7eb;
+  --border-strong: #d1d5db;
 }
 
 @theme inline {
   --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-surface: var(--surface);
+  --color-surface-hover: var(--surface-hover);
+  --color-primary: var(--primary);
+  --color-primary-glow: var(--primary-glow);
+  --color-primary-subtle: var(--primary-subtle);
+  --color-text-main: var(--text-main);
+  --color-text-muted: var(--text-muted);
+  --color-border-light: var(--border-light);
+  --color-border-strong: var(--border-strong);
+
+  /* Multi-Tier Google Font Typography Hierarchy */
+  --font-primary: var(--font-sans), sans-serif;
+  --font-sans: var(--font-sans), sans-serif;
+
+  --font-secondary: var(--font-syne), var(--font-sans), sans-serif;
+  --font-display: var(--font-syne), var(--font-sans), sans-serif;
+  --font-gued: var(--font-syne), var(--font-sans), sans-serif;
+
+  --font-special: var(--font-instrument-serif), Georgia, serif;
+  --font-serif: var(--font-instrument-serif), Georgia, serif;
+
+  --font-mono: var(--font-jetbrains-mono), monospace;
+  --font-tech: var(--font-jetbrains-mono), monospace;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* Custom engineering technical grid background */
+.bg-grid-blueprint {
+  background-size: 32px 32px;
+  background-image: 
+    linear-gradient(to right, rgba(0, 0, 0, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+}
+
+.bg-dot-matrix {
+  background-image: radial-gradient(rgba(0, 0, 0, 0.08) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Custom sleek scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+}
+
+/* Marquee infinite scroll animation */
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee 28s linear infinite;
 }
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+/* Refined Glassmorphism System (Light-theme optimized with Apple/Linear sheen) */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.03), inset 0 1px 0 0 rgba(255, 255, 255, 0.9);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.04), inset 0 1px 0 0 rgba(255, 255, 255, 0.95);
+}
+
+.glass-card-hover {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-card-hover:hover {
+  background: rgba(255, 255, 255, 0.85);
+  border-color: rgba(230, 57, 70, 0.3);
+  box-shadow: 0 18px 40px -10px rgba(0, 0, 0, 0.07), 0 0 24px -6px rgba(230, 57, 70, 0.08), inset 0 1px 0 0 rgba(255, 255, 255, 1);
+}
+
+.glass-pill {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.02), inset 0 1px 0 0 rgba(255, 255, 255, 0.9);
+}
+
+/* Smooth noise effect */
+.noise-overlay {
+  pointer-events: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  opacity: 0.025;
+  z-index: 9999;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+/* ==========================================================================
+   Mouse-Tracking Specular Border Sheen & Card Illumination (Linear / Apple style)
+   ========================================================================== */
+.glow-card {
+  position: relative;
+  isolation: isolate;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* 1. Precision 1px Specular Border Glint (Hot-center white to crimson gradient) */
+.glow-card::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: radial-gradient(
+    420px circle at var(--glow-x, -999px) var(--glow-y, -999px),
+    #ffffff 0%,
+    rgba(230, 57, 70, 0.92) 18%,
+    rgba(230, 57, 70, 0.35) 42%,
+    transparent 72%
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  opacity: var(--glow-opacity, 0);
+  transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 25;
+}
+
+/* 2. Soft Ambient Radial Spotlight within frosted glass cavity */
+.glow-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    520px circle at var(--glow-x, -999px) var(--glow-y, -999px),
+    rgba(230, 57, 70, 0.08) 0%,
+    rgba(230, 57, 70, 0.02) 40%,
+    transparent 70%
+  );
+  pointer-events: none;
+  opacity: var(--glow-opacity, 0);
+  transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 1;
+}
+
+.glow-card:hover {
+  box-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.06), 0 0 24px -4px rgba(230, 57, 70, 0.12), inset 0 1px 0 0 rgba(255, 255, 255, 1);
+}
+
+/* ==========================================================================
+   Custom Cursor Pointer Rules (Only active on fine pointer desktop devices)
+   ========================================================================== */
+@media (pointer: fine) {
+  body.custom-cursor-active,
+  body.custom-cursor-active a,
+  body.custom-cursor-active button,
+  body.custom-cursor-active [role="button"],
+  body.custom-cursor-active .cursor-pointer,
+  body.custom-cursor-active .cursor-grab,
+  body.custom-cursor-active .cursor-grabbing {
+    cursor: none !important;
+  }
+}
+
