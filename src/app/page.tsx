@@ -11,6 +11,7 @@ import { Projects } from "@/components/sections/Projects";
 import { Writing } from "@/components/sections/Writing";
 import { Contact } from "@/components/sections/Contact";
 import { TickerStrip } from "@/components/global/TickerStrip";
+import { Preloader } from "@/components/global/Preloader";
 
 // Code-split heavy interactive & 3D client components so initial HTML / typography renders instantaneously
 const UnifiedAISpatialCanvas = dynamic(
@@ -86,6 +87,7 @@ export default function Home() {
 
   return (
     <>
+      <Preloader />
       <CustomCursor />
       <CommandPalette />
       <SectionHUD />

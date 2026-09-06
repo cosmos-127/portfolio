@@ -71,6 +71,18 @@ export function Navbar() {
         />
       </div>
 
+      {/* Full-width top frosted ambient blur veil */}
+      <div
+        className={cn(
+          "fixed top-0 inset-x-0 h-24 pointer-events-none z-40 transition-opacity duration-300",
+          scrolled ? "opacity-100 backdrop-blur-2xl bg-white/45" : "opacity-0"
+        )}
+        style={{
+          maskImage: "linear-gradient(to bottom, black 60%, transparent 100%)",
+          WebkitMaskImage: "linear-gradient(to bottom, black 60%, transparent 100%)",
+        }}
+      />
+
       <motion.header
         initial={{ y: -60, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
@@ -79,10 +91,8 @@ export function Navbar() {
       >
         <div
           className={cn(
-            "max-w-5xl mx-auto transition-all duration-300 pointer-events-auto rounded-full px-4 sm:px-5 py-2 sm:py-2.5 flex items-center justify-between glass-panel",
-            scrolled
-              ? "border-white shadow-lg shadow-black/[0.06]"
-              : "shadow-xs"
+            "max-w-5xl mx-auto transition-all duration-300 pointer-events-auto rounded-full px-4 sm:px-5 py-2 sm:py-2.5 flex items-center justify-between",
+            scrolled ? "nav-frost-glass-scrolled" : "nav-frost-glass"
           )}
         >
           {/* Logo */}
@@ -239,7 +249,7 @@ export function Navbar() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -12, scale: 0.98 }}
               transition={{ duration: 0.24, ease: [0.16, 1, 0.3, 1] }}
-              className="fixed inset-x-3 sm:inset-x-4 top-16 sm:top-20 z-50 md:hidden glass-card rounded-2xl shadow-2xl p-5 sm:p-6 relative overflow-hidden will-change-transform"
+              className="fixed inset-x-3 sm:inset-x-4 top-16 sm:top-20 z-50 md:hidden nav-frost-glass-scrolled rounded-2xl shadow-2xl p-5 sm:p-6 relative overflow-hidden will-change-transform"
             >
               {/* Subtle top specular sheen highlight */}
               <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent pointer-events-none z-20" />

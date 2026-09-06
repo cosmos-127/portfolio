@@ -84,6 +84,14 @@ function LenisScrollManager() {
     };
     window.addEventListener("beforeunload", handleBeforeUnload);
 
+    // Refresh and sync when preloader iris reveal finishes
+    const handlePreloaderDone = () => {
+      ScrollTrigger.refresh();
+      window.scrollTo(0, 0);
+      lenis.scrollTo(0, { immediate: true });
+    };
+    window.addEventListener("portfolio:preloader-done", handlePreloaderDone);
+
     // Initial refresh after fonts & layout have settled
     const refreshTimer = setTimeout(() => {
       ScrollTrigger.refresh();
@@ -127,6 +135,7 @@ function LenisScrollManager() {
       gsap.ticker.remove(onTick);
       ScrollTrigger.removeEventListener("refresh", onScrollTriggerRefresh);
       document.removeEventListener("click", handleAnchorClick);
+      window.removeEventListener("portfolio:preloader-done", handlePreloaderDone);
       window.removeEventListener("beforeunload", handleBeforeUnload);
     };
   }, [lenis]);
