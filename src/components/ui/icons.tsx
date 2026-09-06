@@ -1,4 +1,5 @@
 import React from "react";
+export { BrandIcon } from "./BrandIcon";
 
 export function GithubIcon({ className = "w-4 h-4" }: { className?: string }) {
   return (

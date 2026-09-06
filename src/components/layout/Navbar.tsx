@@ -9,6 +9,7 @@ import { Menu, X, ArrowUpRight, Command, Volume2, VolumeX } from "lucide-react";
 import { isSoundEnabled, toggleSound, subscribeSound, playTick } from "@/lib/sound";
 
 import { TextScramble } from "@/components/ui/TextScramble";
+import { BrandIcon } from "@/components/ui/BrandIcon";
 
 const NAV_LINKS = [
   { name: "About", href: "#about" },
@@ -87,8 +88,12 @@ export function Navbar() {
           {/* Logo */}
           <Link
             href="#top"
-            className="flex items-center gap-2 group shrink-0"
+            className="flex items-center gap-2.5 group shrink-0 select-none"
+            aria-label="Gagan — AI Systems Engineer"
           >
+            <div className="relative flex items-center justify-center">
+              <BrandIcon className="w-7 h-7 sm:w-7.5 sm:h-7.5 rounded-lg shadow-xs ring-1 ring-black/10 group-hover:ring-primary/40 group-hover:scale-105 transition-all duration-300" />
+            </div>
             <span className="font-secondary font-bold text-xl sm:text-2xl tracking-tight text-text-main group-hover:text-primary transition-colors">
               Gagan
             </span>

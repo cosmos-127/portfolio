@@ -18,7 +18,7 @@ import {
 } from "lucide-react";
 import { GithubIcon, Neo4jIcon } from "@/components/ui/icons";
 import { cn } from "@/lib/utils";
-import { playTick } from "@/lib/sound";
+import { playDrumClick } from "@/lib/sound";
 import { TextScramble } from "@/components/ui/TextScramble";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
@@ -768,6 +768,9 @@ export function Projects() {
   const transitionToCard = useCallback(
     (targetIdx: number, syncScroll = true) => {
       const clamped = Math.max(0, Math.min(PROJECTS.length - 1, targetIdx));
+      if (clamped !== activeIndexRef.current) {
+        playDrumClick(clamped > activeIndexRef.current ? 1.04 : 0.96);
+      }
       activeIndexRef.current = clamped;
       setActiveIndex(clamped);
 
@@ -924,6 +927,7 @@ export function Projects() {
                 Math.max(0, Math.round(continuous))
               );
               if (targetIdx !== activeIndexRef.current) {
+                playDrumClick(targetIdx > activeIndexRef.current ? 1.04 : 0.96);
                 activeIndexRef.current = targetIdx;
                 setActiveIndex(targetIdx);
                 if (typeof window !== "undefined") {
@@ -1135,7 +1139,6 @@ export function Projects() {
                       <button
                         key={project.id}
                         onClick={() => {
-                          playTick();
                           transitionToCard(idx);
                         }}
                         className={cn(
@@ -1165,7 +1168,6 @@ export function Projects() {
                     whileHover={{ scale: 1.08 }}
                     whileTap={{ scale: 0.92 }}
                     onClick={() => {
-                      playTick();
                       transitionToCard(Math.max(0, activeIndex - 1));
                     }}
                     disabled={activeIndex === 0}
@@ -1178,7 +1180,6 @@ export function Projects() {
                     whileHover={{ scale: 1.08 }}
                     whileTap={{ scale: 0.92 }}
                     onClick={() => {
-                      playTick();
                       transitionToCard(
                         Math.min(PROJECTS.length - 1, activeIndex + 1)
                       );

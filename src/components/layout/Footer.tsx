@@ -3,6 +3,7 @@
 import { useRef } from "react";
 import Link from "next/link";
 import { ArrowUp } from "lucide-react";
+import { BrandIcon } from "@/components/ui/BrandIcon";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
@@ -56,8 +57,9 @@ export function Footer() {
         
         {/* Left info */}
         <div className="flex items-center gap-3">
-          <Link href="#top" className="font-gued font-bold text-xl text-text-main hover:text-primary transition-colors">
-            Gagan
+          <Link href="#top" className="flex items-center gap-2 font-gued font-bold text-xl text-text-main hover:text-primary transition-colors">
+            <BrandIcon className="w-5 h-5 rounded-md shadow-2xs" />
+            <span>Gagan</span>
           </Link>
           <span className="text-border-strong">/</span>
           <span className="text-[11px]">Generalist AI Engineer</span>

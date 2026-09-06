@@ -2,6 +2,7 @@
 
 import { useState, useRef } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Mail,
@@ -9,12 +10,9 @@ import {
   Check,
   ArrowUpRight,
   Terminal,
-  Clock,
   Send,
 } from "lucide-react";
 import { GithubIcon, LinkedinIcon, MediumIcon } from "@/components/ui/icons";
-import { cn } from "@/lib/utils";
-import { useAvailability } from "@/lib/useAvailability";
 import { playChime, playTick } from "@/lib/sound";
 import { TextScramble } from "@/components/ui/TextScramble";
 import gsap from "gsap";
@@ -68,7 +66,6 @@ const CONTACT_CHANNELS: ContactChannel[] = [
 
 export function Contact() {
   const [copiedField, setCopiedField] = useState<string | null>(null);
-  const availability = useAvailability();
 
   const sectionRef = useRef<HTMLDivElement>(null);
   const headerTextRef = useRef<HTMLDivElement>(null);
@@ -178,50 +175,38 @@ export function Contact() {
             </p>
           </div>
 
-          {/* Telemetry & Availability Badge Card with Mouse-Tracking Sheen */}
+          {/* Minimal Editorial Portrait Card with Mouse-Tracking Sheen */}
           <div ref={telemetryRef} className="lg:col-span-5 flex flex-col justify-end">
-            <div className="p-6 rounded-2xl glass-card glass-card-hover glow-card border-trace relative overflow-hidden font-mono text-xs space-y-3">
+            <div className="p-3 sm:p-3.5 rounded-2xl glass-card glass-card-hover glow-card border-trace relative overflow-hidden space-y-3">
               {/* Top specular reflection */}
               <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent pointer-events-none z-20" />
 
-              <div className="flex items-center justify-between text-text-muted pb-2 border-b border-white/60">
-                <span>SYSTEM TELEMETRY</span>
-                <span className={cn(
-                  "glass-pill px-2.5 py-0.5 rounded-full flex items-center gap-1.5 font-bold text-[11px]",
-                  availability.isWorkingHours ? "text-emerald-700" : "text-indigo-700"
-                )}>
-                  <span className={cn(
-                    "w-2 h-2 rounded-full",
-                    availability.isWorkingHours ? "bg-emerald-500 animate-pulse" : "bg-indigo-500"
-                  )} />
-                  {availability.statusText}
+              {/* Status Header */}
+              <div className="flex items-center justify-between px-1 font-mono text-[11px]">
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                  <span className="font-bold text-text-main tracking-wider uppercase">Gagan Parashar</span>
+                </div>
+                <span className="glass-pill px-2.5 py-0.5 rounded-full text-[10px] text-emerald-700 font-semibold tracking-wide flex items-center gap-1">
+                  AVAILABLE FOR WORK
                 </span>
               </div>
-              <div className="flex items-center justify-between">
-                <span className="text-text-muted flex items-center gap-1.5">
-                  <Clock className="w-3.5 h-3.5 text-primary" />
-                  LOCAL TIME:
-                </span>
-                <span className="text-text-main font-semibold">
-                  {availability.timeString || "02:30:00 IST"} ({availability.utcOffset})
-                </span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-text-muted">LOCATION:</span>
-                <span className="text-text-main">{availability.location}</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-text-muted">RESPONSE TIME:</span>
-                <span className="text-primary font-semibold">{availability.responseTime}</span>
-              </div>
-              <div className="flex items-center justify-between pt-1 border-t border-white/40 text-[10px]">
-                <span className="text-text-muted">SCHEDULE NOTE:</span>
-                <span className={cn(
-                  "font-mono font-medium truncate max-w-[220px]",
-                  availability.isWorkingHours ? "text-emerald-700" : "text-indigo-700"
-                )}>
-                  {availability.scheduleNote}
-                </span>
+
+              {/* Portrait Image Frame */}
+              <div className="relative aspect-[4/3] w-full rounded-xl overflow-hidden bg-neutral-900/5 border border-white/70 shadow-2xs group">
+                <Image
+                  src="/images/portrait-original.jpg"
+                  alt="Gagan Parashar - AI Systems Engineer"
+                  fill
+                  sizes="(max-width: 768px) 100vw, 420px"
+                  priority
+                  className="object-cover object-center group-hover:scale-103 transition-transform duration-500 ease-out"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
+                <div className="absolute bottom-2.5 left-3 right-3 flex items-center justify-between text-white/95 font-mono text-[10px]">
+                  <span className="font-semibold tracking-wide drop-shadow-sm">AI Engineer · LLMOps</span>
+                  <span className="text-white/80 drop-shadow-sm">Pune, IN · Remote</span>
+                </div>
               </div>
             </div>
           </div>

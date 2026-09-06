@@ -140,6 +140,63 @@ export function playTick(force = false) {
   });
 }
 
+let lastDrumClickTime = 0;
+
+/**
+ * Very light, crisp mechanical ratchet click ("click-click")
+ * Specially calibrated for project drum rotation and rotary stepping.
+ * Emulates the tactile detent of a luxury camera dial or Swiss watch bezel.
+ */
+export function playDrumClick(pitch = 1.0, force = false) {
+  if (!soundEnabled && !force) return;
+
+  const nowMs = Date.now();
+  if (nowMs - lastDrumClickTime < 50) return;
+  lastDrumClickTime = nowMs;
+
+  runWithAudioContext((ctx) => {
+    try {
+      const now = ctx.currentTime;
+
+      // 1. Primary light transient snap (2400Hz -> 850Hz in 14ms)
+      const snapOsc = ctx.createOscillator();
+      const snapGain = ctx.createGain();
+
+      snapOsc.type = "sine";
+      snapOsc.frequency.setValueAtTime(2400 * pitch, now);
+      snapOsc.frequency.exponentialRampToValueAtTime(850 * pitch, now + 0.014);
+
+      snapGain.gain.setValueAtTime(0.08, now);
+      snapGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.016);
+
+      snapOsc.connect(snapGain);
+      snapGain.connect(ctx.destination);
+
+      snapOsc.start(now);
+      snapOsc.stop(now + 0.018);
+
+      // 2. Secondary micro-ratchet click at +8ms for the organic "click-click" double detent
+      const detentOsc = ctx.createOscillator();
+      const detentGain = ctx.createGain();
+
+      detentOsc.type = "triangle";
+      detentOsc.frequency.setValueAtTime(1750 * pitch, now + 0.008);
+      detentOsc.frequency.exponentialRampToValueAtTime(550 * pitch, now + 0.02);
+
+      detentGain.gain.setValueAtTime(0.05, now + 0.008);
+      detentGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.022);
+
+      detentOsc.connect(detentGain);
+      detentGain.connect(ctx.destination);
+
+      detentOsc.start(now + 0.008);
+      detentOsc.stop(now + 0.024);
+    } catch {
+      // Graceful silent fallback
+    }
+  });
+}
+
 /**
  * Radiant, crystalline dual-tone confirmation chime
  */
