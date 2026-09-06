@@ -2,9 +2,9 @@
 
 import { useState, useRef } from "react";
 import Link from "next/link";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Mail,
-  BookOpen,
   Copy,
   Check,
   ArrowUpRight,
@@ -12,10 +12,11 @@ import {
   Clock,
   Send,
 } from "lucide-react";
-import { GithubIcon, LinkedinIcon } from "@/components/ui/icons";
+import { GithubIcon, LinkedinIcon, MediumIcon } from "@/components/ui/icons";
 import { cn } from "@/lib/utils";
 import { useAvailability } from "@/lib/useAvailability";
-import { playChime } from "@/lib/sound";
+import { playChime, playTick } from "@/lib/sound";
+import { TextScramble } from "@/components/ui/TextScramble";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
@@ -61,7 +62,7 @@ const CONTACT_CHANNELS: ContactChannel[] = [
     value: "medium.com/@gaganparashar127",
     type: "link",
     url: "https://medium.com/@gaganparashar127",
-    icon: BookOpen,
+    icon: MediumIcon,
   },
 ];
 
@@ -82,7 +83,7 @@ export function Contact() {
       if (headerElements.length > 0) {
         gsap.fromTo(
           headerElements,
-          { opacity: 0, y: 24 },
+          { opacity: 0, y: 24, filter: "blur(6px)" },
           {
             scrollTrigger: {
               trigger: headerTextRef.current,
@@ -91,10 +92,11 @@ export function Contact() {
             },
             opacity: 1,
             y: 0,
-            duration: 0.6,
+            filter: "blur(0px)",
+            duration: 0.65,
             stagger: 0.14,
             ease: "power3.out",
-            clearProps: "transform",
+            clearProps: "transform,filter",
           }
         );
       }
@@ -105,7 +107,7 @@ export function Contact() {
         channels.forEach((channel, i) => {
           gsap.fromTo(
             channel,
-            { opacity: 0, x: i % 2 === 0 ? -28 : 28, y: 8 },
+            { opacity: 0, x: i % 2 === 0 ? -28 : 28, y: 8, filter: "blur(6px)" },
             {
               scrollTrigger: {
                 trigger: channelsRef.current,
@@ -115,10 +117,11 @@ export function Contact() {
               opacity: 1,
               x: 0,
               y: 0,
-              duration: 0.55,
-              delay: i * 0.09,
+              filter: "blur(0px)",
+              duration: 0.6,
+              delay: i * 0.08,
               ease: "power3.out",
-              clearProps: "transform",
+              clearProps: "transform,filter",
             }
           );
         });
@@ -128,7 +131,7 @@ export function Contact() {
       if (terminalRef.current) {
         gsap.fromTo(
           terminalRef.current,
-          { opacity: 0, y: 16 },
+          { opacity: 0, y: 16, filter: "blur(4px)" },
           {
             scrollTrigger: {
               trigger: terminalRef.current,
@@ -137,9 +140,10 @@ export function Contact() {
             },
             opacity: 1,
             y: 0,
-            duration: 0.5,
+            filter: "blur(0px)",
+            duration: 0.55,
             ease: "power3.out",
-            clearProps: "transform",
+            clearProps: "transform,filter",
           }
         );
       }
@@ -164,7 +168,7 @@ export function Contact() {
             <div className="flex items-center gap-2 text-xs font-mono text-primary font-bold tracking-widest uppercase mb-3">
               <span>[05]</span>
               <span className="w-8 h-px bg-primary/40" />
-              <span>{"//"} DIRECT CONTACT</span>
+              <span>{"//"} <TextScramble text="DIRECT CONTACT" /></span>
             </div>
             <h2 className="font-gued font-bold text-4xl sm:text-5xl md:text-6xl lg:text-[4.25rem] text-text-main tracking-tight mb-6 leading-[1.1]">
               Let&apos;s build <span className="font-serif italic font-normal text-primary tracking-normal">intelligent systems</span><span className="text-primary font-bold">.</span>
@@ -176,7 +180,7 @@ export function Contact() {
 
           {/* Telemetry & Availability Badge Card with Mouse-Tracking Sheen */}
           <div ref={telemetryRef} className="lg:col-span-5 flex flex-col justify-end">
-            <div className="p-6 rounded-2xl glass-card glass-card-hover glow-card relative overflow-hidden font-mono text-xs space-y-3">
+            <div className="p-6 rounded-2xl glass-card glass-card-hover glow-card border-trace relative overflow-hidden font-mono text-xs space-y-3">
               {/* Top specular reflection */}
               <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent pointer-events-none z-20" />
 
@@ -224,7 +228,7 @@ export function Contact() {
         </div>
 
         {/* Interactive Channel List inside Frosted Glass Container with Mouse-Tracking Sheen */}
-        <div ref={channelsRef} className="glass-card glass-card-hover glow-card rounded-2xl p-2 sm:p-3 relative overflow-hidden flex flex-col gap-1">
+        <div ref={channelsRef} className="glass-card glass-card-hover glow-card border-trace velocity-skew will-change-transform rounded-2xl p-2 sm:p-3 relative overflow-hidden flex flex-col gap-1">
           {/* Top specular reflection */}
           <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent pointer-events-none z-20" />
 
@@ -239,7 +243,8 @@ export function Contact() {
                     href={channel.url || "#"}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex flex-col sm:flex-row sm:items-center justify-between py-5 px-5 rounded-xl hover:bg-white/80 hover:shadow-2xs transition-all duration-200 group border border-transparent hover:border-white/90"
+                    onMouseEnter={() => playTick()}
+                    className="flex flex-col sm:flex-row sm:items-center justify-between py-5 px-5 rounded-xl hover:bg-white/80 hover:shadow-2xs transition-all duration-200 group border border-transparent hover:border-white/90 cursor-pointer"
                   >
                     <div className="flex items-center gap-3 w-44">
                       <div className="p-1.5 rounded-lg bg-white/60 border border-white/80 group-hover:bg-primary/10 group-hover:border-primary/30 transition-colors">
@@ -254,13 +259,16 @@ export function Contact() {
                       {channel.value}
                     </div>
 
-                    <div className="mt-2 sm:mt-0 flex items-center gap-1 text-xs font-mono text-primary font-semibold group-hover:translate-x-1 transition-transform">
+                    <div className="mt-2 sm:mt-0 flex items-center gap-1 text-xs font-mono text-primary font-semibold group-hover:translate-x-1 group-hover:-translate-y-0.5 transition-transform duration-200">
                       <span>Visit</span>
                       <ArrowUpRight className="w-4 h-4" />
                     </div>
                   </Link>
                 ) : (
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between py-5 px-5 rounded-xl hover:bg-white/80 hover:shadow-2xs transition-all duration-200 group border border-transparent hover:border-white/90">
+                  <div
+                    onMouseEnter={() => playTick()}
+                    className="flex flex-col sm:flex-row sm:items-center justify-between py-5 px-5 rounded-xl hover:bg-white/80 hover:shadow-2xs transition-all duration-200 group border border-transparent hover:border-white/90 cursor-default"
+                  >
                     <div className="flex items-center gap-3 w-44">
                       <div className="p-1.5 rounded-lg bg-white/60 border border-white/80 group-hover:bg-primary/10 group-hover:border-primary/30 transition-colors">
                         <Icon className="w-3.5 h-3.5 text-text-muted group-hover:text-primary transition-colors" />
@@ -275,32 +283,52 @@ export function Contact() {
                     </div>
 
                     <div className="mt-2 sm:mt-0 flex items-center gap-3">
-                      <button
+                      <motion.button
+                        whileHover={{ scale: 1.04 }}
+                        whileTap={{ scale: 0.94 }}
                         onClick={() => handleCopy(channel.value, channel.name)}
                         data-cursor="copy"
                         data-cursor-label="COPY"
                         className="glass-pill inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg hover:border-primary text-xs font-mono text-primary transition-all cursor-pointer shadow-2xs"
                       >
-                        {isCopied ? (
-                          <>
-                            <Check className="w-3.5 h-3.5 text-emerald-600" />
-                            <span className="text-emerald-600 font-semibold">Copied ✓</span>
-                          </>
-                        ) : (
-                          <>
-                            <Copy className="w-3.5 h-3.5" />
-                            <span>Copy</span>
-                          </>
-                        )}
-                      </button>
+                        <AnimatePresence mode="wait" initial={false}>
+                          {isCopied ? (
+                            <motion.span
+                              key="copied"
+                              initial={{ scale: 0.6, opacity: 0 }}
+                              animate={{ scale: 1, opacity: 1 }}
+                              exit={{ scale: 0.6, opacity: 0 }}
+                              transition={{ duration: 0.16 }}
+                              className="inline-flex items-center gap-1.5 text-emerald-600 font-semibold"
+                            >
+                              <Check className="w-3.5 h-3.5" />
+                              <span>Copied ✓</span>
+                            </motion.span>
+                          ) : (
+                            <motion.span
+                              key="copy"
+                              initial={{ scale: 0.6, opacity: 0 }}
+                              animate={{ scale: 1, opacity: 1 }}
+                              exit={{ scale: 0.6, opacity: 0 }}
+                              transition={{ duration: 0.16 }}
+                              className="inline-flex items-center gap-1.5"
+                            >
+                              <Copy className="w-3.5 h-3.5" />
+                              <span>Copy</span>
+                            </motion.span>
+                          )}
+                        </AnimatePresence>
+                      </motion.button>
 
-                      <a
+                      <motion.a
+                        whileHover={{ scale: 1.04 }}
+                        whileTap={{ scale: 0.95 }}
                         href={`mailto:${channel.value}`}
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary text-white text-xs font-mono hover:bg-primary/90 transition-colors shadow-2xs"
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary text-white text-xs font-mono hover:bg-primary/90 transition-colors shadow-2xs cursor-pointer"
                       >
                         <Send className="w-3 h-3" />
                         <span>Send Email</span>
-                      </a>
+                      </motion.a>
                     </div>
                   </div>
                 )}
@@ -320,7 +348,9 @@ export function Contact() {
               curl -s https://cosmos127.dev/api/contact
             </code>
           </div>
-          <button
+          <motion.button
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.97 }}
             onClick={() =>
               handleCopy(
                 "curl -s https://cosmos127.dev/api/contact",
@@ -332,7 +362,7 @@ export function Contact() {
             className="text-primary hover:underline cursor-pointer flex items-center gap-1 text-left font-semibold"
           >
             {copiedField === "curl" ? "Copied command ✓" : "Copy curl command"}
-          </button>
+          </motion.button>
         </div>
 
       </div>

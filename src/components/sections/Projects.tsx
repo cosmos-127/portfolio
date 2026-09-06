@@ -3,12 +3,12 @@
 import { useRef, useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import Image, { type StaticImageData } from "next/image";
+import { motion } from "framer-motion";
 import llmarkImage from "@/assets/llmark-landing-page.png";
 import {
   ExternalLink,
   Globe,
   Server,
-  Network,
   Database,
   Sparkles,
   ChevronUp,
@@ -16,8 +16,10 @@ import {
   Compass,
   MoveVertical,
 } from "lucide-react";
-import { GithubIcon } from "@/components/ui/icons";
+import { GithubIcon, Neo4jIcon } from "@/components/ui/icons";
 import { cn } from "@/lib/utils";
+import { playTick } from "@/lib/sound";
+import { TextScramble } from "@/components/ui/TextScramble";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
@@ -119,7 +121,7 @@ function ProjectCard({
   return (
     <div
       className={cn(
-        "glass-card glass-card-hover glow-card rounded-2xl p-6 sm:p-7 flex flex-col justify-between relative group w-full mx-auto select-none overflow-hidden",
+        "glass-card glass-card-hover glow-card border-trace rounded-2xl p-6 sm:p-7 flex flex-col justify-between relative group w-full mx-auto select-none overflow-hidden",
         isActive && "active-glass-card ring-1 ring-primary/30"
       )}
       style={{
@@ -358,7 +360,7 @@ function ProjectCard({
 
             <div className="flex items-center justify-between pb-2 border-b border-border-light/80 text-[11px] text-text-muted">
               <div className="flex items-center gap-1.5">
-                <Network className="w-3.5 h-3.5 text-primary" />
+                <Neo4jIcon className="w-3.5 h-3.5 text-primary" />
                 <span className="truncate">graphrag://neo4j/hybrid-retrieval</span>
               </div>
               <span className="text-amber-600 font-bold shrink-0 flex items-center gap-1">
@@ -1080,7 +1082,7 @@ export function Projects() {
               {/* Telemetry Badge */}
               <div className="flex items-center gap-2 text-xs font-mono text-primary font-bold tracking-widest uppercase mb-4">
                 <Sparkles className="w-3.5 h-3.5" />
-                <span>SYSTEM ARCHITECTURE</span>
+                <span><TextScramble text="SYSTEM ARCHITECTURE" /></span>
                 <span className="w-6 h-px bg-primary/40" />
                 <span className="text-[10px] text-text-muted">01</span>
               </div>
@@ -1126,52 +1128,67 @@ export function Projects() {
 
               {/* Stepper Buttons & Station Selectors */}
               <div className="flex items-center justify-between gap-2 mb-2">
-                <div className="flex items-center gap-3 text-xs font-mono text-text-muted">
+                <div className="flex items-center gap-1.5 text-xs font-mono text-text-muted">
                   {PROJECTS.map((project, idx) => {
                     const isActive = activeIndex === idx;
                     return (
                       <button
                         key={project.id}
-                        onClick={() => transitionToCard(idx)}
+                        onClick={() => {
+                          playTick();
+                          transitionToCard(idx);
+                        }}
                         className={cn(
-                          "transition-colors duration-200 cursor-pointer flex items-center gap-1 px-1.5 py-0.5 rounded",
+                          "relative transition-colors duration-200 cursor-pointer flex items-center gap-1 px-2.5 py-1 rounded-full",
                           isActive
-                            ? "text-primary font-bold bg-primary/10"
-                            : "text-text-muted/60 hover:text-text-main"
+                            ? "text-primary font-bold"
+                            : "text-text-muted hover:text-text-main"
                         )}
                         title={`Rotate drum to ${project.title}`}
                       >
-                        <span>0{idx + 1}</span>
                         {isActive && (
-                          <span className="w-1.5 h-1.5 rounded-full bg-primary" />
+                          <motion.div
+                            layoutId="activeProjectDrumPill"
+                            className="absolute inset-0 bg-primary/10 border border-primary/25 rounded-full -z-10 shadow-2xs"
+                            transition={{ type: "spring", stiffness: 420, damping: 30 }}
+                          />
                         )}
+                        <span>0{idx + 1}</span>
                       </button>
                     );
                   })}
                 </div>
 
                 {/* Quick Step Controls */}
-                <div className="flex items-center gap-1 font-mono text-[10px]">
-                  <button
-                    onClick={() => transitionToCard(Math.max(0, activeIndex - 1))}
+                <div className="flex items-center gap-1.5 font-mono text-[10px]">
+                  <motion.button
+                    whileHover={{ scale: 1.08 }}
+                    whileTap={{ scale: 0.92 }}
+                    onClick={() => {
+                      playTick();
+                      transitionToCard(Math.max(0, activeIndex - 1));
+                    }}
                     disabled={activeIndex === 0}
                     className="p-1.5 rounded-lg glass-pill text-text-muted hover:text-primary hover:border-primary/40 disabled:opacity-25 disabled:pointer-events-none transition-colors cursor-pointer shadow-2xs"
                     title="Previous card (Arrow Up)"
                   >
                     <ChevronUp className="w-3.5 h-3.5" />
-                  </button>
-                  <button
-                    onClick={() =>
+                  </motion.button>
+                  <motion.button
+                    whileHover={{ scale: 1.08 }}
+                    whileTap={{ scale: 0.92 }}
+                    onClick={() => {
+                      playTick();
                       transitionToCard(
                         Math.min(PROJECTS.length - 1, activeIndex + 1)
-                      )
-                    }
+                      );
+                    }}
                     disabled={activeIndex === PROJECTS.length - 1}
                     className="p-1.5 rounded-lg glass-pill text-text-muted hover:text-primary hover:border-primary/40 disabled:opacity-25 disabled:pointer-events-none transition-colors cursor-pointer shadow-2xs"
                     title="Next card (Arrow Down)"
                   >
                     <ChevronDown className="w-3.5 h-3.5" />
-                  </button>
+                  </motion.button>
                 </div>
               </div>
             </div>

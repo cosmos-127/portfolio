@@ -6,6 +6,8 @@ import { ArrowUpRight, Clock } from "lucide-react";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
+import { playTick } from "@/lib/sound";
+import { TextScramble } from "@/components/ui/TextScramble";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -49,7 +51,7 @@ const CURATED_ESSAYS: ArticleItem[] = [
       "A guide to overcoming vector retrieval limitations: constructing entity-relation knowledge graphs with Neo4j and orchestrating multi-hop relational retrieval for accurate agent reasoning.",
     readTime: "9 min read",
     category: "GraphRAG & Knowledge Graphs",
-    link: "https://medium.com/@gaganparashar127/beyond-naive-rag-integrating-knowledge-graphs-with-vector-search-via-langgraph-7d0e51b14271?sharedUserId=gaganparashar127",
+    link: "https://medium.com/@gaganparashar127/beyond-naive-rag-integrating-knowledge-graphs-with-vector-search-via-langGraph-7d0e51b14271?sharedUserId=gaganparashar127",
     date: "Mar 14, 2026",
     relatedProject: "GraphRAG Explorer",
     status: "published",
@@ -69,7 +71,7 @@ export function Writing() {
       if (headerRef.current) {
         gsap.fromTo(
           headerRef.current,
-          { opacity: 0, y: 22 },
+          { opacity: 0, y: 24, filter: "blur(6px)" },
           {
             scrollTrigger: {
               trigger: headerRef.current,
@@ -78,9 +80,10 @@ export function Writing() {
             },
             opacity: 1,
             y: 0,
-            duration: 0.6,
+            filter: "blur(0px)",
+            duration: 0.65,
             ease: "power3.out",
-            clearProps: "transform",
+            clearProps: "transform,filter",
           }
         );
       }
@@ -89,7 +92,7 @@ export function Writing() {
         const cards = Array.from(gridRef.current.children);
         gsap.fromTo(
           cards,
-          { opacity: 0, y: 28 },
+          { opacity: 0, y: 32, filter: "blur(8px)" },
           {
             scrollTrigger: {
               trigger: gridRef.current,
@@ -98,10 +101,11 @@ export function Writing() {
             },
             opacity: 1,
             y: 0,
-            duration: 0.65,
+            filter: "blur(0px)",
+            duration: 0.7,
             stagger: 0.12,
             ease: "power3.out",
-            clearProps: "transform",
+            clearProps: "transform,filter",
           }
         );
       }
@@ -152,7 +156,7 @@ export function Writing() {
             <div className="flex items-center gap-2 text-xs font-mono text-primary font-bold tracking-widest uppercase mb-3">
               <span>[03]</span>
               <span className="w-8 h-px bg-primary/40" />
-              <span>{"//"} TECHNICAL WRITING</span>
+              <span>{"//"} <TextScramble text="TECHNICAL WRITING" /></span>
             </div>
             <h2 className="font-gued font-bold text-3xl sm:text-4xl md:text-5xl lg:text-[3.25rem] text-text-main tracking-tight leading-[1.12]">
               Thinking <span className="font-serif italic font-normal text-primary tracking-normal">out loud</span> about LLMs<span className="text-primary font-bold">.</span>
@@ -171,13 +175,14 @@ export function Writing() {
         </div>
 
         {/* Articles Grid with Mouse-Tracking Sheen */}
-        <div ref={gridRef} className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div ref={gridRef} className="grid grid-cols-1 md:grid-cols-3 gap-6 velocity-skew will-change-transform">
           {articles.map((article) => (
             <article
               key={article.title}
               data-cursor="read"
               data-cursor-label="READ ↗"
-              className="glass-card glass-card-hover glow-card rounded-2xl p-6 sm:p-7 flex flex-col justify-between group relative overflow-hidden will-change-transform select-none"
+              onMouseEnter={() => playTick()}
+              className="glass-card glass-card-hover glow-card border-trace rounded-2xl p-6 sm:p-7 flex flex-col justify-between group relative overflow-hidden will-change-transform select-none"
               style={{
                 transform:
                   "perspective(800px) rotateY(var(--card-tilt-y, 0deg)) rotateX(var(--card-tilt-x, 0deg)) scale3d(var(--card-scale, 1), var(--card-scale, 1), 1)",
@@ -241,10 +246,10 @@ export function Writing() {
                     href={article.link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-primary group-hover:translate-x-0.5 transition-transform font-semibold"
+                    className="inline-flex items-center gap-1 text-primary group-hover:text-primary/90 transition-all font-semibold"
                   >
                     <span>Read</span>
-                    <ArrowUpRight className="w-3.5 h-3.5" />
+                    <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-200" />
                   </Link>
                 </div>
               </div>

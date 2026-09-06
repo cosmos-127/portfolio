@@ -18,7 +18,7 @@ import {
   X,
   Sparkles,
 } from "lucide-react";
-import { GithubIcon, LinkedinIcon } from "@/components/ui/icons";
+import { GithubIcon, LinkedinIcon, MediumIcon } from "@/components/ui/icons";
 import { isSoundEnabled, toggleSound, playTick, playChime, subscribeSound } from "@/lib/sound";
 
 interface CommandItem {
@@ -231,7 +231,7 @@ export function CommandPalette() {
         title: "Medium Notebook",
         description: "medium.com/@gaganparashar127 — Deep dives & system design",
         badge: "EXTERNAL",
-        icon: BookOpen,
+        icon: MediumIcon,
         action: () => {
           playChime();
           window.open("https://medium.com/@gaganparashar127", "_blank", "noopener,noreferrer");
@@ -349,9 +349,9 @@ export function CommandPalette() {
 
             {/* Modal Dialog */}
             <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: -12 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.96, y: -8 }}
+              initial={{ opacity: 0, scale: 0.95, y: -12, filter: "blur(4px)" }}
+              animate={{ opacity: 1, scale: 1, y: 0, filter: "blur(0px)" }}
+              exit={{ opacity: 0, scale: 0.96, y: -8, filter: "blur(4px)" }}
               transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
               className="relative w-full max-w-xl glass-card rounded-2xl shadow-2xl overflow-hidden font-mono z-10 flex flex-col max-h-[75vh] will-change-transform"
               onClick={(e) => e.stopPropagation()}
@@ -381,7 +381,7 @@ export function CommandPalette() {
                       setQuery("");
                       setSelectedIndex(0);
                     }}
-                    className="text-text-muted hover:text-text-main p-1 rounded-md"
+                    className="text-text-muted hover:text-text-main p-1 rounded-md cursor-pointer"
                   >
                     <X className="w-3.5 h-3.5" />
                   </button>
@@ -426,17 +426,25 @@ export function CommandPalette() {
                         onMouseEnter={() => {
                           setSelectedIndex(idx);
                         }}
-                        className={`w-full flex items-center justify-between px-3 sm:px-4 py-2.5 rounded-xl text-left transition-all duration-150 cursor-pointer ${
+                        className={`relative w-full flex items-center justify-between px-3 sm:px-4 py-2.5 rounded-xl text-left transition-colors duration-150 cursor-pointer ${
                           isSelected
-                            ? "bg-primary/10 text-primary border border-primary/20 shadow-2xs translate-x-1"
-                            : "text-text-main hover:bg-surface/60 border border-transparent"
+                            ? "text-primary"
+                            : "text-text-main hover:bg-surface/40"
                         }`}
                       >
-                        <div className="flex items-center gap-3 min-w-0">
+                        {isSelected && (
+                          <motion.div
+                            layoutId="paletteItemActiveHighlight"
+                            className="absolute inset-0 bg-primary/10 border border-primary/25 rounded-xl shadow-2xs -z-10"
+                            transition={{ type: "spring", stiffness: 450, damping: 32 }}
+                          />
+                        )}
+
+                        <div className="flex items-center gap-3 min-w-0 z-10">
                           <div
                             className={`p-2 rounded-lg shrink-0 transition-colors ${
                               isSelected
-                                ? "bg-primary text-white"
+                                ? "bg-primary text-white shadow-xs"
                                 : "bg-surface border border-border-light text-text-muted"
                             }`}
                           >
@@ -463,9 +471,9 @@ export function CommandPalette() {
                           </div>
                         </div>
 
-                        <div className="shrink-0 ml-3">
+                        <div className="shrink-0 ml-3 z-10">
                           {isSelected ? (
-                            <span className="text-[10px] text-primary font-mono flex items-center gap-1">
+                            <span className="text-[10px] text-primary font-mono flex items-center gap-1 font-semibold">
                               <span>↵</span>
                             </span>
                           ) : (

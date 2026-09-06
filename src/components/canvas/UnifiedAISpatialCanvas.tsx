@@ -1635,7 +1635,49 @@ export function UnifiedAISpatialCanvas() {
     }
   }, []);
 
-  const [dpr, setDpr] = useState(1.5);
+  const [dpr, setDpr] = useState(() => {
+    if (typeof window === "undefined") return 1.25;
+    return window.innerWidth < 768 ? 1.0 : Math.min(1.5, window.devicePixelRatio || 1);
+  });
+  const [isPaused, setIsPaused] = useState(false);
+
+  // Intelligent Energy & Battery Throttling:
+  // 1. Pause WebGL frame loop completely when tab is hidden or document is not visible (0% GPU/CPU idle)
+  // 2. Adjust DPR based on device capabilities and battery level
+  useEffect(() => {
+    const handleVisibility = () => {
+      const hidden = document.visibilityState === "hidden";
+      setIsPaused(hidden);
+    };
+
+    const handleResize = () => {
+      const isMobile = window.innerWidth < 768;
+      setDpr(isMobile ? 1.0 : Math.min(1.5, window.devicePixelRatio || 1));
+    };
+
+    document.addEventListener("visibilitychange", handleVisibility);
+    window.addEventListener("resize", handleResize, { passive: true });
+
+    // Optional battery saving: throttle DPR if battery < 20% and not charging
+    let isMounted = true;
+    if (typeof navigator !== "undefined" && "getBattery" in navigator) {
+      (navigator as unknown as { getBattery: () => Promise<{ level: number; charging: boolean }> })
+        .getBattery()
+        .then((battery) => {
+          if (!isMounted) return;
+          if (battery.level <= 0.2 && !battery.charging) {
+            setDpr(1.0);
+          }
+        })
+        .catch(() => {});
+    }
+
+    return () => {
+      isMounted = false;
+      document.removeEventListener("visibilitychange", handleVisibility);
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   return (
     <div
@@ -1649,6 +1691,7 @@ export function UnifiedAISpatialCanvas() {
     >
       <Canvas
         camera={{ position: [0, 0, 7.2], fov: 45 }}
+        frameloop={isPaused ? "never" : "always"}
         dpr={dpr}
         gl={{
           antialias: true,

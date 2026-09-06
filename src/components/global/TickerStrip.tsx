@@ -27,10 +27,10 @@ export function TickerStrip({ className = "" }: TickerStripProps) {
           {TICKER_ITEMS.map((item, idx) => {
             const Icon = item.icon;
             return (
-              <div key={`track1-${idx}`} className="flex items-center gap-3">
-                <Icon className="h-3.5 w-3.5 text-primary" />
-                <span>{item.text}</span>
-                <span className="text-border-strong font-light">/</span>
+              <div key={`track1-${idx}`} className="group/ticker flex items-center gap-3 py-1 px-2 rounded-lg hover:bg-white/80 hover:text-text-main transition-colors duration-200 cursor-default">
+                <Icon className="h-3.5 w-3.5 text-primary group-hover/ticker:scale-110 group-hover/ticker:rotate-6 transition-transform duration-200" />
+                <span className="group-hover/ticker:text-primary transition-colors duration-200">{item.text}</span>
+                <span className="text-border-strong font-light ml-2">/</span>
               </div>
             );
           })}
@@ -39,10 +39,10 @@ export function TickerStrip({ className = "" }: TickerStripProps) {
           {TICKER_ITEMS.map((item, idx) => {
             const Icon = item.icon;
             return (
-              <div key={`track2-${idx}`} className="flex items-center gap-3">
-                <Icon className="h-3.5 w-3.5 text-primary" />
-                <span>{item.text}</span>
-                <span className="text-border-strong font-light">/</span>
+              <div key={`track2-${idx}`} className="group/ticker flex items-center gap-3 py-1 px-2 rounded-lg hover:bg-white/80 hover:text-text-main transition-colors duration-200 cursor-default">
+                <Icon className="h-3.5 w-3.5 text-primary group-hover/ticker:scale-110 group-hover/ticker:rotate-6 transition-transform duration-200" />
+                <span className="group-hover/ticker:text-primary transition-colors duration-200">{item.text}</span>
+                <span className="text-border-strong font-light ml-2">/</span>
               </div>
             );
           })}

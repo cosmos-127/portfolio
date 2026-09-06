@@ -17,9 +17,37 @@ function LenisScrollManager() {
   useEffect(() => {
     if (!lenis) return;
 
-    // 1. Synchronize ScrollTrigger on every Lenis scroll step
-    const onScroll = () => {
+    // 1. Synchronize ScrollTrigger and apply fluid velocity-based micro-skew
+    const isReduced = typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let isSettled = true;
+
+    const onScroll = (e: { velocity: number }) => {
       ScrollTrigger.update();
+
+      if (isReduced) return;
+
+      const v = e.velocity || 0;
+      const targetSkew = Math.max(-1.1, Math.min(1.1, v * 0.032));
+      const elements = document.querySelectorAll(".velocity-skew");
+      if (elements.length === 0) return;
+
+      if (Math.abs(v) > 0.15) {
+        isSettled = false;
+        gsap.to(elements, {
+          skewY: targetSkew,
+          duration: 0.22,
+          ease: "power1.out",
+          overwrite: "auto",
+        });
+      } else if (!isSettled) {
+        isSettled = true;
+        gsap.to(elements, {
+          skewY: 0,
+          duration: 0.45,
+          ease: "power2.out",
+          overwrite: "auto",
+        });
+      }
     };
     lenis.on("scroll", onScroll);
 

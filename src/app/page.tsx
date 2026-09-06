@@ -45,6 +45,14 @@ const MouseSpotlight = dynamic(
   { ssr: false }
 );
 
+const SectionHUD = dynamic(
+  () =>
+    import("@/components/global/SectionHUD").then(
+      (mod) => mod.SectionHUD
+    ),
+  { ssr: false }
+);
+
 export default function Home() {
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -80,6 +88,7 @@ export default function Home() {
     <>
       <CustomCursor />
       <CommandPalette />
+      <SectionHUD />
 
       <UnifiedAISpatialCanvas />
       <MouseSpotlight />

@@ -363,6 +363,12 @@ html.lenis body {
   }
 }
 
+@keyframes border-beam {
+  100% {
+    offset-distance: 100%;
+  }
+}
+
 .animate-telemetry-pulse {
   animation: telemetry-pulse 2.8s ease-in-out infinite;
 }
@@ -373,6 +379,56 @@ html.lenis body {
 
 .animate-float-subtle {
   animation: float-subtle 3.4s ease-in-out infinite;
+}
+
+.animate-border-beam {
+  animation: border-beam calc(var(--duration) * 1s) infinite linear;
+}
+
+/* ==========================================================================
+   Perimeter Circuit Light-Tracing for Frosted Cards (Apple / Linear style)
+   ========================================================================== */
+@property --trace-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+@keyframes rotate-trace {
+  0% { --trace-angle: 0deg; }
+  100% { --trace-angle: 360deg; }
+}
+
+.border-trace {
+  position: relative;
+}
+
+.border-trace::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: conic-gradient(
+    from var(--trace-angle, 0deg) at 50% 50%,
+    transparent 0%,
+    transparent 65%,
+    rgba(230, 57, 70, 0.3) 80%,
+    rgba(255, 255, 255, 0.95) 94%,
+    rgba(230, 57, 70, 0.85) 100%
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 26;
+}
+
+.border-trace:hover::before {
+  opacity: 1;
+  animation: rotate-trace 3.6s linear infinite;
 }
 
 

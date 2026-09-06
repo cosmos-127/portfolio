@@ -12,6 +12,8 @@ import {
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
+import { playTick } from "@/lib/sound";
+import { TextScramble } from "@/components/ui/TextScramble";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -26,7 +28,7 @@ export function About() {
       if (headerRef.current) {
         gsap.fromTo(
           headerRef.current,
-          { opacity: 0, y: 22 },
+          { opacity: 0, y: 24, filter: "blur(6px)" },
           {
             scrollTrigger: {
               trigger: headerRef.current,
@@ -35,9 +37,10 @@ export function About() {
             },
             opacity: 1,
             y: 0,
-            duration: 0.6,
+            filter: "blur(0px)",
+            duration: 0.65,
             ease: "power3.out",
-            clearProps: "transform",
+            clearProps: "transform,filter",
           }
         );
       }
@@ -46,7 +49,7 @@ export function About() {
       if (timelineRef.current) {
         gsap.fromTo(
           timelineRef.current,
-          { opacity: 0, y: 28 },
+          { opacity: 0, y: 30, filter: "blur(8px)" },
           {
             scrollTrigger: {
               trigger: timelineRef.current,
@@ -55,9 +58,10 @@ export function About() {
             },
             opacity: 1,
             y: 0,
-            duration: 0.65,
+            filter: "blur(0px)",
+            duration: 0.7,
             ease: "power3.out",
-            clearProps: "transform",
+            clearProps: "transform,filter",
           }
         );
       }
@@ -79,7 +83,7 @@ export function About() {
             <div className="flex items-center gap-2 text-xs font-mono text-primary font-bold tracking-widest uppercase mb-3">
               <span>[04]</span>
               <span className="w-8 h-px bg-primary/40" />
-              <span>{"//"} ABOUT & TRAJECTORY</span>
+              <span>{"//"} <TextScramble text="ABOUT & TRAJECTORY" /></span>
             </div>
             <h2 className="font-gued font-bold text-3xl sm:text-4xl md:text-5xl lg:text-[3.25rem] text-text-main tracking-tight max-w-3xl leading-[1.12]">
               Background &amp; <span className="font-serif italic font-normal text-primary tracking-normal">career path</span><span className="text-primary font-bold">.</span>
@@ -94,7 +98,7 @@ export function About() {
           <div className="lg:col-span-6 flex flex-col gap-8 max-w-xl">
 
             {/* Glassmorphic Career Trajectory Card with Mouse-Tracking Sheen */}
-            <div ref={timelineRef} className="glass-card glass-card-hover glow-card rounded-2xl p-6 sm:p-7 space-y-6 relative overflow-hidden">
+            <div ref={timelineRef} className="glass-card glass-card-hover glow-card border-trace velocity-skew will-change-transform rounded-2xl p-6 sm:p-7 space-y-6 relative overflow-hidden">
               {/* Subtle top specular sheen highlight */}
               <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent pointer-events-none z-20" />
               
@@ -114,7 +118,10 @@ export function About() {
               <div className="relative ml-3 sm:ml-4 pl-6 sm:pl-7 border-l border-border-light/80 space-y-6 my-2">
                 
                 {/* 1. Education (VIT) */}
-                <div className="relative group p-2 -mx-2 rounded-xl transition-all duration-200 hover:bg-white/60">
+                <div
+                  onMouseEnter={() => playTick()}
+                  className="relative group p-2.5 -mx-2 rounded-xl transition-all duration-200 hover:bg-white/70 hover:translate-x-1 cursor-default"
+                >
                   {/* Node on rail */}
                   <span className="absolute -left-[30px] sm:-left-[34px] top-3.5 w-3 h-3 rounded-full bg-white border-2 border-border-strong group-hover:border-primary group-hover:scale-110 transition-all duration-200 shadow-2xs" />
                   
@@ -143,7 +150,10 @@ export function About() {
                 </div>
 
                 {/* 2. First Role (Accenture) */}
-                <div className="relative group p-2 -mx-2 rounded-xl transition-all duration-200 hover:bg-white/60">
+                <div
+                  onMouseEnter={() => playTick()}
+                  className="relative group p-2.5 -mx-2 rounded-xl transition-all duration-200 hover:bg-white/70 hover:translate-x-1 cursor-default"
+                >
                   {/* Node on rail */}
                   <span className="absolute -left-[30px] sm:-left-[34px] top-3.5 w-3 h-3 rounded-full bg-white border-2 border-border-strong group-hover:border-primary group-hover:scale-110 transition-all duration-200 shadow-2xs" />
                   
@@ -172,7 +182,10 @@ export function About() {
                 </div>
 
                 {/* 3. Current Role (Strategy) */}
-                <div className="relative group p-3 -mx-2 rounded-xl glass-panel shadow-2xs transition-all duration-200 hover:bg-white/85">
+                <div
+                  onMouseEnter={() => playTick()}
+                  className="relative group p-3.5 -mx-2 rounded-xl glass-panel shadow-2xs transition-all duration-200 hover:bg-white/90 hover:translate-x-1 cursor-default"
+                >
                   {/* Active glowing beacon node */}
                   <span className="absolute -left-[31px] sm:-left-[35px] top-4 flex h-3.5 w-3.5 items-center justify-center">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-40" />

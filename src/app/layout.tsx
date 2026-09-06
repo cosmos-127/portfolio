@@ -76,6 +76,54 @@ export const metadata: Metadata = {
   },
 };
 
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": "https://cosmos127.dev/#person",
+      "name": "Gagan",
+      "jobTitle": "AI Engineer",
+      "worksFor": {
+        "@type": "Organization",
+        "name": "Strategy",
+      },
+      "alumniOf": {
+        "@type": "EducationalOrganization",
+        "name": "Vellore Institute of Technology",
+      },
+      "description":
+        "AI Engineer specializing in compound AI architectures, autonomous agent workflows (LangGraph, ReWOO, ReAct), GraphRAG, Model Context Protocol (MCP), and production model serving with vLLM.",
+      "url": "https://cosmos127.dev",
+      "sameAs": [
+        "https://github.com/cosmos-127",
+        "https://www.linkedin.com/in/gagan-parashar/",
+        "https://medium.com/@gaganparashar127",
+      ],
+      "knowsAbout": [
+        "Artificial Intelligence",
+        "Large Language Models",
+        "LLMOps",
+        "vLLM Serving",
+        "LangGraph",
+        "GraphRAG",
+        "Model Context Protocol",
+        "Multi-Agent Systems",
+        "Neo4j",
+      ],
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://cosmos127.dev/#website",
+      "url": "https://cosmos127.dev",
+      "name": "Gagan — Generalist AI Engineer",
+      "publisher": {
+        "@id": "https://cosmos127.dev/#person",
+      },
+    },
+  ],
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -86,6 +134,12 @@ export default function RootLayout({
       lang="en"
       className={`${syne.variable} ${instrumentSerif.variable} ${jetbrainsMono.variable} ${plusJakartaSans.variable} antialiased`}
     >
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
       <body className="min-h-full flex flex-col font-sans text-text-main bg-background selection:bg-primary selection:text-white">
         <SmoothScrollProvider>{children}</SmoothScrollProvider>
       </body>

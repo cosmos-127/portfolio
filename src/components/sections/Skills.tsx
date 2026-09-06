@@ -5,6 +5,9 @@ import { Bot, Network, Zap, Cpu } from "lucide-react";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
+import { playTick } from "@/lib/sound";
+
+import { TextScramble } from "@/components/ui/TextScramble";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -81,7 +84,7 @@ export function Skills() {
       if (headerRef.current) {
         gsap.fromTo(
           headerRef.current,
-          { opacity: 0, y: 22 },
+          { opacity: 0, y: 24, filter: "blur(6px)" },
           {
             scrollTrigger: {
               trigger: headerRef.current,
@@ -90,9 +93,10 @@ export function Skills() {
             },
             opacity: 1,
             y: 0,
-            duration: 0.6,
+            filter: "blur(0px)",
+            duration: 0.65,
             ease: "power3.out",
-            clearProps: "transform",
+            clearProps: "transform,filter",
           }
         );
       }
@@ -101,7 +105,7 @@ export function Skills() {
         const columns = Array.from(cardsRef.current.children);
         gsap.fromTo(
           columns,
-          { opacity: 0, y: 28 },
+          { opacity: 0, y: 32, filter: "blur(8px)" },
           {
             scrollTrigger: {
               trigger: cardsRef.current,
@@ -110,10 +114,11 @@ export function Skills() {
             },
             opacity: 1,
             y: 0,
-            duration: 0.65,
+            filter: "blur(0px)",
+            duration: 0.7,
             stagger: 0.12,
             ease: "power3.out",
-            clearProps: "transform",
+            clearProps: "transform,filter",
           }
         );
       }
@@ -137,7 +142,7 @@ export function Skills() {
             <div className="flex items-center gap-2 text-xs font-mono text-primary font-bold tracking-widest uppercase mb-3">
               <span>[02]</span>
               <span className="w-8 h-px bg-primary/40" />
-              <span>{"//"} SKILLS</span>
+              <span>{"//"} <TextScramble text="SKILLS" /></span>
             </div>
             <h2 className="font-gued font-bold text-3xl sm:text-4xl md:text-5xl lg:text-[3.25rem] text-text-main tracking-tight leading-[1.12]">
               What I <span className="font-serif italic font-normal text-primary tracking-normal">work with</span><span className="text-primary font-bold">.</span>
@@ -146,13 +151,13 @@ export function Skills() {
         </div>
 
         {/* Refined Glassmorphic Capabilities Grid with Mouse-Tracking Sheen */}
-        <div ref={cardsRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-6 xl:gap-8">
+        <div ref={cardsRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-6 xl:gap-8 velocity-skew will-change-transform">
           {SKILL_GROUPS.map((group) => {
             const Icon = group.icon;
             return (
               <div
                 key={group.number}
-                className="group relative flex flex-col glass-card glass-card-hover glow-card rounded-2xl p-6 sm:p-7 justify-between overflow-hidden"
+                className="group relative flex flex-col glass-card glass-card-hover glow-card border-trace rounded-2xl p-6 sm:p-7 justify-between overflow-hidden"
               >
                 {/* Subtle top specular sheen highlight */}
                 <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent pointer-events-none z-20" />
@@ -176,11 +181,12 @@ export function Skills() {
                   </h3>
 
                   {/* Capability Rows with subtle interactive glass pills */}
-                  <ul className="flex flex-col gap-3">
+                  <ul className="flex flex-col gap-2.5">
                     {group.skills.map((skill) => (
                       <li
                         key={skill.name}
-                        className="group/item flex items-center gap-2 p-2 -mx-2 rounded-xl transition-all duration-200 hover:bg-white/60 hover:shadow-2xs"
+                        onMouseEnter={() => playTick()}
+                        className="group/item flex items-center gap-2.5 p-2 -mx-2 rounded-xl transition-all duration-200 hover:bg-white/80 hover:translate-x-1 hover:shadow-2xs cursor-default"
                       >
                         <span className="w-1.5 h-1.5 rounded-full bg-primary/40 group-hover/item:bg-primary group-hover/item:scale-125 transition-all duration-200 shrink-0" />
                         <span className="text-sm font-semibold text-text-main group-hover/item:text-primary transition-colors duration-200">

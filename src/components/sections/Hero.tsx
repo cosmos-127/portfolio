@@ -97,7 +97,7 @@ export function Hero() {
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.3 }}
-              className="glass-pill inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full text-xs font-mono text-text-muted shadow-2xs select-none"
+              className="glass-pill inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full text-xs font-mono text-text-muted shadow-2xs select-none hover:border-primary/30 transition-colors"
             >
               <span className="relative flex h-2 w-2 shrink-0">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" />
@@ -108,10 +108,10 @@ export function Hero() {
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={metricIdx}
-                    initial={{ y: 12, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    exit={{ y: -12, opacity: 0 }}
-                    transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                    initial={{ y: 14, opacity: 0, filter: "blur(2px)" }}
+                    animate={{ y: 0, opacity: 1, filter: "blur(0px)" }}
+                    exit={{ y: -14, opacity: 0, filter: "blur(2px)" }}
+                    transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
                     className="absolute inset-0 flex items-center gap-2 truncate will-change-transform"
                   >
                     <span className="text-text-main font-semibold tracking-tight text-[11px] sm:text-xs">
@@ -141,8 +141,8 @@ export function Hero() {
                 {"Gagan".split("").map((char, i) => (
                   <motion.span
                     key={i}
-                    initial={{ y: 50, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
+                    initial={{ y: 50, opacity: 0, filter: "blur(4px)" }}
+                    animate={{ y: 0, opacity: 1, filter: "blur(0px)" }}
                     transition={{
                       duration: 0.55,
                       delay: 0.7 + i * 0.065,
@@ -157,7 +157,7 @@ export function Hero() {
                   initial={{ scale: 0, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
                   transition={{
-                    duration: 0.4,
+                    duration: 0.45,
                     delay: 1.08,
                     ease: [0.34, 1.56, 0.64, 1],
                   }}
@@ -177,30 +177,42 @@ export function Hero() {
               </motion.p>
             </div>
 
-            {/* Call to actions */}
+            {/* Call to actions with spring micro-interactions */}
             <motion.div
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 1.35 }}
               className="flex flex-wrap items-center gap-4 pt-3"
             >
-              <Link
-                href="#projects"
-                className="group inline-flex items-center gap-2 px-6 py-3 rounded-full bg-primary text-white font-mono text-xs tracking-wide hover:bg-primary/90 shadow-sm shadow-primary/20 hover:shadow-md hover:shadow-primary/30 transition-all duration-200"
+              <motion.div
+                whileHover={{ y: -2, scale: 1.02 }}
+                whileTap={{ scale: 0.97 }}
+                transition={{ type: "spring", stiffness: 400, damping: 25 }}
               >
-                <span>View Projects</span>
-                <ArrowDown className="w-3.5 h-3.5 group-hover:translate-y-0.5 transition-transform" />
-              </Link>
+                <Link
+                  href="#projects"
+                  className="group inline-flex items-center gap-2 px-6 py-3 rounded-full bg-primary text-white font-mono text-xs tracking-wide shadow-sm shadow-primary/25 hover:shadow-lg hover:shadow-primary/35 transition-all duration-200 cursor-pointer"
+                >
+                  <span>View Projects</span>
+                  <ArrowDown className="w-3.5 h-3.5 group-hover:translate-y-1 transition-transform duration-200" />
+                </Link>
+              </motion.div>
 
-              <Link
-                href="https://github.com/cosmos-127"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="glass-pill inline-flex items-center gap-2 px-6 py-3 rounded-full text-text-main font-mono text-xs hover:border-text-main hover:bg-white transition-all duration-200 shadow-2xs"
+              <motion.div
+                whileHover={{ y: -2, scale: 1.02 }}
+                whileTap={{ scale: 0.97 }}
+                transition={{ type: "spring", stiffness: 400, damping: 25 }}
               >
-                <GithubIcon className="w-3.5 h-3.5" />
-                <span>GitHub</span>
-              </Link>
+                <Link
+                  href="https://github.com/cosmos-127"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="glass-pill inline-flex items-center gap-2 px-6 py-3 rounded-full text-text-main font-mono text-xs hover:border-text-main hover:bg-white transition-all duration-200 shadow-2xs cursor-pointer"
+                >
+                  <GithubIcon className="w-3.5 h-3.5" />
+                  <span>GitHub</span>
+                </Link>
+              </motion.div>
             </motion.div>
           </div>
 
