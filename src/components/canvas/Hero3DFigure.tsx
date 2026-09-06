@@ -41,7 +41,7 @@ function NeuralTensorScene() {
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, []);
 
-  const baseScale = viewport.width > 7 ? 1.08 : 0.82;
+  const baseScale = viewport.width > 7 ? 0.8 : 0.65;
 
   useFrame((state, delta) => {
     const time = state.clock.elapsedTime;

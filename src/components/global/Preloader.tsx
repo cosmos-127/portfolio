@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const GLYPHS = "01XZ#%&*<>/[]{}+=";
@@ -121,6 +121,27 @@ export function Preloader() {
     };
   }, [isDone]);
 
+  const triggerCompletion = useCallback((immediate = false) => {
+    if (hasTriggeredRef.current) return;
+    hasTriggeredRef.current = true;
+
+    setProgress(100);
+    setStepIndex(STEPS.length - 1);
+
+    if (immediate) {
+      setIsExpanding(true);
+      setTimeout(() => {
+        setIsDone(true);
+      }, 350);
+      return;
+    }
+
+    // Comfortable 450ms pause at 100% so the user reads the final welcome state
+    setTimeout(() => {
+      setIsExpanding(true);
+    }, 450);
+  }, []);
+
   // Smooth progress increment across the 3 equal intervals
   useEffect(() => {
     if (isDone || isExpanding) return;
@@ -164,28 +185,7 @@ export function Preloader() {
       cancelAnimationFrame(animFrame);
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [isDone, isExpanding]);
-
-  const triggerCompletion = (immediate = false) => {
-    if (hasTriggeredRef.current) return;
-    hasTriggeredRef.current = true;
-
-    setProgress(100);
-    setStepIndex(STEPS.length - 1);
-
-    if (immediate) {
-      setIsExpanding(true);
-      setTimeout(() => {
-        setIsDone(true);
-      }, 350);
-      return;
-    }
-
-    // Comfortable 450ms pause at 100% so the user reads the final welcome state
-    setTimeout(() => {
-      setIsExpanding(true);
-    }, 450);
-  };
+  }, [isDone, isExpanding, triggerCompletion]);
 
   if (isDone) return null;
 

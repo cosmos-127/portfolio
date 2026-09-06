@@ -31,48 +31,48 @@ export const SECTION_SPATIALS: SectionSpatialConfig[] = [
     x: 0.65,
     y: 0.0,
     z: 0.0,
-    scale: 1.02,
+    scale: 0.8,
     opacity: 1.0,
     blur: 0,
     rotX: 0.0,
     rotY: 0.0,
     rotZ: 0.0,
   },
-  // 1. Projects Section [01]: Sweeping behind 3D revolving project drum showcase with strong frosted blur
+  // 1. Projects Section [01]: Sweeping behind 3D revolving project drum showcase with deep frosted atmospheric blur
   {
     id: "projects",
     x: -0.72,
     y: 0.10,
     z: -0.85,
-    scale: 1.02,
-    opacity: 0.88,
-    blur: 14.0,
+    scale: 0.8,
+    opacity: 0.45,
+    blur: 36.0,
     rotX: Math.PI * 0.45,
     rotY: Math.PI * 1.3,
     rotZ: Math.PI * 0.1,
   },
-  // 2. Skills Section [02]: Floating behind capability matrix with strong frosted blur
+  // 2. Skills Section [02]: Floating behind capability matrix with deep frosted atmospheric blur
   {
     id: "skills",
     x: 0.72,
     y: -0.06,
     z: -0.85,
-    scale: 1.02,
-    opacity: 0.88,
-    blur: 14.0,
+    scale: 0.8,
+    opacity: 0.45,
+    blur: 36.0,
     rotX: Math.PI * 0.85,
     rotY: Math.PI * 2.5,
     rotZ: -Math.PI * 0.12,
   },
-  // 3. Writing Section [03]: Floating behind technical article cards with strong frosted blur
+  // 3. Writing Section [03]: Floating behind technical article cards with deep frosted atmospheric blur
   {
     id: "writing",
     x: -0.70,
     y: 0.04,
     z: -0.85,
-    scale: 1.02,
-    opacity: 0.88,
-    blur: 14.0,
+    scale: 0.8,
+    opacity: 0.45,
+    blur: 36.0,
     rotX: Math.PI * 1.35,
     rotY: Math.PI * 3.7,
     rotZ: Math.PI * 0.14,
@@ -83,22 +83,22 @@ export const SECTION_SPATIALS: SectionSpatialConfig[] = [
     x: 0.82,
     y: 0.0,
     z: 0.0,
-    scale: 1.02,
-    opacity: 1.0,
+    scale: 0.8,
+    opacity: 0.95,
     blur: 0,
     rotX: Math.PI * 1.8,
     rotY: Math.PI * 4.9,
     rotZ: -Math.PI * 0.08,
   },
-  // 5. Contact Section [05]: Floating behind communication channels with strong frosted blur
+  // 5. Contact Section [05]: Floating behind communication channels with deep frosted atmospheric blur
   {
     id: "contact",
     x: -0.72,
     y: 0.1,
     z: -0.85,
-    scale: 1.02,
-    opacity: 0.88,
-    blur: 14.0,
+    scale: 0.8,
+    opacity: 0.45,
+    blur: 36.0,
     rotX: Math.PI * 2.15,
     rotY: Math.PI * 6.0,
     rotZ: 0.0,
@@ -160,6 +160,7 @@ function sampleSectionSpatial(
   scrollY: number,
   focals: number[]
 ): {
+  id: string;
   x: number;
   y: number;
   z: number;
@@ -203,6 +204,7 @@ function sampleSectionSpatial(
   const t = rawT * rawT * (3 - 2 * rawT);
 
   return {
+    id: t < 0.5 ? s1.id : s2.id,
     x: THREE.MathUtils.lerp(s1.x, s2.x, t),
     y: THREE.MathUtils.lerp(s1.y, s2.y, t),
     z: THREE.MathUtils.lerp(s1.z, s2.z, t),
@@ -471,29 +473,36 @@ function TensorHyperLattice({
       }
     };
 
-    // Global click-and-hold raycast detector on the 3D gyro
+    // Controlled click-and-hold raycast detector on the 3D gyro (Hero section only)
     const handlePointerDown = (e: PointerEvent) => {
+      // Primary left button only
+      if (e.button !== 0) return;
+
       const target = e.target as HTMLElement | null;
-      if (target?.closest("a, button, input, textarea, select, nav, [role='button']")) {
+      if (
+        target?.closest(
+          "a, button, input, textarea, select, nav, [role='button'], [role='tab'], [role='menuitem'], [data-interactive], .glass-card, .glow-card, .drum-card, header, footer, [data-prevent-gyro]"
+        )
+      ) {
         return;
       }
+
+      // Restrict 3D raycast press activation to Hero foreground view only
+      const currentScroll = window.scrollY || document.documentElement.scrollTop;
+      if (currentScroll > window.innerHeight * 0.7) {
+        return;
+      }
+
       if (!groupRef.current || !camera) return;
 
       const ndcX = (e.clientX / window.innerWidth) * 2 - 1;
       const ndcY = -(e.clientY / window.innerHeight) * 2 + 1;
       raycaster.setFromCamera(new THREE.Vector2(ndcX, ndcY), camera);
 
+      // Strict hit collision on actual gyro mesh geometry
       const hits = raycaster.intersectObject(groupRef.current, true);
       if (hits.length > 0) {
         handlePressStart();
-      } else {
-        const groupPos = new THREE.Vector3();
-        groupRef.current.getWorldPosition(groupPos);
-        groupPos.project(camera);
-        const dist = Math.hypot(ndcX - groupPos.x, ndcY - groupPos.y);
-        if (dist < 0.28) {
-          handlePressStart();
-        }
       }
     };
 
@@ -552,7 +561,7 @@ function TensorHyperLattice({
   const rightOffset = isDesktop
     ? Math.min(viewport.width * 0.33, 3.75)
     : Math.min(viewport.width * 0.28, 1.6);
-  const baseScale = isDesktop ? 1.02 : 0.82;
+  const baseScale = isDesktop ? 1.0 : 0.82;
 
   // Physics accumulators for zero-jitter, fluid organic motion
   const smoothScrollY = useRef(0);
@@ -687,16 +696,16 @@ function TensorHyperLattice({
       holdDuration.current
     );
 
-    // Multi-tiered ring overdrive speed per stage:
+    // Controlled, elegant ring overdrive speed per stage:
     // Base: 1.0x
-    // Stage 1 (0-2s): up to 4.8x
-    // Stage 2 (2-4s): up to 11.5x
-    // Stage 3 (4s+): CRAZY supersonic 27x turbine velocity!
+    // Stage 1 (0-3s): controlled acceleration +0.35x (total ~1.35x)
+    // Stage 2 (3-6s): poised resonance +0.45x (total ~1.8x)
+    // Stage 3 (6s+): energetic, refined spin +0.45x (total ~2.25x max, never erratic)
     const ringOverdrive =
       1 +
-      ringsHoldIntensity.current * 3.8 +
-      cubesHoldIntensity.current * 6.4 +
-      stage3Intensity.current * 16.5;
+      ringsHoldIntensity.current * 0.35 +
+      cubesHoldIntensity.current * 0.45 +
+      stage3Intensity.current * 0.45;
     const ringSpeedMult = speedMult * ringOverdrive;
 
     // Delta scroll for kinetic rotational impulse
@@ -707,139 +716,129 @@ function TensorHyperLattice({
     const target = sampleSectionSpatial(sY, focals);
 
     // Controlled, gentle scroll nudge (strictly capped so it never spins like a machine)
-    const scrollNudge = Math.max(-0.005, Math.min(0.005, deltaScroll * 0.00015)) * speedMult;
+    const scrollNudge = Math.max(-0.003, Math.min(0.003, deltaScroll * 0.0001)) * speedMult;
 
     // 1. SEAMLESS OUTER GIMBAL RING (RING 1 - Crimson Halo -> Stage 3 Electric Cyan)
-    ring1Spin.current += (delta * 0.65 + scrollNudge * 2) * ringSpeedMult;
+    ring1Spin.current += (delta * 0.48 + scrollNudge * 1.5) * ringSpeedMult;
 
     if (ring1GroupRef.current) {
-      const ratchetJitter = Math.sin(time * 26) * 0.025 * ringsHoldIntensity.current;
-      const s2Wobble = cubesHoldIntensity.current * 0.16;
-      const s3SupersonicPrecession = Math.sin(time * 15) * 0.36 * stage3Intensity.current;
+      const ratchetJitter = Math.sin(time * 16) * 0.005 * ringsHoldIntensity.current;
+      const s2Wobble = cubesHoldIntensity.current * 0.025;
+      const s3SupersonicPrecession = Math.sin(time * 6) * 0.045 * stage3Intensity.current;
       ring1GroupRef.current.rotation.x = Math.PI / 4 + ratchetJitter + s2Wobble + s3SupersonicPrecession;
       ring1GroupRef.current.rotation.y = ring1Spin.current;
       ring1GroupRef.current.rotation.z =
-        Math.sin(time * 0.6) * (0.06 + ringsHoldIntensity.current * 0.08) +
-        Math.cos(time * 12) * 0.22 * stage3Intensity.current;
+        Math.sin(time * 0.6) * (0.06 + ringsHoldIntensity.current * 0.02) +
+        Math.cos(time * 4) * 0.035 * stage3Intensity.current;
     }
 
     // 2. COUNTER-ROTATING SECONDARY GIMBAL (RING 2 - Titanium Slate -> Stage 3 Plasma Violet)
-    ring2Spin.current -= (delta * 0.55 + scrollNudge * 2) * ringSpeedMult;
+    ring2Spin.current -= (delta * 0.4 + scrollNudge * 1.5) * ringSpeedMult;
 
     if (ring2GroupRef.current) {
       ring2GroupRef.current.rotation.x = ring2Spin.current;
       ring2GroupRef.current.rotation.y =
         -Math.PI / 4 +
-        Math.cos(time * 0.7) * (0.08 + ringsHoldIntensity.current * 0.08) +
-        Math.sin(time * 14) * 0.28 * stage3Intensity.current;
+        Math.cos(time * 0.7) * (0.08 + ringsHoldIntensity.current * 0.02) +
+        Math.sin(time * 4) * 0.04 * stage3Intensity.current;
       ring2GroupRef.current.rotation.z =
         Math.PI / 6 +
-        ringsHoldIntensity.current * 0.08 +
-        cubesHoldIntensity.current * 0.14 +
-        Math.cos(time * 16) * 0.32 * stage3Intensity.current;
+        ringsHoldIntensity.current * 0.02 +
+        cubesHoldIntensity.current * 0.025 +
+        Math.cos(time * 4) * 0.04 * stage3Intensity.current;
     }
 
     // 3. INNER ACCENT ORBIT GIMBAL (RING 3 - Crimson Polar -> Stage 3 Electric Emerald)
-    ring3Spin.current += (delta * 0.75 + scrollNudge * 2) * ringSpeedMult;
+    ring3Spin.current += (delta * 0.54 + scrollNudge * 1.5) * ringSpeedMult;
     if (ring3GroupRef.current) {
       ring3GroupRef.current.rotation.z = ring3Spin.current;
       ring3GroupRef.current.rotation.x =
         -Math.PI / 3 +
-        Math.sin(time * 1.1) * (0.1 + ringsHoldIntensity.current * 0.08) +
-        Math.sin(time * 18) * 0.36 * stage3Intensity.current;
-      ring3GroupRef.current.rotation.y = Math.PI / 4 + (ring3Spin.current * 0.5);
+        Math.sin(time * 1.1) * (0.1 + ringsHoldIntensity.current * 0.02) +
+        Math.sin(time * 5) * 0.045 * stage3Intensity.current;
+      ring3GroupRef.current.rotation.y = Math.PI / 4 + (ring3Spin.current * 0.3);
     }
 
     // Decay card-step resonance pulse
     projectPulse.current = THREE.MathUtils.lerp(projectPulse.current, 0, 0.05);
 
     // 4. CENTRAL COMPUTE DIAMOND (Refractive Optical Crystal Core)
-    // Multi-stage tumble: Spools up in Stage 1, thumps in Stage 2, crazy supersonic tumble in Stage 3
+    // Controlled, elegant rotational spin and gentle rhythmic breathing
     if (coreRef.current) {
-      const coreSpeedX = 1 + ringsHoldIntensity.current * 1.8 + cubesHoldIntensity.current * 4.2 + stage3Intensity.current * 9.5;
-      const coreSpeedY = 1 + ringsHoldIntensity.current * 2.2 + cubesHoldIntensity.current * 5.0 + stage3Intensity.current * 11.0;
-      coreRef.current.rotation.x += delta * 0.32 * speedMult * coreSpeedX;
-      coreRef.current.rotation.y += delta * 0.42 * speedMult * coreSpeedY;
+      const coreSpeedX = 1 + ringsHoldIntensity.current * 0.25 + cubesHoldIntensity.current * 0.35 + stage3Intensity.current * 0.45;
+      const coreSpeedY = 1 + ringsHoldIntensity.current * 0.3 + cubesHoldIntensity.current * 0.4 + stage3Intensity.current * 0.5;
+      coreRef.current.rotation.x += delta * 0.26 * speedMult * coreSpeedX;
+      coreRef.current.rotation.y += delta * 0.34 * speedMult * coreSpeedY;
 
-      const s2BhumPulse = Math.sin(time * 16) * 0.12 * cubesHoldIntensity.current;
-      const s3TurbineFlash = Math.sin(time * 28) * 0.18 * stage3Intensity.current;
+      const s2BhumPulse = Math.sin(time * 6) * 0.025 * cubesHoldIntensity.current;
+      const s3TurbineFlash = Math.sin(time * 8) * 0.035 * stage3Intensity.current;
       const corePulse =
-        (1 + Math.sin(time * 1.0) * 0.02 * speedMult) *
-        (1 + projectPulse.current * 0.14) *
-        (1 + ringsHoldIntensity.current * 0.05 + s2BhumPulse + s3TurbineFlash);
+        (1 + Math.sin(time * 1.0) * 0.016 * speedMult) *
+        (1 + projectPulse.current * 0.08) *
+        (1 + ringsHoldIntensity.current * 0.02 + s2BhumPulse + s3TurbineFlash);
       coreRef.current.scale.setScalar(corePulse);
     }
 
     // 5. MID WIREFRAME CAGE (Glowing Crimson Octahedron -> Yellow in Stage 2/3)
     if (midCageRef.current) {
-      midCageRef.current.rotation.y -= delta * 0.18 * ringSpeedMult;
-      midCageRef.current.rotation.x += delta * 0.14 * ringSpeedMult;
+      midCageRef.current.rotation.y -= delta * 0.13 * ringSpeedMult;
+      midCageRef.current.rotation.x += delta * 0.10 * ringSpeedMult;
       const midScale =
-        (1 + Math.cos(time * 0.9) * 0.018 * speedMult) *
-        (1 + ringsHoldIntensity.current * 0.06 + cubesHoldIntensity.current * 0.08);
+        (1 + Math.cos(time * 0.9) * 0.014 * speedMult) *
+        (1 + ringsHoldIntensity.current * 0.02 + cubesHoldIntensity.current * 0.03);
       midCageRef.current.scale.setScalar(midScale);
     }
 
     // 6. OUTER WIREFRAME CAGE (Titanium Obsidian Dodecahedron)
     if (outerCageRef.current) {
-      outerCageRef.current.rotation.x -= delta * 0.11 * ringSpeedMult;
-      outerCageRef.current.rotation.z += delta * 0.13 * ringSpeedMult;
+      outerCageRef.current.rotation.x -= delta * 0.08 * ringSpeedMult;
+      outerCageRef.current.rotation.z += delta * 0.09 * ringSpeedMult;
       const outerScale =
-        (1 + Math.sin(time * 0.8) * 0.015 * speedMult) *
-        (1 + ringsHoldIntensity.current * 0.05 + stage3Intensity.current * 0.08);
+        (1 + Math.sin(time * 0.8) * 0.012 * speedMult) *
+        (1 + ringsHoldIntensity.current * 0.018 + stage3Intensity.current * 0.03);
       outerCageRef.current.scale.setScalar(outerScale);
     }
 
-    // 7. FLOATING TENSOR SHARD CUBES: DISTINCT 3-STAGE SPEED & CRAZY CENTRIFUGAL DISPERSION
+    // 7. FLOATING TENSOR SHARD CUBES: CONTROLLED HARMONIC ORBITS & SUBTLE EXPANSION
     shardsRef.current.forEach((shardMesh, idx) => {
       if (shardMesh) {
         const shard = tensorShards[idx];
 
-        // Orbit speed:
-        // Stage 1 (0-2s): calm baseline 1.0x drift
-        // Stage 2 (2-4s): accelerated 3.2x orbit
-        // Stage 3 (4s+):  CRAZY supersonic 9.5x hyper-velocity orbit!
+        // Orbit speed: smooth, poised acceleration
         const orbitMultiplier =
           1 +
-          cubesHoldIntensity.current * 2.2 +
-          stage3Intensity.current * 6.5;
+          cubesHoldIntensity.current * 0.35 +
+          stage3Intensity.current * 0.55;
 
         const shardAngle =
           shard.phase +
           time * shard.speed * speedMult * orbitMultiplier +
           (sY / 2400) * Math.sign(shard.speed);
 
-        // Outward radial dispersion:
-        // Stage 1: tight baseline
-        // Stage 2: centrifugal expansion +0.38
-        // Stage 3: CRAZY wide dispersion +0.95 with non-linear harmonic breathing
+        // Outward radial dispersion: gentle, controlled breathing
         const rad =
           shard.radius +
-          Math.sin(time * 0.8 + idx * 0.9) * 0.04 * speedMult +
-          cubesHoldIntensity.current * 0.38 +
-          stage3Intensity.current * (0.62 + Math.sin(time * 7 + idx * 1.4) * 0.24);
+          Math.sin(time * 0.8 + idx * 0.9) * 0.03 * speedMult +
+          cubesHoldIntensity.current * 0.08 +
+          stage3Intensity.current * (0.12 + Math.sin(time * 3 + idx * 1.4) * 0.04);
 
         shardMesh.position.x = Math.cos(shardAngle) * rad;
         shardMesh.position.z = Math.sin(shardAngle) * rad;
         shardMesh.position.y =
           shard.height +
-          Math.sin(time * 0.9 + idx * 0.7) * 0.05 * speedMult +
-          (stage3Intensity.current * Math.sin(time * 9 + idx * 2.0) * 0.28);
+          Math.sin(time * 0.9 + idx * 0.7) * 0.04 * speedMult +
+          (stage3Intensity.current * Math.sin(time * 4 + idx * 1.5) * 0.06);
 
-        // Cube Individual Axial Rotation (Distinct speed tiers per stage):
-        // Idle: calm 0.35 rad/s
-        // Stage 1 (0-2s): 1.1 rad/s ratchet spool
-        // Stage 2 (2-4s): 7.2 rad/s fast tumbling
-        // Stage 3 (4s+):  CRAZY 22.0 rad/s supersonic spin on all 3 axes!
-        const baseTumble = prefersReducedMotion.current ? 0.08 : 0.35;
-        const s1Tumble = ringsHoldIntensity.current * 0.75;
-        const s2Tumble = cubesHoldIntensity.current * 6.5;
-        const s3Tumble = stage3Intensity.current * 15.5;
+        // Cube Individual Axial Rotation: gentle, elegant tumble
+        const baseTumble = prefersReducedMotion.current ? 0.08 : 0.28;
+        const s1Tumble = ringsHoldIntensity.current * 0.15;
+        const s2Tumble = cubesHoldIntensity.current * 0.35;
+        const s3Tumble = stage3Intensity.current * 0.5;
         const fastTumble = s1Tumble + s2Tumble + s3Tumble;
 
-        const tumbleX = (baseTumble + fastTumble) * (1 + (idx % 3) * 0.38);
-        const tumbleY = (baseTumble * 1.2 + fastTumble * 1.42) * (1 - (idx % 2) * 0.32);
-        const tumbleZ = (baseTumble * 0.8 + fastTumble * 1.55) * (1 + (idx % 4) * 0.3);
+        const tumbleX = (baseTumble + fastTumble) * (1 + (idx % 3) * 0.2);
+        const tumbleY = (baseTumble * 1.1 + fastTumble * 1.2) * (1 - (idx % 2) * 0.18);
+        const tumbleZ = (baseTumble * 0.9 + fastTumble * 1.1) * (1 + (idx % 4) * 0.15);
 
         shardMesh.rotation.x += delta * tumbleX;
         shardMesh.rotation.y += delta * tumbleY;
@@ -848,8 +847,8 @@ function TensorHyperLattice({
         // Scale pop & dynamic breathing in Stage 3:
         const cubeScale =
           1 +
-          cubesHoldIntensity.current * 0.25 +
-          stage3Intensity.current * (0.34 + Math.sin(time * 14 + idx * 1.6) * 0.16);
+          cubesHoldIntensity.current * 0.08 +
+          stage3Intensity.current * (0.12 + Math.sin(time * 6 + idx * 1.6) * 0.05);
         shardMesh.scale.setScalar(cubeScale);
       }
     });
@@ -858,9 +857,9 @@ function TensorHyperLattice({
     tetraRefs.current.forEach((tetraGroup, idx) => {
       if (tetraGroup) {
         const config = entropyTetrahedrons[idx];
-        // Dynamic entropy boost: surges during hold overdrive
+        // Dynamic entropy boost: controlled during hold overdrive
         const entropyOverdrive =
-          1 + ringsHoldIntensity.current * 2.4 + cubesHoldIntensity.current * 1.8;
+          1 + ringsHoldIntensity.current * 0.35 + cubesHoldIntensity.current * 0.45;
         const effectiveTime = time * speedMult * (0.85 + idx * 0.18);
 
         // Multi-harmonic non-periodic 3D roaming path across the canvas
@@ -889,8 +888,8 @@ function TensorHyperLattice({
 
         // Subtle organic breathing scale
         const entropyScale =
-          (1 + Math.sin(effectiveTime * 2.2 + idx * 1.5) * 0.06) *
-          (1 + cubesHoldIntensity.current * 0.22);
+          (1 + Math.sin(effectiveTime * 2.2 + idx * 1.5) * 0.05) *
+          (1 + cubesHoldIntensity.current * 0.08);
         tetraGroup.scale.setScalar(entropyScale);
       }
     });
@@ -987,7 +986,9 @@ function TensorHyperLattice({
 
           if (dist < AURA_RADIUS) {
             const norm = 1 - dist / AURA_RADIUS;
-            const intensity = norm * norm;
+            // Soften card proximity aura when gyro is blurred behind content blocks so text stays crisp and undistracted
+            const blurDampening = target.blur > 10 ? 0.22 : 1.0;
+            const intensity = norm * norm * blurDampening;
             const relX = gyroScreenX - rect.left;
             const relY = gyroScreenY - rect.top;
             pendingUpdates.push({ card, shouldReset: false, relX, relY, intensity });
@@ -1011,7 +1012,7 @@ function TensorHyperLattice({
             u.card.style.setProperty("--gyro-x", `${u.relX.toFixed(1)}px`);
             u.card.style.setProperty("--gyro-y", `${u.relY.toFixed(1)}px`);
             u.card.style.setProperty("--gyro-opacity", u.intensity.toFixed(3));
-            if (u.intensity > 0.1) {
+            if (u.intensity > 0.22) {
               u.card.setAttribute("data-gyro-near", "true");
             } else {
               u.card.removeAttribute("data-gyro-near");
@@ -1023,41 +1024,45 @@ function TensorHyperLattice({
       // Multi-axis rotation: stately, seamless, organic
       const mouseTiltX = prefersReducedMotion.current
         ? 0
-        : -(mousePos.current.y * Math.PI) / 16;
+        : -(mousePos.current.y * Math.PI) / 24;
       const mouseTiltY = prefersReducedMotion.current
         ? 0
-        : (mousePos.current.x * Math.PI) / 16;
+        : (mousePos.current.x * Math.PI) / 24;
 
       const targetRotX = target.rotX + mouseTiltX;
-      const targetRotY = target.rotY + mouseTiltY + time * 0.03 * speedMult;
-      const targetRotZ = target.rotZ + Math.sin(time * 0.25) * 0.03 * speedMult;
+      const targetRotY = target.rotY + mouseTiltY + time * 0.02 * speedMult;
+      const targetRotZ = target.rotZ + Math.sin(time * 0.2) * 0.02 * speedMult;
 
       groupRef.current.rotation.x = THREE.MathUtils.lerp(
         groupRef.current.rotation.x,
         targetRotX,
-        0.04
+        0.035
       );
       groupRef.current.rotation.y = THREE.MathUtils.lerp(
         groupRef.current.rotation.y,
         targetRotY,
-        0.04
+        0.035
       );
       groupRef.current.rotation.z = THREE.MathUtils.lerp(
         groupRef.current.rotation.z,
         targetRotZ,
-        0.04
+        0.035
       );
     }
 
     // 9. DYNAMIC BLUR & OPACITY SYNCHRONIZATION WITH ZERO STEP JITTER
+    // On mobile / stacked layouts, ensure About section is also softly blurred behind full-width content
+    const effectiveTargetBlur = !isDesktop && target.id === "about" ? 36.0 : target.blur;
+    const effectiveTargetOpacity = !isDesktop && target.id === "about" ? 0.45 : target.opacity;
+
     smoothBlur.current = THREE.MathUtils.lerp(
       smoothBlur.current,
-      target.blur,
+      effectiveTargetBlur,
       0.08
     );
     smoothOpacity.current = THREE.MathUtils.lerp(
       smoothOpacity.current,
-      target.opacity,
+      effectiveTargetOpacity,
       0.08
     );
 
@@ -1682,7 +1687,7 @@ export function UnifiedAISpatialCanvas() {
   return (
     <div
       ref={wrapperRef}
-      className="fixed inset-0 w-full h-full pointer-events-none select-none z-0 overflow-hidden will-change-[filter,opacity] [transform:translate3d(0,0,0)] [backface-visibility:hidden]"
+      className="fixed -inset-6 w-[calc(100%+3rem)] h-[calc(100%+3rem)] pointer-events-none select-none z-0 overflow-hidden will-change-[filter,opacity] [transform:translate3d(0,0,0)] [backface-visibility:hidden]"
       style={{
         filter: "none",
         opacity: 1,

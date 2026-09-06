@@ -218,32 +218,34 @@ export function Hero() {
 
           {/* Right Column: Interactive 3D Gyroscope Stage Zone */}
           <div
-            onPointerDown={(e) => {
-              e.preventDefault();
-              window.dispatchEvent(new CustomEvent("portfolio:gyro-press-start"));
-            }}
-            onPointerUp={() => {
-              window.dispatchEvent(new CustomEvent("portfolio:gyro-press-end"));
-            }}
-            onPointerLeave={() => {
-              window.dispatchEvent(new CustomEvent("portfolio:gyro-press-end"));
-            }}
-            className="lg:col-span-5 w-full h-[380px] sm:h-[460px] lg:h-[540px] relative hidden lg:flex flex-col items-center justify-end pb-4 pointer-events-auto cursor-grab active:cursor-grabbing select-none group"
-            title="Hold mouse down: Stage 1 (0-3s Ratchet) -> Stage 2 (3-6s Resonant Core) -> Stage 3 (6s+ Turbine Overdrive)"
+            className="lg:col-span-5 w-full h-[380px] sm:h-[460px] lg:h-[540px] relative hidden lg:flex flex-col items-center justify-end pb-4 pointer-events-none select-none group"
+            title="Hold button: Stage 1 (0-3s Ratchet) -> Stage 2 (3-6s Resonant Core) -> Stage 3 (6s+ Turbine)"
           >
-            {/* Interactive HUD badge indicator - 100% strictly synchronized with 3D canvas stage */}
-            <motion.div
+            {/* Interactive HUD badge button - strictly synchronized with 3D canvas stage */}
+            <motion.button
+              type="button"
+              onPointerDown={(e) => {
+                if (e.button !== 0) return;
+                e.preventDefault();
+                window.dispatchEvent(new CustomEvent("portfolio:gyro-press-start"));
+              }}
+              onPointerUp={() => {
+                window.dispatchEvent(new CustomEvent("portfolio:gyro-press-end"));
+              }}
+              onPointerLeave={() => {
+                window.dispatchEvent(new CustomEvent("portfolio:gyro-press-end"));
+              }}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1.5, duration: 0.5 }}
-              className={`glass-pill px-3.5 py-1.5 rounded-full font-mono text-[11px] flex items-center gap-2 transition-all duration-300 pointer-events-none ${
+              className={`glass-pill px-3.5 py-1.5 rounded-full font-mono text-[11px] flex items-center gap-2 transition-all duration-300 pointer-events-auto cursor-grab active:cursor-grabbing select-none ${
                 gyroStage === 3
                   ? "bg-gradient-to-r from-purple-500/20 via-pink-500/20 to-cyan-500/20 border-purple-400/80 text-purple-700 shadow-[0_0_22px_rgba(168,85,247,0.35),0_0_12px_rgba(6,182,212,0.25)] scale-105 font-bold"
                   : gyroStage === 2
                   ? "bg-amber-400/20 border-amber-400/70 text-amber-700 shadow-[0_0_18px_rgba(251,191,36,0.45)] scale-105 font-bold"
                   : gyroStage === 1
                   ? "bg-primary/20 border-primary/60 text-primary shadow-[0_0_16px_rgba(230,57,70,0.35)] scale-105 font-bold"
-                  : "text-text-muted/80 group-hover:text-text-main group-hover:border-primary/40 shadow-2xs"
+                  : "text-text-muted/80 hover:text-text-main hover:border-primary/40 shadow-2xs"
               }`}
             >
               <span
@@ -277,7 +279,7 @@ export function Hero() {
                   </>
                 )}
               </span>
-            </motion.div>
+            </motion.button>
           </div>
         </div>
       </div>

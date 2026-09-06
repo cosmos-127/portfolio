@@ -574,22 +574,22 @@ export function updateGyroDynamo(
     const clampedS3 = Math.max(0, Math.min(1, stage3Intensity));
     if (clampedS3 > 0.02) {
       // Noise filter sweeps up into rushing jet air whoosh
-      const noiseFreq = 950 + clampedS3 * 2300; // 950Hz -> 3250Hz
+      const noiseFreq = 800 + clampedS3 * 1400; // 800Hz -> 2200Hz
       session.noiseFilter.frequency.setTargetAtTime(noiseFreq, now, 0.05);
-      session.noiseGain.gain.setTargetAtTime(clampedS3 * 0.16, now, 0.05);
+      session.noiseGain.gain.setTargetAtTime(clampedS3 * 0.08, now, 0.05);
 
-      // Turbine compressor spools scream at high supersonic RPM
-      const spool1Freq = 720 + clampedS3 * 1180; // 720Hz -> 1900Hz
-      const spool2Freq = 1440 + clampedS3 * 2360; // 1440Hz -> 3800Hz
+      // Turbine compressor spools spin with smooth, controlled resonance
+      const spool1Freq = 540 + clampedS3 * 560; // 540Hz -> 1100Hz
+      const spool2Freq = 1080 + clampedS3 * 1120; // 1080Hz -> 2200Hz
       session.spoolOsc1.frequency.setTargetAtTime(spool1Freq, now, 0.05);
       session.spoolOsc2.frequency.setTargetAtTime(spool2Freq, now, 0.05);
-      session.spoolGain.gain.setTargetAtTime(clampedS3 * 0.14, now, 0.05);
+      session.spoolGain.gain.setTargetAtTime(clampedS3 * 0.06, now, 0.05);
 
       // Jet afterburner low roar
-      session.rumbleGain.gain.setTargetAtTime(clampedS3 * 0.18, now, 0.05);
+      session.rumbleGain.gain.setTargetAtTime(clampedS3 * 0.08, now, 0.05);
 
       // Carrier drone harmonizes with turbine
-      session.droneOsc.frequency.setTargetAtTime(220 + clampedS3 * 180, now, 0.05);
+      session.droneOsc.frequency.setTargetAtTime(180 + clampedS3 * 110, now, 0.05);
     } else {
       session.noiseGain.gain.setTargetAtTime(0.0001, now, 0.08);
       session.spoolGain.gain.setTargetAtTime(0.0001, now, 0.08);

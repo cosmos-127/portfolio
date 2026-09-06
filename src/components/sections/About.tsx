@@ -98,7 +98,7 @@ export function About() {
           <div className="lg:col-span-6 flex flex-col gap-8 max-w-xl">
 
             {/* Glassmorphic Career Trajectory Card with Mouse-Tracking Sheen */}
-            <div ref={timelineRef} className="glass-card glass-card-hover glow-card border-trace velocity-skew will-change-transform rounded-2xl p-6 sm:p-7 space-y-6 relative overflow-hidden">
+            <div ref={timelineRef} className="glass-card glass-card-hover glow-card border-trace rounded-2xl p-6 sm:p-7 space-y-6 relative overflow-hidden">
               {/* Subtle top specular sheen highlight */}
               <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent pointer-events-none z-20" />
               
