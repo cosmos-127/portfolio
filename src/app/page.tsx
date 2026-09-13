@@ -22,13 +22,6 @@ const UnifiedAISpatialCanvas = dynamic(
   { ssr: false }
 );
 
-const CommandPalette = dynamic(
-  () =>
-    import("@/components/global/CommandPalette").then(
-      (mod) => mod.CommandPalette
-    ),
-  { ssr: false }
-);
 
 const CustomCursor = dynamic(
   () =>
@@ -46,13 +39,6 @@ const MouseSpotlight = dynamic(
   { ssr: false }
 );
 
-const SectionHUD = dynamic(
-  () =>
-    import("@/components/global/SectionHUD").then(
-      (mod) => mod.SectionHUD
-    ),
-  { ssr: false }
-);
 
 export default function Home() {
   useEffect(() => {
@@ -89,8 +75,6 @@ export default function Home() {
     <>
       <Preloader />
       <CustomCursor />
-      <CommandPalette />
-      <SectionHUD />
 
       <UnifiedAISpatialCanvas />
       <MouseSpotlight />
@@ -98,10 +82,10 @@ export default function Home() {
       <main className="flex-1 relative z-10 overflow-x-clip bg-grid-blueprint">
         <Hero />
         <TickerStrip />
+        <About />
         <Projects />
         <Skills />
         <Writing />
-        <About />
         <Contact />
       </main>
       <Footer />

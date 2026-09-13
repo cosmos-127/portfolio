@@ -8,17 +8,16 @@ import { cn } from "@/lib/utils";
 
 interface SectionMarker {
   id: string;
-  code: string;
   label: string;
 }
 
 const SECTION_MARKERS: SectionMarker[] = [
-  { id: "top", code: "00", label: "OVERVIEW" },
-  { id: "projects", code: "01", label: "PROJECTS" },
-  { id: "skills", code: "02", label: "SKILLS" },
-  { id: "writing", code: "03", label: "WRITING" },
-  { id: "about", code: "04", label: "ABOUT" },
-  { id: "contact", code: "05", label: "CONTACT" },
+  { id: "top", label: "OVERVIEW" },
+  { id: "about", label: "ABOUT" },
+  { id: "projects", label: "PROJECTS" },
+  { id: "skills", label: "SKILLS" },
+  { id: "writing", label: "WRITING" },
+  { id: "contact", label: "CONTACT" },
 ];
 
 export function SectionHUD() {
@@ -111,7 +110,7 @@ export function SectionHUD() {
                     transition={{ duration: 0.16, ease: [0.16, 1, 0.3, 1] }}
                     className="absolute right-6 pointer-events-none whitespace-nowrap glass-pill px-2.5 py-1 rounded-full text-[10px] font-mono shadow-md flex items-center gap-1.5"
                   >
-                    <span className="text-primary font-bold">[{marker.code}]</span>
+                    <span className="w-1.5 h-1.5 rounded-full bg-primary" />
                     <span className="text-text-main font-semibold tracking-wider">{marker.label}</span>
                   </motion.div>
                 )}

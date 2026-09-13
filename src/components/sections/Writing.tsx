@@ -6,7 +6,6 @@ import { ArrowUpRight, Clock } from "lucide-react";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
-import { playTick } from "@/lib/sound";
 import { TextScramble } from "@/components/ui/TextScramble";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
@@ -68,10 +67,11 @@ export function Writing() {
 
   useGSAP(
     () => {
+      // 1. Header entrance with blur dissipation
       if (headerRef.current) {
         gsap.fromTo(
           headerRef.current,
-          { opacity: 0, y: 24, filter: "blur(6px)" },
+          { opacity: 0, y: 30, filter: "blur(8px)" },
           {
             scrollTrigger: {
               trigger: headerRef.current,
@@ -81,18 +81,19 @@ export function Writing() {
             opacity: 1,
             y: 0,
             filter: "blur(0px)",
-            duration: 0.65,
+            duration: 0.7,
             ease: "power3.out",
             clearProps: "transform,filter",
           }
         );
       }
 
+      // 2. 3D perspective cards entrance
       if (gridRef.current) {
         const cards = Array.from(gridRef.current.children);
         gsap.fromTo(
           cards,
-          { opacity: 0, y: 32, filter: "blur(8px)" },
+          { opacity: 0, y: 44, rotateX: 12, filter: "blur(8px)" },
           {
             scrollTrigger: {
               trigger: gridRef.current,
@@ -101,13 +102,28 @@ export function Writing() {
             },
             opacity: 1,
             y: 0,
+            rotateX: 0,
             filter: "blur(0px)",
-            duration: 0.7,
-            stagger: 0.12,
+            duration: 0.75,
+            stagger: 0.14,
             ease: "power3.out",
             clearProps: "transform,filter",
           }
         );
+
+        // 3. Multiplane parallax scrub across the 3 article columns on desktop
+        if (window.innerWidth >= 768 && cards.length >= 3) {
+          gsap.to(cards[1], {
+            scrollTrigger: {
+              trigger: gridRef.current,
+              start: "top bottom",
+              end: "bottom top",
+              scrub: 0.5,
+            },
+            y: -24,
+            ease: "none",
+          });
+        }
       }
     },
     { scope: sectionRef }
@@ -153,13 +169,12 @@ export function Writing() {
         {/* Section Header */}
         <div ref={headerRef} className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16">
           <div>
-            <div className="flex items-center gap-2 text-xs font-mono text-primary font-bold tracking-widest uppercase mb-3">
-              <span>[03]</span>
-              <span className="w-8 h-px bg-primary/40" />
-              <span>{"//"} <TextScramble text="TECHNICAL WRITING" /></span>
+            <div className="flex items-center gap-2.5 text-xs font-mono text-primary font-bold tracking-widest uppercase mb-3">
+              <span className="w-2 h-2 rounded-full bg-primary" />
+              <TextScramble text="TECHNICAL WRITING & ESSAYS" />
             </div>
             <h2 className="font-gued font-bold text-3xl sm:text-4xl md:text-5xl lg:text-[3.25rem] text-text-main tracking-tight leading-[1.12]">
-              Thinking <span className="font-serif italic font-normal text-primary tracking-normal">out loud</span> about LLMs<span className="text-primary font-bold">.</span>
+              Engineering articles & <span className="font-serif italic font-normal text-primary tracking-normal">insights</span><span className="text-primary font-bold">.</span>
             </h2>
           </div>
 
@@ -181,7 +196,6 @@ export function Writing() {
               key={article.title}
               data-cursor="read"
               data-cursor-label="READ ↗"
-              onMouseEnter={() => playTick()}
               className="glass-card glass-card-hover glow-card border-trace rounded-2xl p-6 sm:p-7 flex flex-col justify-between group relative overflow-hidden will-change-transform select-none"
               style={{
                 transform:

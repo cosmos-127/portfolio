@@ -1,77 +1,38 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import Link from "next/link";
-import { useRef, useState, useEffect } from "react";
+import { useRef } from "react";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import { ArrowDown } from "lucide-react";
 import { GithubIcon } from "@/components/ui/icons";
+import { AuroraText } from "@/components/ui/AuroraText";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
-
-const TELEMETRY_METRICS = [
-  { label: "AI SYSTEMS ENGINEER", detail: "LLMOps & AGENTS" },
-  { label: "INFERENCE SERVING", detail: "TTFT 24ms · 136 tok/s" },
-  { label: "COMPOUND REASONING", detail: "GraphRAG · LangGraph" },
-  { label: "KV-CACHE EFFICIENCY", detail: "PagedAttention 99.4%" },
-];
 
 export function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLDivElement>(null);
-  const scrollIndicatorRef = useRef<HTMLDivElement>(null);
-  const [metricIdx, setMetricIdx] = useState(0);
-  const [gyroStage, setGyroStage] = useState(0);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setMetricIdx((prev) => (prev + 1) % TELEMETRY_METRICS.length);
-    }, 3200);
-    return () => clearInterval(timer);
-  }, []);
-
-  useEffect(() => {
-    const handleStageChange = (e: Event) => {
-      const ce = e as CustomEvent<{ stage: number; holding: boolean }>;
-      if (ce.detail) {
-        setGyroStage(ce.detail.holding ? ce.detail.stage : 0);
-      }
-    };
-    window.addEventListener("portfolio:gyro-stage-change", handleStageChange);
-    return () => {
-      window.removeEventListener("portfolio:gyro-stage-change", handleStageChange);
-    };
-  }, []);
 
   useGSAP(
     () => {
-      gsap.to(textRef.current, {
-        scrollTrigger: {
-          trigger: containerRef.current,
-          start: "top top",
-          end: "70% top",
-          scrub: 0.3,
-          invalidateOnRefresh: true,
-        },
-        y: -45,
-        scale: 0.97,
-        opacity: 0,
-        ease: "none",
-      });
-
-      if (scrollIndicatorRef.current) {
-        gsap.to(scrollIndicatorRef.current, {
+      // 1. Text editorial column multiplane parallax scrub
+      if (textRef.current) {
+        gsap.to(textRef.current, {
           scrollTrigger: {
             trigger: containerRef.current,
             start: "top top",
-            end: "140px top",
-            scrub: 0.2,
+            end: "65% top",
+            scrub: 0.35,
+            invalidateOnRefresh: true,
           },
+          y: -65,
+          scale: 0.96,
           opacity: 0,
-          y: 20,
-          ease: "none",
+          filter: "blur(6px)",
+          ease: "power2.inOut",
         });
       }
     },
@@ -92,38 +53,24 @@ export function Hero() {
             ref={textRef}
             className="lg:col-span-7 flex flex-col items-start gap-6"
           >
-            {/* Eyebrow badge with dynamic telemetry cycler */}
+            {/* Eyebrow badge */}
             <motion.div
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.3 }}
-              className="glass-pill inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full text-xs font-mono text-text-muted shadow-2xs select-none hover:border-primary/30 transition-colors"
+              className="glass-pill inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-mono text-text-muted shadow-2xs select-none hover:border-primary/30 transition-colors"
             >
               <span className="relative flex h-2 w-2 shrink-0">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" />
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-primary" />
               </span>
-              <span className="text-primary font-semibold shrink-0">{"//"}</span>
-              <div className="h-4.5 overflow-hidden relative min-w-[210px] sm:min-w-[260px] flex items-center">
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={metricIdx}
-                    initial={{ y: 14, opacity: 0, filter: "blur(2px)" }}
-                    animate={{ y: 0, opacity: 1, filter: "blur(0px)" }}
-                    exit={{ y: -14, opacity: 0, filter: "blur(2px)" }}
-                    transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-                    className="absolute inset-0 flex items-center gap-2 truncate will-change-transform"
-                  >
-                    <span className="text-text-main font-semibold tracking-tight text-[11px] sm:text-xs">
-                      {TELEMETRY_METRICS[metricIdx].label}
-                    </span>
-                    <span className="text-text-muted text-[10px]">·</span>
-                    <span className="text-text-muted text-[11px] truncate">
-                      {TELEMETRY_METRICS[metricIdx].detail}
-                    </span>
-                  </motion.div>
-                </AnimatePresence>
-              </div>
+              <span className="text-text-main font-semibold tracking-tight text-[11px] sm:text-xs">
+                AI Systems Engineer
+              </span>
+              <span className="text-text-muted text-[10px]">·</span>
+              <span className="text-text-muted text-[11px]">
+                LLMOps &amp; Autonomous Agents
+              </span>
             </motion.div>
 
             {/* Heading */}
@@ -137,22 +84,24 @@ export function Hero() {
                 Hi, I&apos;m
               </motion.p>
 
-              <h1 className="font-gued font-bold text-6xl sm:text-7xl md:text-8xl lg:text-[6.5rem] tracking-tight text-text-main leading-[0.95]">
-                {"Gagan".split("").map((char, i) => (
-                  <motion.span
-                    key={i}
-                    initial={{ y: 50, opacity: 0, filter: "blur(4px)" }}
-                    animate={{ y: 0, opacity: 1, filter: "blur(0px)" }}
-                    transition={{
-                      duration: 0.55,
-                      delay: 0.7 + i * 0.065,
-                      ease: [0.16, 1, 0.3, 1],
-                    }}
-                    className="inline-block"
+              <h1 className="font-gued font-bold text-6xl sm:text-7xl md:text-8xl lg:text-[6.5rem] tracking-tight leading-[0.95]">
+                <motion.span
+                  initial={{ y: 50, opacity: 0, filter: "blur(4px)" }}
+                  animate={{ y: 0, opacity: 1, filter: "blur(0px)" }}
+                  transition={{
+                    duration: 0.65,
+                    delay: 0.7,
+                    ease: [0.16, 1, 0.3, 1],
+                  }}
+                  className="inline-block"
+                >
+                  <AuroraText
+                    colors={["#e63946", "#ff4d6d", "#9d0208", "#d90429", "#c9184a"]}
+                    speed={1.2}
                   >
-                    {char}
-                  </motion.span>
-                ))}
+                    Gagan
+                  </AuroraText>
+                </motion.span>
                 <motion.span
                   initial={{ scale: 0, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
@@ -216,92 +165,11 @@ export function Hero() {
             </motion.div>
           </div>
 
-          {/* Right Column: Interactive 3D Gyroscope Stage Zone */}
-          <div
-            className="lg:col-span-5 w-full h-[380px] sm:h-[460px] lg:h-[540px] relative hidden lg:flex flex-col items-center justify-end pb-4 pointer-events-none select-none group"
-            title="Hold button: Stage 1 (0-3s Ratchet) -> Stage 2 (3-6s Resonant Core) -> Stage 3 (6s+ Turbine)"
-          >
-            {/* Interactive HUD badge button - strictly synchronized with 3D canvas stage */}
-            <motion.button
-              type="button"
-              onPointerDown={(e) => {
-                if (e.button !== 0) return;
-                e.preventDefault();
-                window.dispatchEvent(new CustomEvent("portfolio:gyro-press-start"));
-              }}
-              onPointerUp={() => {
-                window.dispatchEvent(new CustomEvent("portfolio:gyro-press-end"));
-              }}
-              onPointerLeave={() => {
-                window.dispatchEvent(new CustomEvent("portfolio:gyro-press-end"));
-              }}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1.5, duration: 0.5 }}
-              className={`glass-pill px-3.5 py-1.5 rounded-full font-mono text-[11px] flex items-center gap-2 transition-all duration-300 pointer-events-auto cursor-grab active:cursor-grabbing select-none ${
-                gyroStage === 3
-                  ? "bg-gradient-to-r from-purple-500/20 via-pink-500/20 to-cyan-500/20 border-purple-400/80 text-purple-700 shadow-[0_0_22px_rgba(168,85,247,0.35),0_0_12px_rgba(6,182,212,0.25)] scale-105 font-bold"
-                  : gyroStage === 2
-                  ? "bg-amber-400/20 border-amber-400/70 text-amber-700 shadow-[0_0_18px_rgba(251,191,36,0.45)] scale-105 font-bold"
-                  : gyroStage === 1
-                  ? "bg-primary/20 border-primary/60 text-primary shadow-[0_0_16px_rgba(230,57,70,0.35)] scale-105 font-bold"
-                  : "text-text-muted/80 hover:text-text-main hover:border-primary/40 shadow-2xs"
-              }`}
-            >
-              <span
-                className={`w-1.5 h-1.5 rounded-full ${
-                  gyroStage === 3
-                    ? "bg-purple-500 animate-ping"
-                    : gyroStage === 2
-                    ? "bg-amber-400 animate-ping"
-                    : gyroStage === 1
-                    ? "bg-primary animate-ping"
-                    : "bg-primary/60 animate-pulse"
-                }`}
-              />
-              <span className="tracking-wide flex items-center gap-1.5">
-                {gyroStage === 0 ? (
-                  <span>HOLD TO SPIN GYRO</span>
-                ) : gyroStage === 3 ? (
-                  <>
-                    <span className="text-purple-600 font-bold">[3/3]</span>
-                    <span>STAGE 3 · TURBINE OVERDRIVE</span>
-                  </>
-                ) : gyroStage === 2 ? (
-                  <>
-                    <span className="text-amber-600 font-bold">[2/3]</span>
-                    <span>STAGE 2 · RESONANT SOLAR CORE</span>
-                  </>
-                ) : (
-                  <>
-                    <span className="text-primary font-bold">[1/3]</span>
-                    <span>STAGE 1 · RATCHET ACCELERATION</span>
-                  </>
-                )}
-              </span>
-            </motion.button>
-          </div>
+          {/* Right Column: Unobstructed 3D Gyroscope Stage Zone */}
+          <div className="lg:col-span-5 w-full h-[380px] sm:h-[460px] lg:h-[540px] relative hidden lg:flex pointer-events-none select-none" />
         </div>
       </div>
 
-      {/* Editorial Scroll Down Indicator */}
-      <motion.div
-        ref={scrollIndicatorRef}
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 1.55 }}
-        className="absolute bottom-6 left-6 sm:left-12 lg:left-1/2 lg:-translate-x-1/2 z-20 pointer-events-auto"
-      >
-        <Link
-          href="#projects"
-          className="group inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full glass-pill hover:border-primary/40 text-text-muted hover:text-primary transition-all duration-300 shadow-2xs font-mono text-[11px] animate-float-subtle"
-          aria-label="Scroll to projects"
-        >
-          <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
-          <span className="tracking-wider uppercase font-semibold">Scroll to explore</span>
-          <ArrowDown className="w-3 h-3 text-primary group-hover:translate-y-1 transition-transform duration-200" />
-        </Link>
-      </motion.div>
     </section>
   );
 }

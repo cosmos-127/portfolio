@@ -5,8 +5,8 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const GLYPHS = "01XZ#%&*<>/[]{}+=";
 
-const TOTAL_DURATION = 3500; // Exactly 3.5 seconds total loading duration
-const STEP_DURATION = TOTAL_DURATION / 3; // Exactly 1166.6ms per step (equally divided)
+const TOTAL_DURATION = 3000; // Exactly 3.0 seconds total loading duration
+const STEP_DURATION = 1000; // Exactly 1.0 second per step (1, 1, 1 sec)
 
 const STEPS = [
   "Initializing neural engine...",
@@ -136,10 +136,10 @@ export function Preloader() {
       return;
     }
 
-    // Comfortable 450ms pause at 100% so the user reads the final welcome state
+    // Clean 250ms pause at 100% so the user reads the final welcome state
     setTimeout(() => {
       setIsExpanding(true);
-    }, 450);
+    }, 250);
   }, []);
 
   // Smooth progress increment across the 3 equal intervals

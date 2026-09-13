@@ -1,7 +1,5 @@
 "use client";
-
 import React, { useState, useRef, useEffect, useCallback } from "react";
-import { playTick } from "@/lib/sound";
 
 interface TextScrambleProps {
   text: string;
@@ -42,7 +40,6 @@ export function TextScramble({
   const scramble = useCallback(() => {
     if (isAnimatingRef.current || isReducedMotion.current) return;
     isAnimatingRef.current = true;
-    playTick();
 
     const originalText = text;
     const length = originalText.length;

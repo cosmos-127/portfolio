@@ -10,10 +10,8 @@ import {
   Globe,
   Server,
   Database,
-  Sparkles,
   ChevronUp,
   ChevronDown,
-  Compass,
   MoveVertical,
 } from "lucide-react";
 import { GithubIcon, Neo4jIcon } from "@/components/ui/icons";
@@ -43,7 +41,7 @@ interface ProjectItem {
 const PROJECTS: ProjectItem[] = [
   {
     id: "llmark",
-    code: "[01]",
+    code: "Inference",
     title: "LLMark",
     category: "Inference Benchmarking",
     description:
@@ -56,7 +54,7 @@ const PROJECTS: ProjectItem[] = [
   },
   {
     id: "mcp-server",
-    code: "[02]",
+    code: "MCP",
     title: "MCP Tool Server",
     category: "Agent Tooling",
     description:
@@ -68,7 +66,7 @@ const PROJECTS: ProjectItem[] = [
   },
   {
     id: "graphrag-explorer",
-    code: "[03]",
+    code: "GraphRAG",
     title: "GraphRAG Explorer",
     category: "Knowledge Retrieval",
     description:
@@ -80,7 +78,7 @@ const PROJECTS: ProjectItem[] = [
   },
   {
     id: "federated-analyst",
-    code: "[04]",
+    code: "Multi-Agent",
     title: "Federated AI Analyst",
     category: "Multi-Agent Analytics",
     description:
@@ -161,12 +159,6 @@ function ProjectCard({
             >
               {project.code}
             </span>
-            {isActive && (
-              <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[10px] font-mono bg-primary/10 text-primary font-semibold border border-primary/20">
-                <span className="w-1.5 h-1.5 rounded-full bg-primary animate-ping" />
-                ACTIVE AXIS 0°
-              </span>
-            )}
           </div>
           <span className="glass-pill px-2.5 py-0.5 rounded-full font-mono text-[10px] text-text-muted font-medium truncate max-w-[260px]">
             {project.category}
@@ -523,7 +515,7 @@ function DrumSpokeAssembly({
   return (
     <>
       {/* Structural Lateral Guide Rails on Card Edges */}
-      <div className="hidden md:block absolute -left-0.5 top-10 bottom-10 w-px bg-gradient-to-b from-transparent via-border-strong/40 to-transparent pointer-events-none" />
+      <div data-spoke={idx} className="hidden md:block absolute -left-0.5 top-10 bottom-10 w-px bg-gradient-to-b from-transparent via-border-strong/40 to-transparent pointer-events-none" />
       <div className="hidden md:block absolute -right-0.5 top-10 bottom-10 w-px bg-gradient-to-b from-transparent via-border-strong/40 to-transparent pointer-events-none" />
 
       {/* LEFT FLANK SPOKE OUTRIGGER */}
@@ -581,16 +573,6 @@ function DrumSpokeAssembly({
               )}
             />
           </div>
-
-          {/* Micro Telemetry Datum Tag */}
-          <span
-            className={cn(
-              "absolute -top-4 left-1/2 -translate-x-1/2 font-mono text-[7px] lg:text-[8px] whitespace-nowrap tracking-tighter transition-colors duration-300",
-              isActive ? "text-primary font-bold" : "text-zinc-400/70"
-            )}
-          >
-            SPK-L{idx + 1}
-          </span>
         </div>
       </div>
 
@@ -616,16 +598,6 @@ function DrumSpokeAssembly({
               )}
             />
           </div>
-
-          {/* Micro Telemetry Datum Tag */}
-          <span
-            className={cn(
-              "absolute -top-4 left-1/2 -translate-x-1/2 font-mono text-[7px] lg:text-[8px] whitespace-nowrap tracking-tighter transition-colors duration-300",
-              isActive ? "text-primary font-bold" : "text-zinc-400/70"
-            )}
-          >
-            SPK-R{idx + 1}
-          </span>
         </div>
 
         {/* Horizontal Outrigger Arm to Card Edge */}
@@ -673,14 +645,12 @@ export function Projects() {
   const triggerRef = useRef<HTMLDivElement>(null);
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
   const progressBarRef = useRef<HTMLDivElement>(null);
+  const leftTelemetryRef = useRef<HTMLDivElement>(null);
   const scrollTriggerInstance = useRef<ScrollTrigger | null>(null);
 
   // Continuous drum progress and gesture tracking
   const [activeIndex, setActiveIndex] = useState(0);
   const activeIndexRef = useRef(0);
-  const drumAngleTextRef = useRef<HTMLSpanElement>(null);
-  const vernierStripRef = useRef<HTMLDivElement>(null);
-  const axisLockRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState(false);
 
   // Mechanical drum progress animation state driven by GSAP
@@ -694,24 +664,6 @@ export function Projects() {
 
   // Desktop 3D Cylindrical Drum update function
   const updateDrum = useCallback((continuous: number) => {
-    // Current drum rotation angle in degrees
-    const currentAngle = continuous * STEP_ANGLE_DEG;
-
-    if (drumAngleTextRef.current) {
-      drumAngleTextRef.current.textContent = `${currentAngle.toFixed(1)}° REEL`;
-    }
-    if (vernierStripRef.current) {
-      const offset = -((currentAngle % STEP_ANGLE_DEG) / STEP_ANGLE_DEG) * 36;
-      vernierStripRef.current.style.transform = `translateY(${offset.toFixed(1)}px)`;
-    }
-    if (axisLockRef.current) {
-      const mod = Math.abs(currentAngle % STEP_ANGLE_DEG);
-      const isLocked = mod < 2 || Math.abs(mod - STEP_ANGLE_DEG) < 2;
-      axisLockRef.current.className = isLocked
-        ? "flex items-center gap-1 px-1.5 py-0.5 rounded font-bold border whitespace-nowrap transition-all duration-300 bg-primary/15 text-primary border-primary/40 shadow-[0_0_8px_rgba(230,57,70,0.25)] scale-105"
-        : "flex items-center gap-1 px-1.5 py-0.5 rounded font-bold border whitespace-nowrap transition-all duration-300 bg-white/60 text-text-muted border-border-light";
-    }
-
     const cards = cardRefs.current.filter(Boolean) as HTMLDivElement[];
     cards.forEach((card, i) => {
       const delta = i - continuous;
@@ -906,6 +858,26 @@ export function Projects() {
         // Initialize drum position
         updateDrum(0);
 
+        if (leftTelemetryRef.current) {
+          gsap.fromTo(
+            leftTelemetryRef.current,
+            { opacity: 0, x: -35, filter: "blur(6px)" },
+            {
+              scrollTrigger: {
+                trigger: trigger,
+                start: "top 85%",
+                toggleActions: "play none none reverse",
+              },
+              opacity: 1,
+              x: 0,
+              filter: "blur(0px)",
+              duration: 0.75,
+              ease: "power3.out",
+              clearProps: "transform,filter",
+            }
+          );
+        }
+
         const st = ScrollTrigger.create({
           trigger: trigger,
           pin: true,
@@ -1081,14 +1053,15 @@ export function Projects() {
           className="h-screen w-full flex items-center justify-between px-6 sm:px-10 lg:px-12 max-w-[1440px] mx-auto relative bg-transparent overflow-hidden"
         >
           {/* STATIC LEFT COLUMN - TELEMETRY & CONTROLS */}
-          <div className="w-[32%] lg:w-[28%] max-w-[340px] shrink-0 pr-6 lg:pr-8 flex flex-col justify-between h-[640px] lg:h-[720px] py-2 z-30">
+          <div
+            ref={leftTelemetryRef}
+            className="w-[32%] lg:w-[28%] max-w-[340px] shrink-0 pr-6 lg:pr-8 flex flex-col justify-between h-[640px] lg:h-[720px] py-2 z-30"
+          >
             <div>
               {/* Telemetry Badge */}
               <div className="flex items-center gap-2 text-xs font-mono text-primary font-bold tracking-widest uppercase mb-4">
-                <Sparkles className="w-3.5 h-3.5" />
-                <span><TextScramble text="SYSTEM ARCHITECTURE" /></span>
-                <span className="w-6 h-px bg-primary/40" />
-                <span className="text-[10px] text-text-muted">01</span>
+                <span className="w-2 h-2 rounded-full bg-primary" />
+                <TextScramble text="FEATURED PROJECTS & SYSTEMS" />
               </div>
 
               {/* Static Main Headline with Editorial Serif Polish */}
@@ -1104,35 +1077,10 @@ export function Projects() {
                 and federated analytical flows.
               </p>
 
-              {/* Real-time 3D Drum Telemetry & Angle Dial with Mouse-Tracking Border Sheen */}
-              <div className="mb-6 p-4 rounded-2xl glass-card glass-card-hover glow-card font-mono text-[11px] space-y-2.5 relative overflow-hidden">
-                {/* Subtle top specular sheen highlight */}
-                <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent pointer-events-none z-20" />
-                <div className="flex items-center justify-between text-text-muted">
-                  <div className="flex items-center gap-1.5">
-                    <Compass
-                      className="w-3.5 h-3.5 text-primary animate-spin"
-                      style={{ animationDuration: "12s" }}
-                    />
-                    <span>ROTOR TELEMETRY</span>
-                  </div>
-                  <span ref={drumAngleTextRef} className="text-text-main font-bold">
-                    0.0° REEL
-                  </span>
-                </div>
-
-                <div className="flex items-center justify-between pt-2.5 border-t border-white/60 text-[10px]">
-                  <span className="text-text-muted">FOCAL ALIGNMENT</span>
-                  <span className="text-primary font-semibold flex items-center gap-1">
-                    <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
-                    AXIS 0° LOCKED
-                  </span>
-                </div>
-              </div>
 
               {/* Stepper Buttons & Station Selectors */}
               <div className="flex items-center justify-between gap-2 mb-2">
-                <div className="flex items-center gap-1.5 text-xs font-mono text-text-muted">
+                <div className="flex items-center gap-1 text-xs font-mono text-text-muted">
                   {PROJECTS.map((project, idx) => {
                     const isActive = activeIndex === idx;
                     return (
@@ -1142,7 +1090,7 @@ export function Projects() {
                           transitionToCard(idx);
                         }}
                         className={cn(
-                          "relative transition-colors duration-200 cursor-pointer flex items-center gap-1 px-2.5 py-1 rounded-full",
+                          "relative transition-colors duration-200 cursor-pointer flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px]",
                           isActive
                             ? "text-primary font-bold"
                             : "text-text-muted hover:text-text-main"
@@ -1156,7 +1104,7 @@ export function Projects() {
                             transition={{ type: "spring", stiffness: 420, damping: 30 }}
                           />
                         )}
-                        <span>0{idx + 1}</span>
+                        <span>{project.title}</span>
                       </button>
                     );
                   })}
@@ -1207,8 +1155,8 @@ export function Projects() {
 
               <div className="flex items-center justify-between text-[11px] font-mono text-text-muted">
                 <div className="flex items-center gap-1.5 truncate max-w-[200px]">
-                  <span className="text-primary font-semibold">
-                    [{PROJECTS[activeIndex]?.code}]
+                  <span className="text-primary font-semibold text-[10px] uppercase tracking-wider">
+                    {PROJECTS[activeIndex]?.code} ·
                   </span>
                   <span className="text-text-main font-semibold truncate">
                     {PROJECTS[activeIndex]?.title}
@@ -1243,60 +1191,6 @@ export function Projects() {
               isDragging ? "cursor-grabbing" : "cursor-grab"
             )}
           >
-            {/* Caliper HUD Datum Guides on Stage Perimeter */}
-            <div className="absolute left-1 top-8 bottom-8 flex flex-col justify-between items-center z-10 pointer-events-none opacity-45 font-mono text-[9px] text-text-muted select-none">
-              <span className="tracking-widest rotate-[-90deg] origin-center whitespace-nowrap">
-                +{STEP_ANGLE_DEG}° REEL
-              </span>
-              <div className="w-px flex-1 bg-border-light my-2 relative overflow-hidden">
-                {/* Dynamic Vernier Tick Strip sliding with continuous drum rotation */}
-                <div
-                  ref={vernierStripRef}
-                  className="absolute inset-x-0 w-full h-40 flex flex-col justify-between items-center opacity-60"
-                  style={{
-                    transform: "translateY(0px)",
-                  }}
-                >
-                  {Array.from({ length: 8 }).map((_, i) => (
-                    <div
-                      key={i}
-                      className={cn(
-                        "h-px bg-text-muted/60 transition-all",
-                        i % 2 === 0 ? "w-2 bg-primary/60" : "w-1"
-                      )}
-                    />
-                  ))}
-                </div>
-              </div>
-              <div
-                ref={axisLockRef}
-                className="flex items-center gap-1 px-1.5 py-0.5 rounded font-bold border whitespace-nowrap transition-all duration-300 bg-primary/15 text-primary border-primary/40 shadow-[0_0_8px_rgba(230,57,70,0.25)] scale-105"
-              >
-                <span>AXIS 0°</span>
-              </div>
-              <div className="w-px flex-1 bg-border-light my-2" />
-              <span className="tracking-widest rotate-[-90deg] origin-center whitespace-nowrap">
-                -{STEP_ANGLE_DEG}° REEL
-              </span>
-            </div>
-
-            <div className="absolute right-1 top-8 bottom-8 flex flex-col justify-between items-center z-10 pointer-events-none opacity-45 font-mono text-[9px] text-text-muted select-none">
-              <span>▲ REEL</span>
-              <div className="flex flex-col gap-1.5 py-2">
-                {PROJECTS.map((_, i) => (
-                  <span
-                    key={i}
-                    className={cn(
-                      "w-1 rounded-full transition-all duration-200",
-                      activeIndex === i
-                        ? "bg-primary shadow-[0_0_6px_var(--primary)] h-4.5"
-                        : "bg-border-light h-3"
-                    )}
-                  />
-                ))}
-              </div>
-              <span>▼ REEL</span>
-            </div>
 
             {/* 3D Cylindrical Drum Rotating Container */}
             <div
@@ -1385,10 +1279,8 @@ export function Projects() {
       <div className="md:hidden max-w-xl mx-auto px-6 py-20">
         <div className="mb-10">
           <div className="flex items-center gap-2 text-xs font-mono text-primary font-bold tracking-widest uppercase mb-3">
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>SYSTEM ARCHITECTURE</span>
-            <span className="w-6 h-px bg-primary/40" />
-            <span>[01]</span>
+            <span className="w-2 h-2 rounded-full bg-primary" />
+            <span>FEATURED PROJECTS & SYSTEMS</span>
           </div>
           <h2 className="font-gued font-bold text-2xl sm:text-3xl text-text-main tracking-tight leading-snug">
             Systems designed to solve <span className="font-serif italic font-normal text-primary tracking-normal">real AI bottlenecks</span>

@@ -104,3 +104,32 @@ export function NextjsIcon({ className = "w-4 h-4" }: { className?: string }) {
     </svg>
   );
 }
+
+export function AccentureIcon({ className = "w-4 h-4" }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      className={className}
+      aria-hidden="true"
+    >
+      <path d="m.66 16.95 13.242-4.926L.66 6.852V0l22.68 9.132v5.682L.66 24Z" />
+    </svg>
+  );
+}
+
+export function StrategyIcon({ className = "w-4 h-4" }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      className={className}
+      aria-hidden="true"
+    >
+      <path d="M9.095 2.572h5.827v18.856H9.096zM0 2.572h5.825v18.856H.001zm18.174 0v18.854H24V8.33z" />
+    </svg>
+  );
+}
+
+export const MicroStrategyIcon = StrategyIcon;
+

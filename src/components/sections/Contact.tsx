@@ -13,7 +13,7 @@ import {
   Send,
 } from "lucide-react";
 import { GithubIcon, LinkedinIcon, MediumIcon } from "@/components/ui/icons";
-import { playChime, playTick } from "@/lib/sound";
+import { playChime } from "@/lib/sound";
 import { TextScramble } from "@/components/ui/TextScramble";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
@@ -75,36 +75,68 @@ export function Contact() {
 
   useGSAP(
     () => {
-      // 1. Header & Telemetry entrance
-      const headerElements = [headerTextRef.current, telemetryRef.current].filter(Boolean);
-      if (headerElements.length > 0) {
+      // 1. Header & Text entrance
+      if (headerTextRef.current) {
         gsap.fromTo(
-          headerElements,
-          { opacity: 0, y: 24, filter: "blur(6px)" },
+          headerTextRef.current,
+          { opacity: 0, y: 32, filter: "blur(8px)" },
           {
             scrollTrigger: {
               trigger: headerTextRef.current,
-              start: "top 85%",
+              start: "top 86%",
               toggleActions: "play none none reverse",
             },
             opacity: 1,
             y: 0,
             filter: "blur(0px)",
-            duration: 0.65,
-            stagger: 0.14,
+            duration: 0.7,
             ease: "power3.out",
             clearProps: "transform,filter",
           }
         );
       }
 
-      // 2. Channel rows stagger
+      // 2. Editorial Portrait entrance & smooth parallax scrub
+      if (telemetryRef.current) {
+        gsap.fromTo(
+          telemetryRef.current,
+          { opacity: 0, y: 36, scale: 0.97, filter: "blur(8px)" },
+          {
+            scrollTrigger: {
+              trigger: telemetryRef.current,
+              start: "top 85%",
+              toggleActions: "play none none reverse",
+            },
+            opacity: 1,
+            y: 0,
+            scale: 1,
+            filter: "blur(0px)",
+            duration: 0.75,
+            ease: "power3.out",
+            clearProps: "scale,filter",
+          }
+        );
+
+        // Gentle parallax float on scroll
+        gsap.to(telemetryRef.current, {
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top bottom",
+            end: "bottom top",
+            scrub: 0.4,
+          },
+          y: -28,
+          ease: "none",
+        });
+      }
+
+      // 3. Channel rows stagger
       if (channelsRef.current) {
         const channels = Array.from(channelsRef.current.children);
         channels.forEach((channel, i) => {
           gsap.fromTo(
             channel,
-            { opacity: 0, x: i % 2 === 0 ? -28 : 28, y: 8, filter: "blur(6px)" },
+            { opacity: 0, x: -32, filter: "blur(6px)" },
             {
               scrollTrigger: {
                 trigger: channelsRef.current,
@@ -113,10 +145,9 @@ export function Contact() {
               },
               opacity: 1,
               x: 0,
-              y: 0,
               filter: "blur(0px)",
-              duration: 0.6,
-              delay: i * 0.08,
+              duration: 0.65,
+              delay: i * 0.1,
               ease: "power3.out",
               clearProps: "transform,filter",
             }
@@ -124,11 +155,11 @@ export function Contact() {
         });
       }
 
-      // 3. Quick terminal query bar entrance
+      // 4. Quick terminal query bar entrance
       if (terminalRef.current) {
         gsap.fromTo(
           terminalRef.current,
-          { opacity: 0, y: 16, filter: "blur(4px)" },
+          { opacity: 0, y: 24, filter: "blur(6px)" },
           {
             scrollTrigger: {
               trigger: terminalRef.current,
@@ -138,7 +169,7 @@ export function Contact() {
             opacity: 1,
             y: 0,
             filter: "blur(0px)",
-            duration: 0.55,
+            duration: 0.6,
             ease: "power3.out",
             clearProps: "transform,filter",
           }
@@ -162,10 +193,9 @@ export function Contact() {
         {/* Section Header */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-16">
           <div ref={headerTextRef} className="lg:col-span-7">
-            <div className="flex items-center gap-2 text-xs font-mono text-primary font-bold tracking-widest uppercase mb-3">
-              <span>[05]</span>
-              <span className="w-8 h-px bg-primary/40" />
-              <span>{"//"} <TextScramble text="DIRECT CONTACT" /></span>
+            <div className="flex items-center gap-2.5 text-xs font-mono text-primary font-bold tracking-widest uppercase mb-3">
+              <span className="w-2 h-2 rounded-full bg-primary" />
+              <TextScramble text="GET IN TOUCH" />
             </div>
             <h2 className="font-gued font-bold text-4xl sm:text-5xl md:text-6xl lg:text-[4.25rem] text-text-main tracking-tight mb-6 leading-[1.1]">
               Let&apos;s build <span className="font-serif italic font-normal text-primary tracking-normal">intelligent systems</span><span className="text-primary font-bold">.</span>
@@ -228,7 +258,6 @@ export function Contact() {
                     href={channel.url || "#"}
                     target="_blank"
                     rel="noopener noreferrer"
-                    onMouseEnter={() => playTick()}
                     className="flex flex-col sm:flex-row sm:items-center justify-between py-5 px-5 rounded-xl hover:bg-white/80 hover:shadow-2xs transition-all duration-200 group border border-transparent hover:border-white/90 cursor-pointer"
                   >
                     <div className="flex items-center gap-3 w-44">
@@ -251,7 +280,6 @@ export function Contact() {
                   </Link>
                 ) : (
                   <div
-                    onMouseEnter={() => playTick()}
                     className="flex flex-col sm:flex-row sm:items-center justify-between py-5 px-5 rounded-xl hover:bg-white/80 hover:shadow-2xs transition-all duration-200 group border border-transparent hover:border-white/90 cursor-default"
                   >
                     <div className="flex items-center gap-3 w-44">

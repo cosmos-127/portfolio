@@ -1,6 +1,6 @@
 // Production Web Audio synthesizer for tactile micro-haptics
 let audioCtx: AudioContext | null = null;
-let soundEnabled = true; // Default ON so visitors experience tactile audio
+let soundEnabled = false; // Default muted
 const listeners = new Set<(enabled: boolean) => void>();
 
 function getAudioContext(): AudioContext | null {
@@ -29,13 +29,13 @@ if (typeof window !== "undefined") {
   window.addEventListener("wheel", unlockAudio, { passive: true });
 }
 
-// Initialize sound preference from localStorage (default to enabled unless explicitly set to "0")
+// Initialize sound preference from localStorage (default to disabled unless explicitly set to "1")
 if (typeof window !== "undefined") {
   try {
     const saved = localStorage.getItem("portfolio:sound");
-    soundEnabled = saved !== "0";
+    soundEnabled = saved === "1";
   } catch {
-    soundEnabled = true;
+    soundEnabled = false;
   }
 }
 
@@ -91,53 +91,12 @@ function runWithAudioContext(fn: (ctx: AudioContext) => void) {
 }
 
 /**
- * High-precision, tactile mechanical ratchet click
- * Clearly audible on built-in laptop speakers, headphones and mobile
+ * Tactile mechanical ratchet click (silenced on cursor hover)
  */
-export function playTick(force = false) {
-  if (!soundEnabled && !force) return;
-
-  runWithAudioContext((ctx) => {
-    try {
-      const now = ctx.currentTime;
-
-      // 1. High transient snap (1400Hz down to 260Hz)
-      const snapOsc = ctx.createOscillator();
-      const snapGain = ctx.createGain();
-
-      snapOsc.type = "sine";
-      snapOsc.frequency.setValueAtTime(1400, now);
-      snapOsc.frequency.exponentialRampToValueAtTime(260, now + 0.038);
-
-      snapGain.gain.setValueAtTime(0.18, now);
-      snapGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.04);
-
-      snapOsc.connect(snapGain);
-      snapGain.connect(ctx.destination);
-
-      snapOsc.start(now);
-      snapOsc.stop(now + 0.042);
-
-      // 2. Tactile body thud (320Hz down to 80Hz)
-      const thudOsc = ctx.createOscillator();
-      const thudGain = ctx.createGain();
-
-      thudOsc.type = "triangle";
-      thudOsc.frequency.setValueAtTime(320, now);
-      thudOsc.frequency.exponentialRampToValueAtTime(80, now + 0.045);
-
-      thudGain.gain.setValueAtTime(0.14, now);
-      thudGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.048);
-
-      thudOsc.connect(thudGain);
-      thudGain.connect(ctx.destination);
-
-      thudOsc.start(now);
-      thudOsc.stop(now + 0.05);
-    } catch {
-      // Graceful silent fallback
-    }
-  });
+export function playTick(_force: boolean = false) {
+  void _force;
+  // Disabled: removed cursor hover haptic ticks
+  return;
 }
 
 let lastDrumClickTime = 0;
@@ -521,8 +480,7 @@ export function startGyroDynamo() {
 export function updateGyroDynamo(
   stage1Intensity: number,
   stage2Intensity = 0,
-  stage3Intensity = 0,
-  holdDuration = 0
+  stage3Intensity = 0
 ) {
   if (!activeGyro) return;
   try {
@@ -531,65 +489,63 @@ export function updateGyroDynamo(
     const now = ctx.currentTime;
 
     // -----------------------------------------------------------------
-    // 1. STAGE 1 SOUND: "ki kit kit" accelerating ratchet clatter (0s - 3.0s)
+    // 1. STAGE 1 SOUND: Mechanical ratchet clicks & spooling drone
     // -----------------------------------------------------------------
-    if (holdDuration > 0.04 && holdDuration < 3.0) {
+    if (stage1Intensity > 0.08 && stage2Intensity < 0.3 && stage3Intensity < 0.2) {
       if (now >= session.nextTickTime) {
-        const progress = Math.min(1, holdDuration / 3.0);
-        // Accelerates from 150ms down to 48ms interval as Stage 1 ramps up over 3 seconds
-        const interval = 0.15 - progress * 0.102;
-        session.nextTickTime = now + Math.max(0.046, interval);
+        // Interval accelerates from 120ms down to 55ms based on intensity
+        const interval = 0.12 - stage1Intensity * 0.065;
+        session.nextTickTime = now + Math.max(0.048, interval);
 
         // Tactile mechanical ratchet click
-        playKitClick(ctx, session.masterGain, 1.0 + progress * 0.35);
+        playKitClick(ctx, session.masterGain, 1.0 + stage1Intensity * 0.35);
       }
 
       // Drone subtly spools up
-      session.droneOsc.frequency.setTargetAtTime(95 + stage1Intensity * 60, now, 0.08);
-      session.droneGain.gain.setTargetAtTime(0.06 + stage1Intensity * 0.04, now, 0.08);
+      session.droneOsc.frequency.setTargetAtTime(95 + stage1Intensity * 65, now, 0.08);
+      session.droneGain.gain.setTargetAtTime(0.07 + stage1Intensity * 0.05, now, 0.08);
     }
 
     // -----------------------------------------------------------------
-    // 2. STAGE 2 SOUND: "bhum bhum bhum" resonant sub-bass heartbeats (3.0s - 6.0s)
+    // 2. STAGE 2 SOUND: "bhum bhum" resonant sub-bass heartbeats & deep drone
     // -----------------------------------------------------------------
-    if (holdDuration >= 3.0 && holdDuration < 6.0) {
+    if (stage2Intensity > 0.2 && stage3Intensity < 0.25) {
       if (now >= session.nextBhumTime) {
-        const progress = Math.min(1, (holdDuration - 3.0) / 3.0);
-        // Resonant heartbeat thumps spaced ~360ms to ~280ms
-        const interval = 0.36 - progress * 0.08;
-        session.nextBhumTime = now + Math.max(0.26, interval);
+        // Resonant heartbeat thumps spaced ~320ms to ~260ms
+        const interval = 0.34 - stage2Intensity * 0.08;
+        session.nextBhumTime = now + Math.max(0.24, interval);
 
         // Heavy sub-bass reactor impact
-        playBhumThump(ctx, session.masterGain, 1.0 + progress * 0.25);
+        playBhumThump(ctx, session.masterGain, 1.0 + stage2Intensity * 0.25);
       }
 
       // Drone deepens into heavy resonant tone
-      session.droneOsc.frequency.setTargetAtTime(140 + stage2Intensity * 70, now, 0.06);
-      session.droneGain.gain.setTargetAtTime(0.1 + stage2Intensity * 0.06, now, 0.06);
+      session.droneOsc.frequency.setTargetAtTime(140 + stage2Intensity * 75, now, 0.06);
+      session.droneGain.gain.setTargetAtTime(0.12 + stage2Intensity * 0.07, now, 0.06);
     }
 
     // -----------------------------------------------------------------
-    // 3. STAGE 3 SOUND: "turbine" supersonic jet roaring overdrive (6.0s+)
+    // 3. STAGE 3 SOUND: "turbine" supersonic jet roaring overdrive
     // -----------------------------------------------------------------
     const clampedS3 = Math.max(0, Math.min(1, stage3Intensity));
-    if (clampedS3 > 0.02) {
+    if (clampedS3 > 0.12) {
       // Noise filter sweeps up into rushing jet air whoosh
-      const noiseFreq = 800 + clampedS3 * 1400; // 800Hz -> 2200Hz
+      const noiseFreq = 900 + clampedS3 * 1600; // 900Hz -> 2500Hz
       session.noiseFilter.frequency.setTargetAtTime(noiseFreq, now, 0.05);
-      session.noiseGain.gain.setTargetAtTime(clampedS3 * 0.08, now, 0.05);
+      session.noiseGain.gain.setTargetAtTime(clampedS3 * 0.09, now, 0.05);
 
       // Turbine compressor spools spin with smooth, controlled resonance
-      const spool1Freq = 540 + clampedS3 * 560; // 540Hz -> 1100Hz
-      const spool2Freq = 1080 + clampedS3 * 1120; // 1080Hz -> 2200Hz
+      const spool1Freq = 560 + clampedS3 * 620; // 560Hz -> 1180Hz
+      const spool2Freq = 1120 + clampedS3 * 1240; // 1120Hz -> 2360Hz
       session.spoolOsc1.frequency.setTargetAtTime(spool1Freq, now, 0.05);
       session.spoolOsc2.frequency.setTargetAtTime(spool2Freq, now, 0.05);
-      session.spoolGain.gain.setTargetAtTime(clampedS3 * 0.06, now, 0.05);
+      session.spoolGain.gain.setTargetAtTime(clampedS3 * 0.07, now, 0.05);
 
       // Jet afterburner low roar
-      session.rumbleGain.gain.setTargetAtTime(clampedS3 * 0.08, now, 0.05);
+      session.rumbleGain.gain.setTargetAtTime(clampedS3 * 0.09, now, 0.05);
 
       // Carrier drone harmonizes with turbine
-      session.droneOsc.frequency.setTargetAtTime(180 + clampedS3 * 110, now, 0.05);
+      session.droneOsc.frequency.setTargetAtTime(190 + clampedS3 * 120, now, 0.05);
     } else {
       session.noiseGain.gain.setTargetAtTime(0.0001, now, 0.08);
       session.spoolGain.gain.setTargetAtTime(0.0001, now, 0.08);
