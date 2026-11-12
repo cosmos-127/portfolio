@@ -25,7 +25,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 const plusJakartaSans = Plus_Jakarta_Sans({
-  variable: "--font-sans",
+  variable: "--font-jakarta",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
   display: "swap",
@@ -149,7 +149,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body className="min-h-full flex flex-col font-sans text-text-main bg-background selection:bg-primary selection:text-white">
+      <body className="min-h-full flex flex-col font-sans text-text-main bg-background">
         <SmoothScrollProvider>{children}</SmoothScrollProvider>
       </body>
     </html>

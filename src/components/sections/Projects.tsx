@@ -18,6 +18,10 @@ import { GithubIcon, Neo4jIcon } from "@/components/ui/icons";
 import { cn } from "@/lib/utils";
 import { playDrumClick } from "@/lib/sound";
 import { TextScramble } from "@/components/ui/TextScramble";
+import { HairlineFigure } from "@/components/figures/HairlineFigure";
+import { patchbay } from "@/components/figures/patchbay";
+import { graphrag } from "@/components/figures/graphrag";
+import { federated } from "@/components/figures/federated";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
@@ -119,11 +123,10 @@ function ProjectCard({
   return (
     <div
       className={cn(
-        "glass-card glass-card-hover glow-card border-trace rounded-2xl p-6 sm:p-7 flex flex-col justify-between relative group w-full mx-auto select-none overflow-hidden",
+        "glass-card glass-card-hover glow-card rounded-2xl p-6 sm:p-7 flex flex-col justify-between relative group w-full mx-auto select-none overflow-hidden min-h-[540px] md:h-[540px]",
         isActive && "active-glass-card ring-1 ring-primary/30"
       )}
       style={{
-        height: "540px",
         maxWidth: "700px",
         transition: "border-color 0.2s, box-shadow 0.2s",
       }}
@@ -138,7 +141,7 @@ function ProjectCard({
         )}
         style={{
           background:
-            "linear-gradient(to bottom, rgba(15, 23, 42, 0.4) 0%, transparent 28%, transparent 72%, rgba(15, 23, 42, 0.4) 100%)",
+            "linear-gradient(to bottom, color-mix(in srgb, var(--text-main) 40%, transparent) 0%, transparent 28%, transparent 72%, color-mix(in srgb, var(--text-main) 40%, transparent) 100%)",
         }}
       />
 
@@ -153,32 +156,32 @@ function ProjectCard({
           <div className="flex items-center gap-2">
             <span
               className={cn(
-                "font-mono text-xs font-bold transition-colors",
+                "font-mono text-xs font-semibold transition-colors",
                 isActive ? "text-primary" : "text-text-muted"
               )}
             >
               {project.code}
             </span>
           </div>
-          <span className="glass-pill px-2.5 py-0.5 rounded-full font-mono text-[10px] text-text-muted font-medium truncate max-w-[260px]">
+          <span className="glass-pill px-2.5 py-0.5 rounded-full font-mono text-2xs text-text-muted font-medium truncate max-w-[260px]">
             {project.category}
           </span>
         </div>
 
         {/* Card Title */}
-        <h3 className="font-gued font-bold text-2xl sm:text-3xl text-text-main mb-1.5 tracking-tight group-hover:text-primary transition-colors">
+        <h3 className="font-display font-bold text-2xl sm:text-3xl text-text-main mb-1.5 tracking-tight group-hover:text-primary transition-colors">
           {project.title}
         </h3>
 
         {/* Description */}
-        <p className="font-sans text-xs sm:text-sm text-text-muted leading-relaxed mb-4 line-clamp-3">
+        <p className="font-sans text-sm text-text-muted leading-relaxed mb-4 line-clamp-3">
           {project.description}
         </p>
 
         {/* Card Visual Area - 16:9 Aspect Ratio & Contained Inside Card */}
         {project.image ? (
           /* User-provided preview image */
-          <div className="w-full max-w-[540px] aspect-video max-h-[260px] sm:max-h-[275px] rounded-xl overflow-hidden border border-border-light bg-zinc-950 mb-2 relative mx-auto group/img">
+          <div className="w-full max-w-[540px] aspect-video max-h-[260px] sm:max-h-[275px] rounded-xl overflow-hidden border border-border-light bg-gray-950 mb-2 relative mx-auto group/img">
             <Image
               src={project.image}
               alt={project.title}
@@ -194,7 +197,7 @@ function ProjectCard({
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={handleLinkClick}
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-white font-mono text-xs font-semibold shadow-lg hover:bg-primary/90 transition-colors"
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary-ink text-white font-sans text-sm font-semibold shadow-lg hover:bg-primary transition-colors"
                 >
                   <span>Open Live Deployment</span>
                   <ExternalLink className="w-3.5 h-3.5" />
@@ -204,23 +207,23 @@ function ProjectCard({
           </div>
         ) : project.id === "llmark" ? (
           /* LLMark: High-performance Inference Telemetry Visualizer & Direct Deployment CTA */
-          <div className="w-full max-w-[540px] aspect-video max-h-[260px] sm:max-h-[275px] rounded-xl overflow-hidden border border-border-light bg-zinc-950 mb-2 p-3.5 sm:p-4 flex flex-col justify-between font-mono text-xs mx-auto shadow-inner relative">
+          <div className="w-full max-w-[540px] sm:aspect-video sm:max-h-[275px] rounded-xl overflow-hidden border border-border-light bg-gray-950 mb-2 p-3.5 sm:p-4 flex flex-col justify-between font-mono text-xs mx-auto shadow-inner relative">
             {/* Ambient subtle scan-line when active */}
             {isActive && (
               <div className="pointer-events-none absolute inset-x-0 top-0 h-[1.5px] bg-gradient-to-r from-transparent via-emerald-400 to-transparent z-20 animate-data-flow" />
             )}
 
             {/* Mini Browser Header */}
-            <div className="flex items-center justify-between pb-2 border-b border-zinc-800 font-mono text-[10px] text-zinc-400 shrink-0">
+            <div className="flex items-center justify-between pb-2 border-b border-gray-800 font-mono text-2xs text-gray-400 shrink-0">
               <div className="flex items-center gap-1.5">
                 <span className="w-2 h-2 rounded-full bg-red-500/80 inline-block" />
                 <span className="w-2 h-2 rounded-full bg-amber-500/80 inline-block" />
                 <span className="w-2 h-2 rounded-full bg-emerald-500/80 inline-block" />
-                <span className="ml-1.5 text-zinc-300 truncate max-w-[180px] sm:max-w-none text-[10px]">
+                <span className="ml-1.5 text-gray-300 truncate max-w-[180px] sm:max-w-none text-2xs">
                   https://llmark.netlify.app/
                 </span>
               </div>
-              <span className="text-emerald-400 font-semibold flex items-center gap-1 text-[10px] shrink-0">
+              <span className="text-emerald-400 font-semibold flex items-center gap-1 text-2xs shrink-0">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                 LIVE DEPLOYMENT
               </span>
@@ -228,36 +231,36 @@ function ProjectCard({
 
             {/* Telemetry Metrics Panel */}
             <div className="grid grid-cols-2 gap-2.5 sm:gap-3 py-2 my-auto text-xs">
-              <div className="p-2.5 sm:p-3 rounded-lg bg-zinc-900/90 border border-zinc-800 flex flex-col justify-center relative overflow-hidden group/tile">
-                <span className="text-zinc-400 text-[10px] sm:text-[11px] font-sans flex items-center justify-between">
+              <div className="p-2.5 sm:p-3 rounded-lg bg-gray-900/90 border border-gray-800 flex flex-col justify-center relative overflow-hidden group/tile">
+                <span className="text-gray-400 text-2xs font-sans flex items-center justify-between">
                   <span>TTFT Latency</span>
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400/80 animate-ping" />
                 </span>
                 <span className="text-emerald-400 font-bold text-sm sm:text-base animate-telemetry-pulse">
                   142 ms{" "}
-                  <span className="text-[10px] text-zinc-500 font-normal">
+                  <span className="text-2xs text-gray-400 font-normal">
                     p95
                   </span>
                 </span>
               </div>
-              <div className="p-2.5 sm:p-3 rounded-lg bg-zinc-900/90 border border-zinc-800 flex flex-col justify-center">
-                <span className="text-zinc-400 text-[10px] sm:text-[11px] font-sans">
+              <div className="p-2.5 sm:p-3 rounded-lg bg-gray-900/90 border border-gray-800 flex flex-col justify-center">
+                <span className="text-gray-400 text-2xs font-sans">
                   Token Throughput
                 </span>
                 <span className="text-primary font-bold text-sm sm:text-base animate-telemetry-pulse">
                   124.8 tok/s
                 </span>
               </div>
-              <div className="p-2.5 sm:p-3 rounded-lg bg-zinc-900/90 border border-zinc-800 flex flex-col justify-center">
-                <span className="text-zinc-400 text-[10px] sm:text-[11px] font-sans">
+              <div className="p-2.5 sm:p-3 rounded-lg bg-gray-900/90 border border-gray-800 flex flex-col justify-center">
+                <span className="text-gray-400 text-2xs font-sans">
                   vLLM Engine
                 </span>
-                <span className="text-zinc-200 font-bold text-xs sm:text-sm">
+                <span className="text-gray-200 font-bold text-xs sm:text-sm">
                   PagedAttention v2
                 </span>
               </div>
-              <div className="p-2.5 sm:p-3 rounded-lg bg-zinc-900/90 border border-zinc-800 flex flex-col justify-center">
-                <span className="text-zinc-400 text-[10px] sm:text-[11px] font-sans">
+              <div className="p-2.5 sm:p-3 rounded-lg bg-gray-900/90 border border-gray-800 flex flex-col justify-center">
+                <span className="text-gray-400 text-2xs font-sans">
                   Concurrency
                 </span>
                 <span className="text-amber-400 font-bold text-xs sm:text-sm">
@@ -267,9 +270,9 @@ function ProjectCard({
             </div>
 
             {/* Direct Deployment Bar inside Visualizer with Throughput Activity Line */}
-            <div className="pt-2 border-t border-zinc-800 flex items-center justify-between text-xs">
-              <div className="flex items-center gap-2 text-zinc-400 text-[11px] hidden sm:flex">
-                <span className="w-24 h-1 bg-zinc-800 rounded-full overflow-hidden relative inline-block">
+            <div className="pt-2 border-t border-gray-800 flex items-center justify-between text-xs">
+              <div className="flex items-center gap-2 text-gray-400 text-2xs hidden sm:flex">
+                <span className="w-24 h-1 bg-gray-800 rounded-full overflow-hidden relative inline-block">
                   <span className="absolute inset-0 bg-gradient-to-r from-primary via-emerald-400 to-primary animate-data-flow" />
                 </span>
                 <span>Inference Stream Active</span>
@@ -281,7 +284,7 @@ function ProjectCard({
                 onClick={handleLinkClick}
                 data-cursor="view"
                 data-cursor-label="LAUNCH ↗"
-                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-md bg-primary text-white font-mono text-xs font-semibold hover:bg-primary/90 transition-colors ml-auto sm:ml-0 shadow-sm"
+                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-primary-ink text-white font-sans text-sm font-semibold hover:bg-primary transition-colors ml-auto sm:ml-0 shadow-sm"
               >
                 <span>Launch Live App</span>
                 <ExternalLink className="w-3.5 h-3.5" />
@@ -290,173 +293,99 @@ function ProjectCard({
           </div>
         ) : project.id === "mcp-server" ? (
           /* MCP Tool Server: 16:9 Contained FastMCP Protocol Visualizer */
-          <div className="w-full max-w-[540px] aspect-video max-h-[260px] sm:max-h-[275px] rounded-xl overflow-hidden border border-white/80 bg-white/35 backdrop-blur-md mb-2 p-3.5 sm:p-4 flex flex-col justify-between font-mono text-xs mx-auto relative shadow-2xs">
+          <div className="w-full max-w-[540px] sm:aspect-video sm:max-h-[275px] rounded-xl overflow-hidden border border-white/80 bg-white/35 backdrop-blur-md mb-2 p-3.5 sm:p-4 flex flex-col justify-between font-mono text-xs mx-auto relative shadow-2xs">
             {isActive && (
               <div className="pointer-events-none absolute inset-x-0 top-0 h-[1.5px] bg-gradient-to-r from-transparent via-primary to-transparent z-20 animate-data-flow" />
             )}
 
-            <div className="flex items-center justify-between pb-2 border-b border-border-light/80 text-[11px] text-text-muted">
-              <div className="flex items-center gap-1.5">
+            <div className="flex items-center justify-between pb-2 border-b border-border-light/80 text-2xs text-text-muted">
+              <div className="flex items-center gap-1.5 min-w-0">
                 <Server className="w-3.5 h-3.5 text-primary" />
                 <span className="truncate">mcp://gateway:8080/tools</span>
               </div>
-              <span className="text-emerald-600 font-bold shrink-0 flex items-center gap-1">
+              <span className="text-emerald-700 font-semibold shrink-0 flex items-center gap-1">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                 ACTIVE GATEWAY
               </span>
             </div>
 
-            <div className="py-2 space-y-2 text-xs">
-              <div className="p-2 rounded-lg bg-white/60 border border-white/85 flex items-center justify-between shadow-2xs">
-                <span className="text-text-muted font-sans text-xs">
-                  Tool Protocol:
-                </span>
-                <span className="text-primary font-bold text-xs flex items-center gap-1.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-primary/60 animate-ping" />
-                  FastMCP JSON-RPC 2.0
-                </span>
-              </div>
-              <div className="p-2 rounded-lg bg-white/60 border border-white/85 flex items-center justify-between shadow-2xs">
-                <span className="text-text-muted font-sans text-xs">
-                  Schema Contract:
-                </span>
-                <code className="text-text-main font-mono text-[11px] px-1.5 py-0.5 rounded bg-surface/80 border border-border-light/60">
-                  JSONSchema(strict=True)
-                </code>
-              </div>
-              <div className="p-2 rounded-lg bg-white/60 border border-white/85 flex items-center justify-between shadow-2xs">
-                <span className="text-text-muted font-sans text-xs">
-                  Serialization:
-                </span>
-                <span className="text-emerald-700 font-bold text-xs">
-                  0ms (Zero-Copy)
-                </span>
-              </div>
-            </div>
-
-            <div className="pt-2 border-t border-border-light/80 flex items-center justify-between text-[11px] text-text-muted">
-              <span>Target Flow</span>
-              <span className="text-text-main font-semibold flex items-center gap-1">
-                <span>LangGraph</span>
-                <span className="text-primary font-bold">&bull;</span>
-                <span>ReAct Fleet</span>
+            {/* One agent cable, five typed sockets: the plug hops to the socket under the pointer */}
+            <HairlineFigure
+              figure={patchbay}
+              label="plug"
+              play={isActive}
+              className="h-[210px] sm:h-auto sm:flex-1 sm:min-h-0"
+            >
+              <span className="absolute bottom-0 left-0 text-2xs text-text-muted pointer-events-none">
+                FastMCP · JSON-RPC 2.0
               </span>
-            </div>
+            </HairlineFigure>
           </div>
         ) : project.id === "graphrag-explorer" ? (
           /* GraphRAG Explorer: 16:9 Contained Knowledge Graph Visualizer */
-          <div className="w-full max-w-[540px] aspect-video max-h-[260px] sm:max-h-[275px] rounded-xl overflow-hidden border border-white/80 bg-white/35 backdrop-blur-md mb-2 p-3.5 sm:p-4 flex flex-col justify-between font-mono text-xs mx-auto relative shadow-2xs">
+          <div className="w-full max-w-[540px] sm:aspect-video sm:max-h-[275px] rounded-xl overflow-hidden border border-white/80 bg-white/35 backdrop-blur-md mb-2 p-3.5 sm:p-4 flex flex-col justify-between font-mono text-xs mx-auto relative shadow-2xs">
             {isActive && (
-              <div className="pointer-events-none absolute inset-x-0 top-0 h-[1.5px] bg-gradient-to-r from-transparent via-amber-500 to-transparent z-20 animate-data-flow" />
+              <div className="pointer-events-none absolute inset-x-0 top-0 h-[1.5px] bg-gradient-to-r from-transparent via-primary to-transparent z-20 animate-data-flow" />
             )}
 
-            <div className="flex items-center justify-between pb-2 border-b border-border-light/80 text-[11px] text-text-muted">
-              <div className="flex items-center gap-1.5">
+            <div className="flex items-center justify-between pb-2 border-b border-border-light/80 text-2xs text-text-muted">
+              <div className="flex items-center gap-1.5 min-w-0">
                 <Neo4jIcon className="w-3.5 h-3.5 text-primary" />
                 <span className="truncate">graphrag://neo4j/hybrid-retrieval</span>
               </div>
-              <span className="text-amber-600 font-bold shrink-0 flex items-center gap-1">
+              <span className="text-amber-700 font-semibold shrink-0 flex items-center gap-1">
                 <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
                 TRAVERSAL
               </span>
             </div>
 
-            <div className="py-2 space-y-2 text-xs">
-              <div className="p-2 rounded-lg bg-white/60 border border-white/85 flex items-center justify-between shadow-2xs relative overflow-hidden">
-                <span className="text-text-muted font-sans text-xs">
-                  Multi-Hop Traversal:
-                </span>
-                <span className="text-text-main font-semibold text-[11px] flex items-center gap-1 font-mono">
-                  <span className="text-primary">Entity</span>
-                  <span className="text-text-muted">&rarr;</span>
-                  <span className="text-amber-700 bg-amber-50/80 px-1 rounded border border-amber-200/60">[rel:owns]</span>
-                  <span className="text-text-muted">&rarr;</span>
-                  <span className="text-emerald-700">Concept</span>
-                </span>
-              </div>
-              <div className="p-2 rounded-lg bg-white/60 border border-white/85 flex items-center justify-between shadow-2xs">
-                <span className="text-text-muted font-sans text-xs">
-                  Chunk Fragmentation:
-                </span>
-                <span className="text-emerald-700 font-bold text-xs">
-                  Eliminated (Triples)
-                </span>
-              </div>
-              <div className="p-2 rounded-lg bg-white/60 border border-white/85 flex items-center justify-between shadow-2xs">
-                <span className="text-text-muted font-sans text-xs">
-                  Index Engine:
-                </span>
-                <span className="text-primary font-bold text-xs">
-                  Neo4j + Vector Hybrid
-                </span>
-              </div>
-            </div>
-
-            <div className="pt-2 border-t border-border-light/80 flex items-center justify-between text-[11px] text-text-muted">
-              <span>Engine</span>
-              <span className="text-text-main font-semibold">
+            {/* Hybrid retrieval: a drawer pulled, then the drawers its links reach, hop by hop */}
+            <HairlineFigure
+              figure={graphrag}
+              label="drawer"
+              play={isActive}
+              className="h-[210px] sm:h-auto sm:flex-1 sm:min-h-0"
+            >
+              <span className="absolute bottom-0 left-0 text-2xs text-text-muted pointer-events-none">
                 Neo4j + Vector Hybrid
               </span>
-            </div>
+            </HairlineFigure>
           </div>
         ) : (
           /* Federated AI Analyst: 16:9 Contained ReWOO + Trino Visualizer */
-          <div className="w-full max-w-[540px] aspect-video max-h-[260px] sm:max-h-[275px] rounded-xl overflow-hidden border border-white/80 bg-white/35 backdrop-blur-md mb-2 p-3.5 sm:p-4 flex flex-col justify-between font-mono text-xs mx-auto relative shadow-2xs">
+          <div className="w-full max-w-[540px] sm:aspect-video sm:max-h-[275px] rounded-xl overflow-hidden border border-white/80 bg-white/35 backdrop-blur-md mb-2 p-3.5 sm:p-4 flex flex-col justify-between font-mono text-xs mx-auto relative shadow-2xs">
             {isActive && (
-              <div className="pointer-events-none absolute inset-x-0 top-0 h-[1.5px] bg-gradient-to-r from-transparent via-purple-500 to-transparent z-20 animate-data-flow" />
+              <div className="pointer-events-none absolute inset-x-0 top-0 h-[1.5px] bg-gradient-to-r from-transparent via-primary to-transparent z-20 animate-data-flow" />
             )}
 
-            <div className="flex items-center justify-between pb-2 border-b border-border-light/80 text-[11px] text-text-muted">
-              <div className="flex items-center gap-1.5">
+            <div className="flex items-center justify-between pb-2 border-b border-border-light/80 text-2xs text-text-muted">
+              <div className="flex items-center gap-1.5 min-w-0">
                 <Database className="w-3.5 h-3.5 text-primary" />
                 <span className="truncate">rewoo://trino/distributed-sql</span>
               </div>
-              <span className="text-purple-600 font-bold shrink-0 flex items-center gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-purple-500 animate-pulse" />
+              <span className="text-primary font-semibold shrink-0 flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
                 FEDERATED
               </span>
             </div>
 
-            <div className="py-2 space-y-2 text-xs">
-              <div className="p-2 rounded-lg bg-white/60 border border-white/85 flex items-center justify-between shadow-2xs">
-                <span className="text-text-muted font-sans text-xs">
-                  Orchestration:
-                </span>
-                <span className="text-primary font-bold text-xs flex items-center gap-1">
-                  <span>ReWOO Parallel Flow</span>
-                  <span className="w-1.5 h-1.5 rounded-full bg-primary animate-ping" />
-                </span>
-              </div>
-              <div className="p-2 rounded-lg bg-white border border-border-light flex items-center justify-between shadow-2xs">
-                <span className="text-text-muted font-sans text-xs">
-                  Data Movement:
-                </span>
-                <span className="text-emerald-700 font-bold text-xs">
-                  0 bytes (In-situ)
-                </span>
-              </div>
-              <div className="p-2 rounded-lg bg-white border border-border-light flex items-center justify-between shadow-2xs">
-                <span className="text-text-muted font-sans text-xs">
-                  Runtime:
-                </span>
-                <span className="text-text-main font-semibold text-xs">
-                  Trino SQL Cluster
-                </span>
-              </div>
-            </div>
-
-            <div className="pt-2 border-t border-border-light/80 flex items-center justify-between text-[11px] text-text-muted">
-              <span>Query Engine</span>
-              <span className="text-text-main font-semibold">
-                Trino Distributed SQL
+            {/* ReWOO fan-out: one planner, three vaults; only the capsules travel, the data stays in situ */}
+            <HairlineFigure
+              figure={federated}
+              label="vault"
+              play={isActive}
+              className="h-[210px] sm:h-auto sm:flex-1 sm:min-h-0"
+            >
+              <span className="absolute bottom-0 left-0 text-2xs text-text-muted pointer-events-none">
+                ReWOO · 0 bytes moved
               </span>
-            </div>
+            </HairlineFigure>
           </div>
         )}
       </div>
 
       {/* Card Bottom: Links & Tags */}
-      <div className="relative z-10 pt-4 border-t border-white/70 flex items-center justify-between gap-2">
+      <div className="relative z-10 pt-4 border-t border-white/70 flex flex-wrap items-center justify-between gap-x-2 gap-y-3">
         <div className="flex items-center gap-2">
           {project.websiteUrl && (
             <Link
@@ -466,7 +395,7 @@ function ProjectCard({
               onClick={handleLinkClick}
               data-cursor="view"
               data-cursor-label="LAUNCH ↗"
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-primary text-white text-xs font-mono font-semibold hover:bg-primary/90 transition-colors shadow-sm cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-primary-ink text-white text-sm font-sans font-semibold whitespace-nowrap hover:bg-primary transition-colors shadow-sm cursor-pointer"
             >
               <Globe className="w-3.5 h-3.5" />
               <span>{project.websiteLabel || "Deployment ↗"}</span>
@@ -479,7 +408,7 @@ function ProjectCard({
             onClick={handleLinkClick}
             data-cursor="view"
             data-cursor-label="CODE ↗"
-            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg glass-pill text-text-main text-xs font-mono font-medium hover:border-text-main hover:bg-white transition-colors cursor-pointer shadow-2xs"
+            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg glass-pill text-text-main text-sm font-sans font-semibold whitespace-nowrap hover:border-text-main hover:bg-white transition-colors cursor-pointer shadow-2xs"
           >
             <GithubIcon className="w-3.5 h-3.5" />
             <span>GitHub ↗</span>
@@ -490,7 +419,7 @@ function ProjectCard({
           {project.tags.map((tag) => (
             <span
               key={tag}
-              className="glass-pill px-2.5 py-1 rounded-md text-[10px] font-mono text-text-muted"
+              className="glass-pill px-2.5 py-1 rounded-md text-2xs font-mono text-text-muted"
             >
               {tag}
             </span>
@@ -530,8 +459,8 @@ function DrumSpokeAssembly({
             transform: "rotateY(-42deg) translateZ(-45px)",
             transformStyle: "preserve-3d",
             background: isActive
-              ? "linear-gradient(to left, var(--primary) 0%, rgba(230, 57, 70, 0.35) 60%, transparent 100%)"
-              : "linear-gradient(to left, rgba(161, 161, 170, 0.5) 0%, rgba(161, 161, 170, 0.05) 100%)",
+              ? "linear-gradient(to left, var(--primary) 0%, color-mix(in srgb, var(--primary) 35%, transparent) 60%, transparent 100%)"
+              : "linear-gradient(to left, var(--border-strong) 0%, transparent 100%)",
             opacity: isActive ? 0.95 : 0.4,
           }}
         >
@@ -540,8 +469,8 @@ function DrumSpokeAssembly({
             className={cn(
               "absolute left-0 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full border transition-all duration-300",
               isActive
-                ? "border-primary bg-primary shadow-[0_0_8px_var(--primary)]"
-                : "border-zinc-400/50 bg-white/60"
+                ? "border-primary bg-primary shadow-glow"
+                : "border-border-strong bg-white/60"
             )}
           />
         </div>
@@ -552,7 +481,7 @@ function DrumSpokeAssembly({
             "h-px w-5 lg:w-8 xl:w-10 transition-colors duration-300",
             isActive
               ? "bg-gradient-to-l from-primary via-primary/70 to-transparent"
-              : "bg-gradient-to-l from-zinc-400/40 via-zinc-400/20 to-transparent"
+              : "bg-gradient-to-l from-border-strong via-border-light to-transparent"
           )}
         />
 
@@ -562,14 +491,14 @@ function DrumSpokeAssembly({
             className={cn(
               "w-3.5 h-3.5 lg:w-4 lg:h-4 rounded-full border flex items-center justify-center transition-all duration-300 backdrop-blur-xs",
               isActive
-                ? "border-primary bg-white shadow-[0_0_10px_rgba(230,57,70,0.45)] ring-1 ring-primary/30"
-                : "border-zinc-300 bg-white/70 shadow-2xs"
+                ? "border-primary bg-white shadow-glow ring-1 ring-primary/30"
+                : "border-border-strong bg-white/70 shadow-2xs"
             )}
           >
             <span
               className={cn(
                 "w-1.5 h-1.5 rounded-full transition-colors duration-300",
-                isActive ? "bg-primary animate-pulse" : "bg-zinc-400"
+                isActive ? "bg-primary animate-pulse" : "bg-border-strong"
               )}
             />
           </div>
@@ -587,14 +516,14 @@ function DrumSpokeAssembly({
             className={cn(
               "w-3.5 h-3.5 lg:w-4 lg:h-4 rounded-full border flex items-center justify-center transition-all duration-300 backdrop-blur-xs",
               isActive
-                ? "border-primary bg-white shadow-[0_0_10px_rgba(230,57,70,0.45)] ring-1 ring-primary/30"
-                : "border-zinc-300 bg-white/70 shadow-2xs"
+                ? "border-primary bg-white shadow-glow ring-1 ring-primary/30"
+                : "border-border-strong bg-white/70 shadow-2xs"
             )}
           >
             <span
               className={cn(
                 "w-1.5 h-1.5 rounded-full transition-colors duration-300",
-                isActive ? "bg-primary animate-pulse" : "bg-zinc-400"
+                isActive ? "bg-primary animate-pulse" : "bg-border-strong"
               )}
             />
           </div>
@@ -606,7 +535,7 @@ function DrumSpokeAssembly({
             "h-px w-5 lg:w-8 xl:w-10 transition-colors duration-300",
             isActive
               ? "bg-gradient-to-r from-primary via-primary/70 to-transparent"
-              : "bg-gradient-to-r from-zinc-400/40 via-zinc-400/20 to-transparent"
+              : "bg-gradient-to-r from-border-strong via-border-light to-transparent"
           )}
         />
 
@@ -617,8 +546,8 @@ function DrumSpokeAssembly({
             transform: "rotateY(42deg) translateZ(-45px)",
             transformStyle: "preserve-3d",
             background: isActive
-              ? "linear-gradient(to right, var(--primary) 0%, rgba(230, 57, 70, 0.35) 60%, transparent 100%)"
-              : "linear-gradient(to right, rgba(161, 161, 170, 0.5) 0%, rgba(161, 161, 170, 0.05) 100%)",
+              ? "linear-gradient(to right, var(--primary) 0%, color-mix(in srgb, var(--primary) 35%, transparent) 60%, transparent 100%)"
+              : "linear-gradient(to right, var(--border-strong) 0%, transparent 100%)",
             opacity: isActive ? 0.95 : 0.4,
           }}
         >
@@ -627,8 +556,8 @@ function DrumSpokeAssembly({
             className={cn(
               "absolute right-0 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full border transition-all duration-300",
               isActive
-                ? "border-primary bg-primary shadow-[0_0_8px_var(--primary)]"
-                : "border-zinc-400/50 bg-white/60"
+                ? "border-primary bg-primary shadow-glow"
+                : "border-border-strong bg-white/60"
             )}
           />
         </div>
@@ -765,7 +694,7 @@ export function Projects() {
       drumTweenRef.current = gsap.to(drumAnimProgress.current, {
         value: clamped,
         duration: 0.32,
-        ease: "power2.out",
+        ease: "power3.out",
         onUpdate: () => {
           updateDrum(drumAnimProgress.current.value);
         },
@@ -1044,7 +973,7 @@ export function Projects() {
     <section
       id="projects"
       ref={sectionRef}
-      className="relative bg-transparent border-t border-border-light/60"
+      className="relative bg-transparent section-divider"
     >
       {/* DESKTOP & TABLET: TWO-COLUMN PINNED VIEW WITH 3D ROTATING DRUM WHEEL */}
       <div className="hidden md:block">
@@ -1059,19 +988,19 @@ export function Projects() {
           >
             <div>
               {/* Telemetry Badge */}
-              <div className="flex items-center gap-2 text-xs font-mono text-primary font-bold tracking-widest uppercase mb-4">
+              <div className="flex items-center gap-2.5 text-xs font-mono text-text-muted font-semibold tracking-wider uppercase mb-3">
                 <span className="w-2 h-2 rounded-full bg-primary" />
                 <TextScramble text="FEATURED PROJECTS & SYSTEMS" />
               </div>
 
               {/* Static Main Headline with Editorial Serif Polish */}
-              <h2 className="font-gued font-bold text-3xl lg:text-4xl xl:text-[2.65rem] text-text-main tracking-tight leading-[1.15] mb-4">
+              <h2 className="font-display font-bold text-3xl lg:text-4xl text-text-main tracking-tight leading-[1.15] mb-4">
                 Systems designed to solve <span className="font-serif italic font-normal text-primary tracking-normal">real AI bottlenecks</span>
                 <span className="text-primary font-bold">.</span>
               </h2>
 
               {/* Editorial Description */}
-              <p className="text-text-muted font-sans text-xs sm:text-sm leading-relaxed mb-6">
+              <p className="text-text-muted font-sans text-sm leading-relaxed mb-6">
                 Minimal, purpose-built architectures spanning inference serving
                 telemetry, agent tool protocol gateways, relational GraphRAG,
                 and federated analytical flows.
@@ -1090,9 +1019,9 @@ export function Projects() {
                           transitionToCard(idx);
                         }}
                         className={cn(
-                          "relative transition-colors duration-200 cursor-pointer flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px]",
+                          "relative transition-colors duration-200 cursor-pointer flex items-center gap-1 px-2.5 py-1 rounded-full text-2xs",
                           isActive
-                            ? "text-primary font-bold"
+                            ? "text-primary font-semibold"
                             : "text-text-muted hover:text-text-main"
                         )}
                         title={`Rotate drum to ${project.title}`}
@@ -1111,7 +1040,7 @@ export function Projects() {
                 </div>
 
                 {/* Quick Step Controls */}
-                <div className="flex items-center gap-1.5 font-mono text-[10px]">
+                <div className="flex items-center gap-1.5 font-mono text-2xs">
                   <motion.button
                     whileHover={{ scale: 1.08 }}
                     whileTap={{ scale: 0.92 }}
@@ -1153,9 +1082,9 @@ export function Projects() {
                 />
               </div>
 
-              <div className="flex items-center justify-between text-[11px] font-mono text-text-muted">
+              <div className="flex items-center justify-between text-2xs font-mono text-text-muted">
                 <div className="flex items-center gap-1.5 truncate max-w-[200px]">
-                  <span className="text-primary font-semibold text-[10px] uppercase tracking-wider">
+                  <span className="text-primary font-semibold text-2xs uppercase tracking-wider">
                     {PROJECTS[activeIndex]?.code} ·
                   </span>
                   <span className="text-text-main font-semibold truncate">
@@ -1173,8 +1102,8 @@ export function Projects() {
                 </Link>
               </div>
 
-              <div className="text-[10px] font-mono text-text-muted/60 flex items-center gap-1.5">
-                <MoveVertical className="w-3 h-3 text-primary/70" />
+              <div className="text-2xs font-mono text-text-muted flex items-center gap-1.5">
+                <MoveVertical className="w-3 h-3 text-primary" />
                 <span>Scroll, drag drum stage, or use ▲▼ arrows</span>
               </div>
             </div>
@@ -1278,11 +1207,11 @@ export function Projects() {
       {/* MOBILE VIEW (< 768px): RESPONSIVE VERTICAL STACK */}
       <div className="md:hidden max-w-xl mx-auto px-6 py-20">
         <div className="mb-10">
-          <div className="flex items-center gap-2 text-xs font-mono text-primary font-bold tracking-widest uppercase mb-3">
+          <div className="flex items-center gap-2.5 text-xs font-mono text-text-muted font-semibold tracking-wider uppercase mb-3">
             <span className="w-2 h-2 rounded-full bg-primary" />
             <span>FEATURED PROJECTS & SYSTEMS</span>
           </div>
-          <h2 className="font-gued font-bold text-2xl sm:text-3xl text-text-main tracking-tight leading-snug">
+          <h2 className="font-display font-bold text-h2 text-text-main tracking-tight leading-[1.12]">
             Systems designed to solve <span className="font-serif italic font-normal text-primary tracking-normal">real AI bottlenecks</span>
             <span className="text-primary font-bold">.</span>
           </h2>

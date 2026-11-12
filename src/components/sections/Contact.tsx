@@ -187,17 +187,17 @@ export function Contact() {
   };
 
   return (
-    <section ref={sectionRef} id="contact" className="py-32 bg-transparent section-divider-shimmer relative overflow-hidden">
-      <div className="max-w-6xl mx-auto px-6 relative z-10">
+    <section ref={sectionRef} id="contact" className="py-28 md:py-36 bg-transparent section-divider relative overflow-hidden">
+      <div className="max-w-7xl mx-auto px-6 relative z-10">
         
         {/* Section Header */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-16">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-12 md:mb-16">
           <div ref={headerTextRef} className="lg:col-span-7">
-            <div className="flex items-center gap-2.5 text-xs font-mono text-primary font-bold tracking-widest uppercase mb-3">
+            <div className="flex items-center gap-2.5 text-xs font-mono text-text-muted font-semibold tracking-wider uppercase mb-3">
               <span className="w-2 h-2 rounded-full bg-primary" />
               <TextScramble text="GET IN TOUCH" />
             </div>
-            <h2 className="font-gued font-bold text-4xl sm:text-5xl md:text-6xl lg:text-[4.25rem] text-text-main tracking-tight mb-6 leading-[1.1]">
+            <h2 className="font-display font-bold text-h2 text-text-main tracking-tight mb-6 leading-[1.12]">
               Let&apos;s build <span className="font-serif italic font-normal text-primary tracking-normal">intelligent systems</span><span className="text-primary font-bold">.</span>
             </h2>
             <p className="font-sans text-text-muted text-base sm:text-lg max-w-xl leading-relaxed">
@@ -207,23 +207,23 @@ export function Contact() {
 
           {/* Minimal Editorial Portrait Card with Mouse-Tracking Sheen */}
           <div ref={telemetryRef} className="lg:col-span-5 flex flex-col justify-end">
-            <div className="p-3 sm:p-3.5 rounded-2xl glass-card glass-card-hover glow-card border-trace relative overflow-hidden space-y-3">
+            <div className="p-3 sm:p-3.5 rounded-2xl glass-card glass-card-hover glow-card relative overflow-hidden space-y-3">
               {/* Top specular reflection */}
               <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent pointer-events-none z-20" />
 
               {/* Status Header */}
-              <div className="flex items-center justify-between px-1 font-mono text-[11px]">
+              <div className="flex items-center justify-between px-1 font-mono text-2xs">
                 <div className="flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                  <span className="font-bold text-text-main tracking-wider uppercase">Gagan Parashar</span>
+                  <span className="font-semibold text-text-main tracking-wider uppercase">Gagan Parashar</span>
                 </div>
-                <span className="glass-pill px-2.5 py-0.5 rounded-full text-[10px] text-emerald-700 font-semibold tracking-wide flex items-center gap-1">
+                <span className="glass-pill px-2.5 py-0.5 rounded-full text-2xs text-emerald-700 font-semibold tracking-wider flex items-center gap-1">
                   AVAILABLE FOR WORK
                 </span>
               </div>
 
               {/* Portrait Image Frame */}
-              <div className="relative aspect-[4/3] w-full rounded-xl overflow-hidden bg-neutral-900/5 border border-white/70 shadow-2xs group">
+              <div className="relative aspect-[4/3] w-full rounded-xl overflow-hidden bg-text-main/5 border border-white/70 shadow-2xs group">
                 <Image
                   src="/images/portrait-original.jpg"
                   alt="Gagan Parashar - AI Systems Engineer"
@@ -233,8 +233,8 @@ export function Contact() {
                   className="object-cover object-center group-hover:scale-103 transition-transform duration-500 ease-out"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
-                <div className="absolute bottom-2.5 left-3 right-3 flex items-center justify-between text-white/95 font-mono text-[10px]">
-                  <span className="font-semibold tracking-wide drop-shadow-sm">AI Engineer · LLMOps</span>
+                <div className="absolute bottom-2.5 left-3 right-3 flex items-center justify-between text-white/95 font-mono text-2xs">
+                  <span className="font-semibold drop-shadow-sm">AI Engineer · LLMOps</span>
                   <span className="text-white/80 drop-shadow-sm">Pune, IN · Remote</span>
                 </div>
               </div>
@@ -243,7 +243,7 @@ export function Contact() {
         </div>
 
         {/* Interactive Channel List inside Frosted Glass Container with Mouse-Tracking Sheen */}
-        <div ref={channelsRef} className="glass-card glass-card-hover glow-card border-trace velocity-skew will-change-transform rounded-2xl p-2 sm:p-3 relative overflow-hidden flex flex-col gap-1">
+        <div ref={channelsRef} className="glass-card glass-card-hover glow-card velocity-skew will-change-transform rounded-2xl p-2 sm:p-3 relative overflow-hidden flex flex-col gap-1">
           {/* Top specular reflection */}
           <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent pointer-events-none z-20" />
 
@@ -264,7 +264,7 @@ export function Contact() {
                       <div className="p-1.5 rounded-lg bg-white/60 border border-white/80 group-hover:bg-primary/10 group-hover:border-primary/30 transition-colors">
                         <Icon className="w-3.5 h-3.5 text-text-muted group-hover:text-primary transition-colors" />
                       </div>
-                      <span className="font-mono text-xs font-bold text-text-muted group-hover:text-primary transition-colors">
+                      <span className="font-sans text-sm font-semibold text-text-muted group-hover:text-primary transition-colors">
                         {channel.name}
                       </span>
                     </div>
@@ -273,7 +273,7 @@ export function Contact() {
                       {channel.value}
                     </div>
 
-                    <div className="mt-2 sm:mt-0 flex items-center gap-1 text-xs font-mono text-primary font-semibold group-hover:translate-x-1 group-hover:-translate-y-0.5 transition-transform duration-200">
+                    <div className="mt-2 sm:mt-0 flex items-center gap-1 text-sm font-sans text-primary font-semibold group-hover:translate-x-1 group-hover:-translate-y-0.5 transition-transform duration-200">
                       <span>Visit</span>
                       <ArrowUpRight className="w-4 h-4" />
                     </div>
@@ -286,7 +286,7 @@ export function Contact() {
                       <div className="p-1.5 rounded-lg bg-white/60 border border-white/80 group-hover:bg-primary/10 group-hover:border-primary/30 transition-colors">
                         <Icon className="w-3.5 h-3.5 text-text-muted group-hover:text-primary transition-colors" />
                       </div>
-                      <span className="font-mono text-xs font-bold text-text-muted group-hover:text-primary transition-colors">
+                      <span className="font-sans text-sm font-semibold text-text-muted group-hover:text-primary transition-colors">
                         {channel.name}
                       </span>
                     </div>
@@ -302,7 +302,7 @@ export function Contact() {
                         onClick={() => handleCopy(channel.value, channel.name)}
                         data-cursor="copy"
                         data-cursor-label="COPY"
-                        className="glass-pill inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg hover:border-primary text-xs font-mono text-primary transition-all cursor-pointer shadow-2xs"
+                        className="glass-pill inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg hover:border-primary text-sm font-sans font-semibold text-primary transition-all cursor-pointer shadow-2xs"
                       >
                         <AnimatePresence mode="wait" initial={false}>
                           {isCopied ? (
@@ -312,10 +312,10 @@ export function Contact() {
                               animate={{ scale: 1, opacity: 1 }}
                               exit={{ scale: 0.6, opacity: 0 }}
                               transition={{ duration: 0.16 }}
-                              className="inline-flex items-center gap-1.5 text-emerald-600 font-semibold"
+                              className="inline-flex items-center gap-1.5 text-emerald-700 font-semibold"
                             >
                               <Check className="w-3.5 h-3.5" />
-                              <span>Copied ✓</span>
+                              <span>Copied</span>
                             </motion.span>
                           ) : (
                             <motion.span
@@ -337,7 +337,7 @@ export function Contact() {
                         whileHover={{ scale: 1.04 }}
                         whileTap={{ scale: 0.95 }}
                         href={`mailto:${channel.value}`}
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary text-white text-xs font-mono hover:bg-primary/90 transition-colors shadow-2xs cursor-pointer"
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary-ink text-white text-sm font-sans font-semibold hover:bg-primary transition-colors shadow-2xs cursor-pointer"
                       >
                         <Send className="w-3 h-3" />
                         <span>Send Email</span>

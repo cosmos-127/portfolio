@@ -24,13 +24,16 @@ html.lenis body {
   pointer-events: none;
 }
 
+/* ==========================================================================
+   Design tokens
+   ========================================================================== */
 :root {
   --background: #ffffff;
   --surface: #f8f9fa;
-  --surface-hover: #f1f3f5;
+  /* Brand red for fills: dots, bars, glows. The logo, OG image and 3D canvas hardcode the same value. */
   --primary: #e63946;
-  --primary-glow: rgba(230, 57, 70, 0.15);
-  --primary-subtle: rgba(230, 57, 70, 0.06);
+  /* Same hue, darker, for red text and white-on-red buttons: 5.7:1 on white where --primary is 4.2:1. */
+  --primary-ink: #c81e2e;
   --text-main: #0a0a0a;
   --text-muted: #525866;
   --border-light: #e5e7eb;
@@ -40,72 +43,56 @@ html.lenis body {
 @theme inline {
   --color-background: var(--background);
   --color-surface: var(--surface);
-  --color-surface-hover: var(--surface-hover);
   --color-primary: var(--primary);
-  --color-primary-glow: var(--primary-glow);
-  --color-primary-subtle: var(--primary-subtle);
+  --color-primary-ink: var(--primary-ink);
   --color-text-main: var(--text-main);
   --color-text-muted: var(--text-muted);
   --color-border-light: var(--border-light);
   --color-border-strong: var(--border-strong);
 
-  /* Multi-Tier Google Font Typography Hierarchy */
-  --font-primary: var(--font-sans), sans-serif;
-  --font-sans: var(--font-sans), sans-serif;
+  /* text-primary resolves to the ink shade so red text passes AA without a second class name. */
+  --text-color-primary: var(--primary-ink);
 
-  --font-secondary: var(--font-syne), var(--font-sans), sans-serif;
-  --font-display: var(--font-syne), var(--font-sans), sans-serif;
-  --font-gued: var(--font-syne), var(--font-sans), sans-serif;
-
-  --font-special: var(--font-instrument-serif), Georgia, serif;
+  /* Four families: sans reads, display titles, serif accents, mono for data and labels. */
+  --font-sans: var(--font-jakarta), sans-serif;
+  --font-display: var(--font-syne), var(--font-jakarta), sans-serif;
   --font-serif: var(--font-instrument-serif), Georgia, serif;
-
   --font-mono: var(--font-jetbrains-mono), monospace;
-  --font-tech: var(--font-jetbrains-mono), monospace;
 }
 
-/* Custom engineering technical grid background */
-.bg-grid-blueprint {
-  background-size: 32px 32px;
-  background-image: 
-    linear-gradient(to right, rgba(0, 0, 0, 0.035) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(0, 0, 0, 0.035) 1px, transparent 1px);
+@theme {
+  /* Smallest text on the site (11px): mono labels, tags, timestamps. */
+  --text-2xs: 0.6875rem;
+  /* Section headings and the hero name, fluid between phone and desktop. */
+  --text-h2: clamp(1.875rem, 1.1rem + 3.2vw, 3.25rem);
+  --text-display: clamp(3.75rem, 2rem + 7vw, 6rem);
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --shadow-glow: 0 0 10px color-mix(in srgb, var(--primary) 55%, transparent);
 }
 
-/* Animated gradient section divider line */
-@keyframes shimmer-sweep {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
+@layer base {
+  html {
+    caret-color: var(--primary);
+    accent-color: var(--primary);
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+
+  /* In the base layer so a utility such as focus:outline-hidden can still opt out. */
+  :focus-visible {
+    outline: 2px solid var(--primary-ink);
+    outline-offset: 3px;
+  }
 }
 
-.section-divider-shimmer {
-  position: relative;
-  border-top: none !important;
-}
-
-.section-divider-shimmer::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    var(--border-light) 15%,
-    var(--primary) 50%,
-    var(--border-light) 85%,
-    transparent 100%
-  );
-  background-size: 200% 100%;
-  animation: shimmer-sweep 4s ease-in-out infinite;
-  opacity: 0.45;
-}
-
-.bg-dot-matrix {
-  background-image: radial-gradient(rgba(0, 0, 0, 0.08) 1px, transparent 1px);
-  background-size: 24px 24px;
+::selection {
+  background-color: var(--primary-ink);
+  color: #ffffff;
 }
 
 /* Custom sleek scrollbar */
@@ -119,7 +106,7 @@ html.lenis body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #d1d5db;
+  background: var(--border-strong);
   border-radius: 3px;
 }
 
@@ -127,126 +114,38 @@ html.lenis body {
   background: var(--primary);
 }
 
-/* Marquee infinite scroll animation */
-@keyframes marquee {
-  0% {
-    transform: translate3d(0, 0, 0);
-  }
-  100% {
-    transform: translate3d(-50%, 0, 0);
-  }
+/* ==========================================================================
+   Backgrounds and dividers
+   ========================================================================== */
+.bg-grid-blueprint {
+  background-size: 32px 32px;
+  background-image:
+    linear-gradient(to right, rgba(0, 0, 0, 0.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.035) 1px, transparent 1px);
 }
 
-.animate-marquee {
-  display: flex;
-  width: max-content;
-  will-change: transform;
-  animation: marquee 32s linear infinite;
+/* Hairline between sections: neutral at the edges, a trace of red in the middle. */
+.section-divider {
+  position: relative;
 }
 
-.animate-marquee:hover {
-  animation-play-state: paused;
+.section-divider::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--border-light) 15%,
+    color-mix(in srgb, var(--primary) 45%, var(--border-light)) 50%,
+    var(--border-light) 85%,
+    transparent 100%
+  );
 }
 
-
-/* Refined Whitish Strong Frosted Glassmorphism System */
-.glass-panel {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.48) 0%, rgba(255, 255, 255, 0.28) 100%);
-  backdrop-filter: blur(40px) saturate(200%) contrast(104%);
-  -webkit-backdrop-filter: blur(40px) saturate(200%) contrast(104%);
-  border: 1px solid rgba(255, 255, 255, 0.85);
-  box-shadow: 
-    0 16px 36px -10px rgba(0, 0, 0, 0.05),
-    0 0 0 1px rgba(215, 222, 232, 0.50),
-    inset 0 1.5px 1px 0 rgba(255, 255, 255, 1),
-    inset 0 -1px 1px 0 rgba(255, 255, 255, 0.30);
-}
-
-.glass-card {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.46) 0%, rgba(255, 255, 255, 0.24) 100%);
-  backdrop-filter: blur(48px) saturate(210%) contrast(104%);
-  -webkit-backdrop-filter: blur(48px) saturate(210%) contrast(104%);
-  border: 1px solid rgba(255, 255, 255, 0.85);
-  box-shadow: 
-    0 18px 42px -12px rgba(0, 0, 0, 0.065),
-    0 6px 16px -4px rgba(0, 0, 0, 0.03),
-    0 0 0 1px rgba(215, 222, 232, 0.55),
-    inset 0 1.5px 1.5px 0 rgba(255, 255, 255, 1),
-    inset 0 -1px 1px 0 rgba(255, 255, 255, 0.35);
-}
-
-.glass-card-hover {
-  transition: background 0.3s cubic-bezier(0.16, 1, 0.3, 1),
-              border-color 0.3s cubic-bezier(0.16, 1, 0.3, 1),
-              box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1),
-              transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.glass-card-hover:hover {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.60) 0%, rgba(255, 255, 255, 0.36) 100%);
-  border-color: rgba(255, 255, 255, 1);
-  box-shadow: 
-    0 24px 50px -12px rgba(0, 0, 0, 0.08),
-    0 8px 20px -4px rgba(0, 0, 0, 0.04),
-    0 0 0 1px rgba(230, 57, 70, 0.30),
-    0 0 28px -4px rgba(230, 57, 70, 0.14),
-    inset 0 2px 1.5px 0 rgba(255, 255, 255, 1),
-    inset 0 -1px 1px 0 rgba(255, 255, 255, 0.45);
-}
-
-.active-glass-card {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.62) 0%, rgba(255, 255, 255, 0.38) 100%) !important;
-  border-color: rgba(255, 255, 255, 1) !important;
-  backdrop-filter: blur(54px) saturate(220%) contrast(105%) !important;
-  -webkit-backdrop-filter: blur(54px) saturate(220%) contrast(105%) !important;
-  box-shadow: 
-    0 28px 56px -14px rgba(0, 0, 0, 0.09),
-    0 10px 24px -4px rgba(0, 0, 0, 0.04),
-    0 0 0 1px rgba(230, 57, 70, 0.38),
-    0 0 32px -4px rgba(230, 57, 70, 0.18),
-    inset 0 2px 1.5px 0 rgba(255, 255, 255, 1),
-    inset 0 -1px 1px 0 rgba(255, 255, 255, 0.50) !important;
-}
-
-.glass-pill {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.60) 0%, rgba(255, 255, 255, 0.38) 100%);
-  backdrop-filter: blur(24px) saturate(190%);
-  -webkit-backdrop-filter: blur(24px) saturate(190%);
-  border: 1px solid rgba(255, 255, 255, 0.88);
-  box-shadow: 
-    0 2px 8px 0 rgba(0, 0, 0, 0.03),
-    0 0 0 1px rgba(215, 222, 232, 0.45),
-    inset 0 1px 0.5px 0 rgba(255, 255, 255, 1);
-}
-
-/* Navigation Bar Ultra-Frosted Glossmorphism System */
-.nav-frost-glass {
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.52) 0%, rgba(255, 255, 255, 0.28) 100%);
-  backdrop-filter: blur(48px) saturate(220%) contrast(108%);
-  -webkit-backdrop-filter: blur(48px) saturate(220%) contrast(108%);
-  border: 1px solid rgba(255, 255, 255, 0.85);
-  box-shadow: 
-    0 16px 36px -8px rgba(0, 0, 0, 0.05),
-    0 4px 14px -2px rgba(0, 0, 0, 0.025),
-    0 0 0 1px rgba(0, 0, 0, 0.04),
-    inset 0 1.5px 1px 0 rgba(255, 255, 255, 1),
-    inset 0 -1px 1px 0 rgba(255, 255, 255, 0.35);
-}
-
-.nav-frost-glass-scrolled {
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.64) 0%, rgba(255, 255, 255, 0.38) 100%);
-  backdrop-filter: blur(64px) saturate(240%) contrast(110%);
-  -webkit-backdrop-filter: blur(64px) saturate(240%) contrast(110%);
-  border: 1px solid rgba(255, 255, 255, 0.95);
-  box-shadow: 
-    0 22px 50px -10px rgba(0, 0, 0, 0.08),
-    0 8px 20px -4px rgba(0, 0, 0, 0.035),
-    0 0 0 1px rgba(0, 0, 0, 0.05),
-    inset 0 2px 1.5px 0 rgba(255, 255, 255, 1),
-    inset 0 -1px 1px 0 rgba(255, 255, 255, 0.45);
-}
-
-/* Smooth noise effect */
 .noise-overlay {
   pointer-events: none;
   position: fixed;
@@ -264,34 +163,128 @@ html.lenis body {
 }
 
 /* ==========================================================================
-   Mouse-Tracking Specular Border Sheen & Card Illumination (Linear / Apple style)
+   Frosted glass: one recipe, three surfaces (card, pill, nav).
+   Only tint, blur and shadow vary, through the custom properties below.
+   ========================================================================== */
+.glass-card,
+.glass-pill,
+.nav-frost-glass,
+.nav-frost-glass-scrolled {
+  background: linear-gradient(
+    var(--glass-angle, 135deg),
+    rgb(255 255 255 / var(--glass-top)) 0%,
+    rgb(255 255 255 / var(--glass-bottom)) 100%
+  );
+  backdrop-filter: blur(var(--glass-blur)) saturate(200%);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(200%);
+  border: 1px solid rgb(255 255 255 / 0.85);
+  box-shadow: var(--glass-shadow);
+}
+
+.glass-card {
+  --glass-top: 0.46;
+  --glass-bottom: 0.24;
+  --glass-blur: 32px;
+  --glass-shadow:
+    0 18px 42px -12px rgba(0, 0, 0, 0.065),
+    0 6px 16px -4px rgba(0, 0, 0, 0.03),
+    0 0 0 1px rgba(215, 222, 232, 0.55),
+    inset 0 1.5px 1.5px 0 rgba(255, 255, 255, 1),
+    inset 0 -1px 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+.glass-pill {
+  --glass-top: 0.6;
+  --glass-bottom: 0.38;
+  --glass-blur: 20px;
+  --glass-shadow:
+    0 2px 8px 0 rgba(0, 0, 0, 0.03),
+    0 0 0 1px rgba(215, 222, 232, 0.45),
+    inset 0 1px 0.5px 0 rgba(255, 255, 255, 1);
+}
+
+.nav-frost-glass,
+.nav-frost-glass-scrolled {
+  --glass-angle: 180deg;
+  --glass-top: 0.52;
+  --glass-bottom: 0.28;
+  --glass-blur: 32px;
+  --glass-shadow:
+    0 16px 36px -8px rgba(0, 0, 0, 0.05),
+    0 4px 14px -2px rgba(0, 0, 0, 0.025),
+    0 0 0 1px rgba(0, 0, 0, 0.04),
+    inset 0 1.5px 1px 0 rgba(255, 255, 255, 1),
+    inset 0 -1px 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+.nav-frost-glass-scrolled {
+  --glass-top: 0.64;
+  --glass-bottom: 0.38;
+  --glass-shadow:
+    0 22px 50px -10px rgba(0, 0, 0, 0.08),
+    0 8px 20px -4px rgba(0, 0, 0, 0.035),
+    0 0 0 1px rgba(0, 0, 0, 0.05),
+    inset 0 2px 1.5px 0 rgba(255, 255, 255, 1),
+    inset 0 -1px 1px 0 rgba(255, 255, 255, 0.45);
+}
+
+/* Hover brightens the pane. The red ring and lift come from .glow-card, which these cards also carry. */
+.glass-card-hover {
+  transition:
+    border-color 0.3s var(--ease-out-expo),
+    box-shadow 0.3s var(--ease-out-expo),
+    transform 0.3s var(--ease-out-expo);
+}
+
+.glass-card-hover:hover,
+.active-glass-card {
+  --glass-top: 0.62;
+  --glass-bottom: 0.38;
+  border-color: #ffffff;
+}
+
+/* Selected project card: holds the lit state whether or not the pointer is over it. */
+.active-glass-card {
+  box-shadow:
+    0 28px 56px -14px rgba(0, 0, 0, 0.09),
+    0 10px 24px -4px rgba(0, 0, 0, 0.04),
+    0 0 0 1px color-mix(in srgb, var(--primary) 38%, transparent),
+    0 0 32px -4px color-mix(in srgb, var(--primary) 18%, transparent),
+    inset 0 2px 1.5px 0 rgba(255, 255, 255, 1),
+    inset 0 -1px 1px 0 rgba(255, 255, 255, 0.5) !important;
+}
+
+/* ==========================================================================
+   Mouse-Tracking Specular Border Sheen & Card Illumination
    ========================================================================== */
 .glow-card {
   position: relative;
   isolation: isolate;
-  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  transition:
+    transform 0.25s var(--ease-out-expo),
+    box-shadow 0.25s var(--ease-out-expo);
 }
 
-/* 1. Precision 1px Specular Border Glint (Hot-center white to crimson gradient from Mouse + Gyroscope Proximity) */
+/* 1. 1px border glint: white at the pointer, fading through red (mouse and 3D gyroscope proximity) */
 .glow-card::before {
   content: "";
   position: absolute;
   inset: -1px;
   border-radius: inherit;
   padding: 1px;
-  background: 
+  background:
     radial-gradient(
       460px circle at var(--gyro-x, -999px) var(--gyro-y, -999px),
       rgba(255, 255, 255, 0.95) 0%,
-      rgba(230, 57, 70, 0.95) 18%,
-      rgba(230, 57, 70, 0.45) 42%,
+      color-mix(in srgb, var(--primary) 95%, transparent) 18%,
+      color-mix(in srgb, var(--primary) 45%, transparent) 42%,
       transparent 72%
     ),
     radial-gradient(
       420px circle at var(--glow-x, -999px) var(--glow-y, -999px),
       #ffffff 0%,
-      rgba(230, 57, 70, 0.92) 18%,
-      rgba(230, 57, 70, 0.35) 42%,
+      color-mix(in srgb, var(--primary) 92%, transparent) 18%,
+      color-mix(in srgb, var(--primary) 35%, transparent) 42%,
       transparent 72%
     );
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
@@ -299,43 +292,43 @@ html.lenis body {
   mask-composite: exclude;
   pointer-events: none;
   opacity: max(var(--glow-opacity, 0), var(--gyro-opacity, 0));
-  transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: opacity 0.3s var(--ease-out-expo);
   z-index: 25;
 }
 
-/* 2. Soft Ambient Radial Spotlight within frosted glass cavity (Mouse spotlight + 3D Gyroscope proximity aura) */
+/* 2. Soft red wash inside the pane, following the same two sources */
 .glow-card::after {
   content: "";
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background: 
+  background:
     radial-gradient(
       560px circle at var(--gyro-x, -999px) var(--gyro-y, -999px),
-      rgba(230, 57, 70, 0.13) 0%,
-      rgba(230, 57, 70, 0.05) 36%,
-      rgba(230, 57, 70, 0.015) 58%,
+      color-mix(in srgb, var(--primary) 13%, transparent) 0%,
+      color-mix(in srgb, var(--primary) 5%, transparent) 36%,
+      color-mix(in srgb, var(--primary) 1.5%, transparent) 58%,
       transparent 75%
     ),
     radial-gradient(
       520px circle at var(--glow-x, -999px) var(--glow-y, -999px),
-      rgba(230, 57, 70, 0.08) 0%,
-      rgba(230, 57, 70, 0.02) 40%,
+      color-mix(in srgb, var(--primary) 8%, transparent) 0%,
+      color-mix(in srgb, var(--primary) 2%, transparent) 40%,
       transparent 70%
     );
   pointer-events: none;
   opacity: max(var(--glow-opacity, 0), var(--gyro-opacity, 0));
-  transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: opacity 0.3s var(--ease-out-expo);
   z-index: 1;
 }
 
 .glow-card:hover,
 .glow-card[data-gyro-near="true"] {
-  box-shadow: 
+  box-shadow:
     0 26px 54px -12px rgba(0, 0, 0, 0.09),
     0 10px 24px -4px rgba(0, 0, 0, 0.04),
-    0 0 0 1px rgba(230, 57, 70, 0.30),
-    0 0 28px -4px rgba(230, 57, 70, 0.16),
+    0 0 0 1px color-mix(in srgb, var(--primary) 30%, transparent),
+    0 0 28px -4px color-mix(in srgb, var(--primary) 16%, transparent),
     inset 0 2px 1.5px 0 rgba(255, 255, 255, 1),
     inset 0 -1px 1px 0 rgba(255, 255, 255, 0.45);
 }
@@ -356,21 +349,28 @@ html.lenis body {
 }
 
 /* ==========================================================================
-   Brand Text Selection Colors
+   Keyframes & Animations
    ========================================================================== */
-::selection {
-  background-color: #e63946;
-  color: #ffffff;
+@keyframes marquee {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
 }
 
-::-moz-selection {
-  background-color: #e63946;
-  color: #ffffff;
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+  animation: marquee 32s linear infinite;
 }
 
-/* ==========================================================================
-   Visualizer Keyframes & Animations
-   ========================================================================== */
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
 @keyframes telemetry-pulse {
   0%, 100% { opacity: 1; transform: scale(1); }
   50% { opacity: 0.7; transform: scale(0.98); }
@@ -379,15 +379,6 @@ html.lenis body {
 @keyframes data-flow-x {
   0% { transform: translateX(-100%); }
   100% { transform: translateX(240%); }
-}
-
-@keyframes float-subtle {
-  0%, 100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-4px);
-  }
 }
 
 @keyframes border-beam {
@@ -402,10 +393,6 @@ html.lenis body {
 
 .animate-data-flow {
   animation: data-flow-x 2.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-}
-
-.animate-float-subtle {
-  animation: float-subtle 3.4s ease-in-out infinite;
 }
 
 .animate-border-beam {
@@ -432,53 +419,6 @@ html.lenis body {
 }
 
 /* ==========================================================================
-   Perimeter Circuit Light-Tracing for Frosted Cards (Apple / Linear style)
-   ========================================================================== */
-@property --trace-angle {
-  syntax: "<angle>";
-  inherits: false;
-  initial-value: 0deg;
-}
-
-@keyframes rotate-trace {
-  0% { --trace-angle: 0deg; }
-  100% { --trace-angle: 360deg; }
-}
-
-.border-trace {
-  position: relative;
-}
-
-.border-trace::before {
-  content: "";
-  position: absolute;
-  inset: -1px;
-  border-radius: inherit;
-  padding: 1.5px;
-  background: conic-gradient(
-    from var(--trace-angle, 0deg) at 50% 50%,
-    transparent 0%,
-    transparent 65%,
-    rgba(230, 57, 70, 0.3) 80%,
-    rgba(255, 255, 255, 0.95) 94%,
-    rgba(230, 57, 70, 0.85) 100%
-  );
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-  z-index: 26;
-}
-
-.border-trace:hover::before {
-  opacity: 1;
-  animation: rotate-trace 3.6s linear infinite;
-}
-
-
-/* ==========================================================================
    Accessibility: Respect prefers-reduced-motion
    ========================================================================== */
 @media (prefers-reduced-motion: reduce) {
@@ -491,4 +431,3 @@ html.lenis body {
     scroll-behavior: auto !important;
   }
 }
-

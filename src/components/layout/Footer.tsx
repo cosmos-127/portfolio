@@ -52,21 +52,21 @@ export function Footer() {
   };
 
   return (
-    <footer ref={footerRef} className="w-full section-divider-shimmer bg-white/50 backdrop-blur-md py-12">
-      <div ref={contentRef} className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6 text-xs font-mono text-text-muted">
+    <footer ref={footerRef} className="w-full section-divider bg-white/50 backdrop-blur-md py-12">
+      <div ref={contentRef} className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6 text-xs font-sans text-text-muted">
         
         {/* Left info */}
         <div className="flex items-center gap-3">
-          <Link href="#top" className="flex items-center gap-2 font-gued font-bold text-xl text-text-main hover:text-primary transition-colors">
+          <Link href="#top" className="flex items-center gap-2 font-display font-bold text-xl text-text-main hover:text-primary transition-colors">
             <BrandIcon className="w-5 h-5 rounded-md shadow-2xs" />
             <span>Gagan</span>
           </Link>
           <span className="text-border-strong">/</span>
-          <span className="text-[11px]">Generalist AI Engineer</span>
+          <span>Generalist AI Engineer</span>
         </div>
 
         {/* Center tech stack */}
-        <div className="flex items-center gap-2 text-center text-[11px]">
+        <div className="flex items-center gap-2 text-center font-mono text-2xs">
           <span>Next.js</span>
           <span>·</span>
           <span>Three.js</span>
@@ -78,7 +78,7 @@ export function Footer() {
 
         {/* Right back to top & copyright */}
         <div className="flex items-center gap-6">
-          <span className="text-[11px]">
+          <span>
             Designed &amp; built by Gagan · {new Date().getFullYear()}
           </span>
 

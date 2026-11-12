@@ -36,7 +36,7 @@ function LenisScrollManager() {
         gsap.to(elements, {
           skewY: targetSkew,
           duration: 0.22,
-          ease: "power1.out",
+          ease: "power3.out",
           overwrite: "auto",
         });
       } else if (!isSettled) {
@@ -44,7 +44,7 @@ function LenisScrollManager() {
         gsap.to(elements, {
           skewY: 0,
           duration: 0.45,
-          ease: "power2.out",
+          ease: "power3.out",
           overwrite: "auto",
         });
       }

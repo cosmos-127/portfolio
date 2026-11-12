@@ -45,7 +45,7 @@ export function TickerStrip({ className = "" }: TickerStripProps) {
             y: 0,
             scale: 1,
             duration: 0.6,
-            ease: "power2.out",
+            ease: "power3.out",
             clearProps: "transform,opacity",
           }
         );
@@ -64,7 +64,7 @@ export function TickerStrip({ className = "" }: TickerStripProps) {
             gsap.to(marqueeRef.current, {
               skewX: skew,
               duration: 0.2,
-              ease: "power1.out",
+              ease: "power3.out",
               overwrite: "auto",
             });
           },
@@ -86,7 +86,7 @@ export function TickerStrip({ className = "" }: TickerStripProps) {
         ref={marqueeRef}
         className="flex w-max animate-marquee will-change-transform"
       >
-        <div className="flex items-center gap-10 whitespace-nowrap text-xs font-mono tracking-widest text-text-muted shrink-0 pr-10">
+        <div className="flex items-center gap-10 whitespace-nowrap text-xs font-mono tracking-wider text-text-muted shrink-0 pr-10">
           {TICKER_ITEMS.map((item, idx) => {
             const Icon = item.icon;
             return (
@@ -104,7 +104,7 @@ export function TickerStrip({ className = "" }: TickerStripProps) {
           })}
         </div>
         <div
-          className="flex items-center gap-10 whitespace-nowrap text-xs font-mono tracking-widest text-text-muted shrink-0 pr-10"
+          className="flex items-center gap-10 whitespace-nowrap text-xs font-mono tracking-wider text-text-muted shrink-0 pr-10"
           aria-hidden="true"
         >
           {TICKER_ITEMS.map((item, idx) => {

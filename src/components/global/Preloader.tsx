@@ -76,7 +76,7 @@ function ScrambleText({ text }: { text: string }) {
             className={
               isResolved
                 ? "text-text-main font-semibold transition-colors duration-150"
-                : "text-primary/75 font-mono"
+                : "text-primary font-mono"
             }
           >
             {isResolved ? char : (scrambleChars[i] || GLYPHS[0])}
@@ -232,7 +232,7 @@ export function Preloader() {
       {/* 2. Soft Crimson Ambient Glow & Blueprint Grid */}
       <motion.div
         animate={{ opacity: isExpanding ? 0 : 1 }}
-        transition={{ duration: 0.25, ease: "easeOut" }}
+        transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
         className="absolute inset-0 pointer-events-none bg-grid-blueprint"
       >
         {/* Soft centered crimson radial gradient matching the site's accent */}
@@ -240,7 +240,7 @@ export function Preloader() {
           className="absolute inset-0"
           style={{
             background:
-              "radial-gradient(circle at 50% 50%, rgba(230, 57, 70, 0.08) 0%, rgba(230, 57, 70, 0.02) 45%, transparent 70%)",
+              "radial-gradient(circle at 50% 50%, color-mix(in srgb, var(--primary) 8%, transparent) 0%, color-mix(in srgb, var(--primary) 2%, transparent) 45%, transparent 70%)",
           }}
         />
       </motion.div>
@@ -248,7 +248,7 @@ export function Preloader() {
       {/* 3. Minimal Header & Skip Controls */}
       <motion.div
         animate={{ opacity: isExpanding ? 0 : 1 }}
-        transition={{ duration: 0.25, ease: "easeOut" }}
+        transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
         className="absolute top-0 left-0 right-0 p-6 flex items-center justify-between text-xs font-mono z-10 pointer-events-auto"
       >
         <div className="inline-flex items-center gap-2 text-text-muted">
@@ -260,18 +260,18 @@ export function Preloader() {
             GAGAN
           </span>
           <span className="text-border-strong">/</span>
-          <span className="text-text-muted text-[11px] tracking-wide">
+          <span className="text-text-muted text-2xs tracking-wider">
             SYSTEM BOOT
           </span>
         </div>
 
         <button
           onClick={() => triggerCompletion(true)}
-          className="glass-pill px-3 py-1 rounded-full text-[11px] font-mono text-text-muted hover:text-primary transition-colors cursor-pointer flex items-center gap-1.5"
+          className="glass-pill px-3 py-1 rounded-full text-2xs font-mono text-text-muted hover:text-primary transition-colors cursor-pointer flex items-center gap-1.5"
           title="Press Escape to skip preloader"
         >
           <span>ESC</span>
-          <span className="text-text-muted/60">·</span>
+          <span className="text-text-muted">·</span>
           <span>SKIP</span>
         </button>
       </motion.div>
@@ -279,14 +279,14 @@ export function Preloader() {
       {/* 4. Center Content (Pulsing Dot, Text Sequence, Hairline Progress) */}
       <motion.div
         animate={{ opacity: isExpanding ? 0 : 1, scale: isExpanding ? 0.95 : 1 }}
-        transition={{ duration: 0.25, ease: "easeOut" }}
+        transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
         className="absolute inset-0 flex flex-col items-center justify-center p-6 z-10 pointer-events-none"
       >
         <div className="flex flex-col items-center gap-6 max-w-sm w-full">
           {/* Subtle breathing aura with central crimson pulse dot */}
           <div className="relative flex items-center justify-center w-12 h-12">
             <span className="absolute w-10 h-10 rounded-full bg-primary/10 animate-ping opacity-60" />
-            <span className="relative w-3 h-3 rounded-full bg-primary shadow-[0_0_14px_rgba(230,57,70,0.8)]" />
+            <span className="relative w-3 h-3 rounded-full bg-primary shadow-glow" />
           </div>
 
           {/* Animated step text with in-place terminal glyph scramble */}
@@ -296,17 +296,17 @@ export function Preloader() {
 
           {/* Minimal hairline progress track */}
           <div className="w-56 sm:w-64 flex flex-col gap-2">
-            <div className="w-full h-[2px] bg-neutral-200/90 rounded-full overflow-hidden relative">
+            <div className="w-full h-[2px] bg-border-light rounded-full overflow-hidden relative">
               <motion.div
-                className="h-full bg-primary rounded-full shadow-[0_0_10px_rgba(230,57,70,0.5)]"
+                className="h-full bg-primary rounded-full shadow-glow"
                 style={{ width: `${progress}%` }}
-                transition={{ ease: "easeOut", duration: 0.1 }}
+                transition={{ ease: [0.16, 1, 0.3, 1], duration: 0.1 }}
               />
             </div>
 
             {/* Telemetry counter */}
-            <div className="flex items-center justify-between text-[11px] font-mono text-text-muted select-none">
-              <span className="text-text-muted/70 tracking-widest text-[10px]">
+            <div className="flex items-center justify-between text-2xs font-mono text-text-muted select-none">
+              <span className="text-text-muted tracking-wider text-2xs">
                 {progress < 100 ? "CALIBRATING" : "READY"}
               </span>
               <span className="font-semibold text-text-main tabular-nums">
@@ -338,8 +338,8 @@ export function Preloader() {
               left: "50%",
               transform: "translate(-50%, -50%)",
               borderRadius: "9999px",
-              border: "1.5px solid rgba(230, 57, 70, 0.55)",
-              boxShadow: "0 0 35px rgba(230, 57, 70, 0.35)",
+              border: "1.5px solid color-mix(in srgb, var(--primary) 55%, transparent)",
+              boxShadow: "0 0 35px color-mix(in srgb, var(--primary) 35%, transparent)",
               pointerEvents: "none",
               zIndex: 100000,
             }}

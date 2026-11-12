@@ -357,7 +357,7 @@ export function CommandPalette() {
               onClick={(e) => e.stopPropagation()}
             >
               {/* Top Accent Gradient Bar */}
-              <div className="h-1 bg-gradient-to-r from-primary via-rose-500 to-primary w-full shrink-0" />
+              <div className="h-1 bg-primary w-full shrink-0" />
               {/* Subtle top specular sheen highlight */}
               <div className="absolute inset-x-0 top-1 h-px bg-gradient-to-r from-transparent via-white to-transparent pointer-events-none z-20" />
 
@@ -373,7 +373,7 @@ export function CommandPalette() {
                     setSelectedIndex(0);
                   }}
                   placeholder="Type a command or jump to section..."
-                  className="flex-1 bg-transparent text-sm text-text-main placeholder-text-muted/60 focus:outline-hidden font-mono"
+                  className="flex-1 bg-transparent text-sm text-text-main placeholder-text-muted focus:outline-hidden font-mono"
                 />
                 {query && (
                   <button
@@ -386,7 +386,7 @@ export function CommandPalette() {
                     <X className="w-3.5 h-3.5" />
                   </button>
                 )}
-                <kbd className="hidden sm:inline-flex items-center gap-1 text-[10px] text-text-muted px-2 py-0.5 rounded-md bg-surface border border-border-light shadow-2xs">
+                <kbd className="hidden sm:inline-flex items-center gap-1 text-2xs text-text-muted px-2 py-0.5 rounded-md bg-surface border border-border-light shadow-2xs">
                   ESC
                 </kbd>
               </div>
@@ -398,9 +398,9 @@ export function CommandPalette() {
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: "auto" }}
                     exit={{ opacity: 0, height: 0 }}
-                    className="bg-emerald-50 text-emerald-800 text-xs px-5 py-2 flex items-center gap-2 border-b border-emerald-200 shrink-0"
+                    className="bg-emerald-50 text-emerald-700 text-xs px-5 py-2 flex items-center gap-2 border-b border-emerald-200 shrink-0"
                   >
-                    <Check className="w-3.5 h-3.5 text-emerald-600" />
+                    <Check className="w-3.5 h-3.5 text-emerald-700" />
                     <span>{toastMessage}</span>
                   </motion.div>
                 )}
@@ -444,7 +444,7 @@ export function CommandPalette() {
                           <div
                             className={`p-2 rounded-lg shrink-0 transition-colors ${
                               isSelected
-                                ? "bg-primary text-white shadow-xs"
+                                ? "bg-primary-ink text-white shadow-xs"
                                 : "bg-surface border border-border-light text-text-muted"
                             }`}
                           >
@@ -455,7 +455,7 @@ export function CommandPalette() {
                               <span>{item.title}</span>
                               {item.badge && (
                                 <span
-                                  className={`text-[9px] px-1.5 py-0.5 rounded-md font-mono ${
+                                  className={`text-2xs px-1.5 py-0.5 rounded-md font-mono ${
                                     isSelected
                                       ? "bg-primary/20 text-primary"
                                       : "bg-surface text-text-muted border border-border-light"
@@ -465,7 +465,7 @@ export function CommandPalette() {
                                 </span>
                               )}
                             </div>
-                            <div className="text-[11px] text-text-muted truncate mt-0.5">
+                            <div className="text-2xs text-text-muted truncate mt-0.5">
                               {item.description}
                             </div>
                           </div>
@@ -473,11 +473,11 @@ export function CommandPalette() {
 
                         <div className="shrink-0 ml-3 z-10">
                           {isSelected ? (
-                            <span className="text-[10px] text-primary font-mono flex items-center gap-1 font-semibold">
+                            <span className="text-2xs text-primary font-mono flex items-center gap-1 font-semibold">
                               <span>↵</span>
                             </span>
                           ) : (
-                            <span className="text-[10px] text-text-muted font-mono capitalize">
+                            <span className="text-2xs text-text-muted font-mono capitalize">
                               {item.category}
                             </span>
                           )}
@@ -489,16 +489,16 @@ export function CommandPalette() {
               </div>
 
               {/* Footer Controls & Hints */}
-              <div className="px-4 sm:px-5 py-2.5 border-t border-border-light bg-surface/30 flex items-center justify-between text-[11px] text-text-muted shrink-0">
+              <div className="px-4 sm:px-5 py-2.5 border-t border-border-light bg-surface/30 flex items-center justify-between text-2xs text-text-muted shrink-0">
                 <div className="flex items-center gap-3">
                   <span className="inline-flex items-center gap-1">
-                    <kbd className="px-1.5 py-0.5 rounded-sm bg-surface border border-border-light text-[10px]">
+                    <kbd className="px-1.5 py-0.5 rounded-md bg-surface border border-border-light text-2xs">
                       ↑↓
                     </kbd>
                     <span>Navigate</span>
                   </span>
                   <span className="inline-flex items-center gap-1">
-                    <kbd className="px-1.5 py-0.5 rounded-sm bg-surface border border-border-light text-[10px]">
+                    <kbd className="px-1.5 py-0.5 rounded-md bg-surface border border-border-light text-2xs">
                       ↵
                     </kbd>
                     <span>Select</span>
@@ -506,9 +506,9 @@ export function CommandPalette() {
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <span className="text-[10px] font-mono">
+                  <span className="text-2xs font-mono">
                     HAPTICS:{" "}
-                    <span className={soundOn ? "text-emerald-600 font-bold" : "text-text-muted"}>
+                    <span className={soundOn ? "text-emerald-700 font-semibold" : "text-text-muted"}>
                       {soundOn ? "ON" : "OFF"}
                     </span>
                   </span>

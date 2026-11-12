@@ -108,7 +108,7 @@ export function SectionHUD() {
                     animate={{ opacity: 1, x: -8, scale: 1 }}
                     exit={{ opacity: 0, x: 6, scale: 0.95 }}
                     transition={{ duration: 0.16, ease: [0.16, 1, 0.3, 1] }}
-                    className="absolute right-6 pointer-events-none whitespace-nowrap glass-pill px-2.5 py-1 rounded-full text-[10px] font-mono shadow-md flex items-center gap-1.5"
+                    className="absolute right-6 pointer-events-none whitespace-nowrap glass-pill px-2.5 py-1 rounded-full text-2xs font-mono shadow-md flex items-center gap-1.5"
                   >
                     <span className="w-1.5 h-1.5 rounded-full bg-primary" />
                     <span className="text-text-main font-semibold tracking-wider">{marker.label}</span>
@@ -127,7 +127,7 @@ export function SectionHUD() {
                 {isActive && (
                   <motion.div
                     layoutId="sectionHudActiveBeacon"
-                    className="absolute w-4 h-4 rounded-full bg-primary/15 border border-primary/40 flex items-center justify-center shadow-[0_0_10px_rgba(230,57,70,0.35)]"
+                    className="absolute w-4 h-4 rounded-full bg-primary/15 border border-primary/40 flex items-center justify-center shadow-glow"
                     transition={{ type: "spring", stiffness: 420, damping: 30 }}
                   >
                     <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />

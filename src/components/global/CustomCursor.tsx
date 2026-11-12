@@ -234,13 +234,13 @@ export function CustomCursor() {
             scale: 3.5,
             opacity: 0,
           }}
-          transition={{ duration: 0.5, ease: "easeOut" }}
+          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
         />
       ))}
 
       {/* 1. Fast Precision Center Dot */}
       <motion.div
-        className="fixed top-0 left-0 -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary z-20 pointer-events-none shadow-[0_0_8px_rgba(230,57,70,0.6)]"
+        className="fixed top-0 left-0 -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary z-20 pointer-events-none shadow-glow"
         style={{
           x: dotX,
           y: dotY,
@@ -252,12 +252,12 @@ export function CustomCursor() {
           height: mode === "text" ? 18 : 6,
           borderRadius: mode === "text" ? 1 : 9999,
         }}
-        transition={{ duration: 0.12, ease: "easeOut" }}
+        transition={{ duration: 0.12, ease: [0.16, 1, 0.3, 1] }}
       />
 
       {/* 2. Fluid Follower Ring / Morphing Pill */}
       <motion.div
-        className="fixed top-0 left-0 -translate-x-1/2 -translate-y-1/2 pointer-events-none flex items-center justify-center font-mono text-[10px] tracking-wider z-10 select-none backdrop-blur-xs"
+        className="fixed top-0 left-0 -translate-x-1/2 -translate-y-1/2 pointer-events-none flex items-center justify-center font-mono text-2xs tracking-wider z-10 select-none backdrop-blur-xs"
         style={{
           x: ringX,
           y: ringY,
@@ -316,7 +316,7 @@ export function CustomCursor() {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.8 }}
               transition={{ duration: 0.15 }}
-              className="text-text-main font-bold flex items-center gap-1.5"
+              className="text-text-main font-semibold flex items-center gap-1.5"
             >
               <span className="w-1.5 h-1.5 rounded-full bg-primary animate-ping" />
               <span className="text-primary font-semibold">{customLabel || (mode === "view" ? "VIEW ↗" : "READ ↗")}</span>
@@ -330,7 +330,7 @@ export function CustomCursor() {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.8 }}
               transition={{ duration: 0.15 }}
-              className="text-primary font-bold flex items-center gap-1"
+              className="text-primary font-semibold flex items-center gap-1"
             >
               <span>{customLabel || "COPY 📋"}</span>
             </motion.span>

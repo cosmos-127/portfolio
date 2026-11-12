@@ -184,18 +184,18 @@ export function About() {
     <section
       ref={sectionRef}
       id="about"
-      className="py-28 md:py-36 bg-transparent section-divider-shimmer relative overflow-hidden min-h-[90vh] flex items-center"
+      className="py-28 md:py-36 bg-transparent section-divider relative overflow-hidden min-h-[90vh] flex items-center"
     >
       <div className="max-w-7xl mx-auto px-6 relative z-10 w-full">
         
         {/* Section Header: Open Canvas Architectural Layout */}
-        <div ref={headerRef} className="mb-10">
+        <div ref={headerRef} className="mb-12 md:mb-16">
           <div>
-            <div className="flex items-center gap-2 text-xs font-mono text-primary font-bold tracking-widest uppercase mb-3">
+            <div className="flex items-center gap-2.5 text-xs font-mono text-text-muted font-semibold tracking-wider uppercase mb-3">
               <span className="w-2 h-2 rounded-full bg-primary" />
               <TextScramble text="ABOUT & CAREER PATH" />
             </div>
-            <h2 className="font-gued font-bold text-3xl sm:text-4xl md:text-5xl lg:text-[3.25rem] text-text-main tracking-tight leading-[1.12]">
+            <h2 className="font-display font-bold text-h2 text-text-main tracking-tight leading-[1.12]">
               Background &amp; <span className="font-serif italic font-normal text-primary tracking-normal">career trajectory</span><span className="text-primary font-bold">.</span>
             </h2>
           </div>
@@ -234,12 +234,12 @@ export function About() {
                     <span className="w-3.5 h-3.5 rounded-full bg-white border-2 border-border-strong group-hover/station:border-primary group-hover/station:scale-110 transition-all duration-200 shadow-2xs" />
                   </span>
                   
-                  <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono text-text-muted mb-1.5">
-                    <span className="flex items-center gap-1.5 font-bold uppercase tracking-wider text-text-muted group-hover/station:text-primary transition-colors duration-200">
+                  <div className="flex flex-wrap items-center justify-between gap-2 text-2xs font-mono text-text-muted mb-1.5">
+                    <span className="flex items-center gap-1.5 font-semibold uppercase tracking-wider text-text-muted group-hover/station:text-primary transition-colors duration-200">
                       <GraduationCap className="w-3.5 h-3.5 text-primary" />
                       Education
                     </span>
-                    <span className="px-2.5 py-0.5 rounded-full bg-surface border border-border-light/80 text-text-muted font-mono text-[10px]">
+                    <span className="px-2.5 py-0.5 rounded-full bg-surface border border-border-light/80 text-text-muted font-mono text-2xs">
                       2020 – 2024
                     </span>
                   </div>
@@ -248,14 +248,14 @@ export function About() {
                     B.Tech in Computer Science
                   </div>
                   
-                  <div className="flex items-center gap-2 text-text-muted text-xs sm:text-sm font-medium mt-1">
+                  <div className="flex items-center gap-2 text-text-muted text-sm font-medium mt-1">
                     <span className="p-1 rounded-md bg-white border border-border-light/80 shadow-2xs flex items-center justify-center shrink-0">
                       <GraduationCap className="w-3.5 h-3.5 text-text-muted" />
                     </span>
                     <span>VIT (Vellore Institute of Technology)</span>
                   </div>
                   
-                  <p className="text-xs sm:text-sm text-text-muted leading-relaxed mt-2 max-w-xl">
+                  <p className="text-sm text-text-muted leading-relaxed mt-2 max-w-xl">
                     Deep academic foundation in AI, ML algorithms, operating systems, and scalable distributed architectures.
                   </p>
 
@@ -263,7 +263,7 @@ export function About() {
                     {MILESTONES[0].tags?.map((tag) => (
                       <span
                         key={tag}
-                        className="px-2 py-0.5 rounded-md bg-white/80 border border-border-light/80 text-[10px] font-mono text-text-muted"
+                        className="px-2 py-0.5 rounded-md bg-white/80 border border-border-light/80 text-2xs font-mono text-text-muted"
                       >
                         {tag}
                       </span>
@@ -273,14 +273,14 @@ export function About() {
 
                 {/* Transition 1: Education -> Industry */}
                 <div className="relative flex items-center select-none py-0.5">
-                  <div className="inline-flex flex-wrap sm:flex-nowrap items-center gap-x-2 gap-y-1 px-3 py-1.5 rounded-full bg-surface/90 border border-border-light/80 text-[10.5px] font-mono text-text-muted shadow-2xs max-w-full">
+                  <div className="inline-flex flex-wrap sm:flex-nowrap items-center gap-x-2 gap-y-1 px-3 py-1.5 rounded-full bg-surface/90 border border-border-light/80 text-2xs font-mono text-text-muted shadow-2xs max-w-full">
                     <span className="flex items-center gap-1.5 font-semibold text-text-muted uppercase tracking-wider">
-                      <span className="p-0.5 rounded bg-primary/10 text-primary shrink-0 flex items-center justify-center">
+                      <span className="p-0.5 rounded-md bg-primary/10 text-primary shrink-0 flex items-center justify-center">
                         <ArrowDown className="w-3 h-3 animate-pulse" />
                       </span>
                       <span>Transition to Industry</span>
                     </span>
-                    <span className="text-[10px] text-text-muted/70 font-mono shrink-0">
+                    <span className="text-2xs text-text-muted font-mono shrink-0">
                       · Jun 2024
                     </span>
                   </div>
@@ -295,12 +295,12 @@ export function About() {
                     <span className="w-3.5 h-3.5 rounded-full bg-white border-2 border-border-strong group-hover/station:border-primary group-hover/station:scale-110 transition-all duration-200 shadow-2xs" />
                   </span>
                   
-                  <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono text-text-muted mb-1.5">
-                    <span className="flex items-center gap-1.5 font-bold uppercase tracking-wider text-text-muted group-hover/station:text-primary transition-colors duration-200">
+                  <div className="flex flex-wrap items-center justify-between gap-2 text-2xs font-mono text-text-muted mb-1.5">
+                    <span className="flex items-center gap-1.5 font-semibold uppercase tracking-wider text-text-muted group-hover/station:text-primary transition-colors duration-200">
                       <AccentureIcon className="w-3.5 h-3.5 text-text-muted group-hover/station:text-[#A100FF] transition-colors duration-200 shrink-0" />
                       First Role · Accenture
                     </span>
-                    <span className="px-2.5 py-0.5 rounded-full bg-surface border border-border-light/80 text-text-muted font-mono text-[10px]">
+                    <span className="px-2.5 py-0.5 rounded-full bg-surface border border-border-light/80 text-text-muted font-mono text-2xs">
                       Jun 2024 – Oct 2025 · 1 yr 5 mos
                     </span>
                   </div>
@@ -309,14 +309,14 @@ export function About() {
                     Advanced Application Engineering Analyst
                   </div>
                   
-                  <div className="flex items-center gap-2 text-text-muted text-xs sm:text-sm font-medium mt-1">
+                  <div className="flex items-center gap-2 text-text-muted text-sm font-medium mt-1">
                     <span className="p-1 rounded-md bg-white border border-border-light/80 shadow-2xs flex items-center justify-center shrink-0">
                       <AccentureIcon className="w-3.5 h-3.5 text-[#A100FF]" />
                     </span>
                     <span>Accenture in India</span>
                   </div>
                   
-                  <p className="text-xs sm:text-sm text-text-muted leading-relaxed mt-2 max-w-xl">
+                  <p className="text-sm text-text-muted leading-relaxed mt-2 max-w-xl">
                     Architected enterprise application pipelines, scaled cloud microservices, and implemented production CI/CD automation.
                   </p>
 
@@ -324,7 +324,7 @@ export function About() {
                     {MILESTONES[1].tags?.map((tag) => (
                       <span
                         key={tag}
-                        className="px-2 py-0.5 rounded-md bg-white/80 border border-border-light/80 text-[10px] font-mono text-text-muted"
+                        className="px-2 py-0.5 rounded-md bg-white/80 border border-border-light/80 text-2xs font-mono text-text-muted"
                       >
                         {tag}
                       </span>
@@ -334,14 +334,14 @@ export function About() {
 
                 {/* Transition 2: Accenture -> Strategy */}
                 <div className="relative flex items-center select-none py-0.5">
-                  <div className="inline-flex flex-wrap sm:flex-nowrap items-center gap-x-2 gap-y-1 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/25 text-[10.5px] font-mono text-primary shadow-2xs max-w-full">
-                    <span className="flex items-center gap-1.5 font-bold uppercase tracking-wider text-primary">
-                      <span className="p-0.5 rounded bg-primary/20 text-primary shrink-0 flex items-center justify-center">
+                  <div className="inline-flex flex-wrap sm:flex-nowrap items-center gap-x-2 gap-y-1 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/25 text-2xs font-mono text-primary shadow-2xs max-w-full">
+                    <span className="flex items-center gap-1.5 font-semibold uppercase tracking-wider text-primary">
+                      <span className="p-0.5 rounded-md bg-primary/20 text-primary shrink-0 flex items-center justify-center">
                         <ArrowDown className="w-3 h-3 animate-pulse" />
                       </span>
                       <span>Transition to AI Systems &amp; LLMOps</span>
                     </span>
-                    <span className="text-[10px] text-primary/80 font-mono font-medium shrink-0">
+                    <span className="text-2xs text-primary font-mono font-medium shrink-0">
                       · Oct 2025
                     </span>
                   </div>
@@ -357,12 +357,12 @@ export function About() {
                     <span className="relative inline-flex rounded-full h-3 w-3 bg-primary ring-4 ring-white shadow-sm" />
                   </span>
 
-                  <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono mb-1.5">
-                    <span className="flex items-center gap-1.5 font-bold uppercase tracking-wider text-primary">
+                  <div className="flex flex-wrap items-center justify-between gap-2 text-2xs font-mono mb-1.5">
+                    <span className="flex items-center gap-1.5 font-semibold uppercase tracking-wider text-primary">
                       <StrategyIcon className="w-3.5 h-3.5 text-primary shrink-0" />
                       Current Role · Strategy
                     </span>
-                    <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-700 font-semibold text-[10px] uppercase tracking-wide shrink-0 flex items-center gap-1.5">
+                    <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-700 font-semibold text-2xs uppercase tracking-wider shrink-0 flex items-center gap-1.5">
                       <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                       Oct 2025 – Present
                     </span>
@@ -372,14 +372,14 @@ export function About() {
                     AI Engineer
                   </div>
                   
-                  <div className="flex items-center gap-2 text-primary font-semibold text-xs sm:text-sm mt-1">
+                  <div className="flex items-center gap-2 text-primary font-semibold text-sm mt-1">
                     <span className="p-1 rounded-md bg-primary/10 border border-primary/25 shadow-2xs flex items-center justify-center shrink-0">
                       <StrategyIcon className="w-3.5 h-3.5 text-primary" />
                     </span>
                     <span>Strategy · Full-time</span>
                   </div>
                   
-                  <p className="text-xs sm:text-sm text-text-muted leading-relaxed mt-2 max-w-xl">
+                  <p className="text-sm text-text-muted leading-relaxed mt-2 max-w-xl">
                     Building compound AI architectures, autonomous agent workflows (LangGraph, ReWOO), GraphRAG with Neo4j, and high-throughput vLLM model serving.
                   </p>
 
@@ -387,7 +387,7 @@ export function About() {
                     {MILESTONES[2].tags?.map((tag) => (
                       <span
                         key={tag}
-                        className="px-2.5 py-0.5 rounded-md bg-primary/10 border border-primary/20 text-[10px] font-mono text-primary font-semibold"
+                        className="px-2.5 py-0.5 rounded-md bg-primary/10 border border-primary/20 text-2xs font-mono text-primary font-semibold"
                       >
                         {tag}
                       </span>
@@ -401,15 +401,15 @@ export function About() {
             {/* Location & Remote Availability Badges directly on canvas */}
             <div
               ref={footerBadgesRef}
-              className="pt-6 border-t border-border-light/70 flex flex-wrap items-center justify-between gap-3 text-xs font-mono text-text-muted"
+              className="pt-6 border-t border-border-light/70 flex flex-wrap items-center justify-between gap-3 text-sm font-sans text-text-muted"
             >
               <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-surface/80 border border-border-light/80 shadow-2xs">
                 <MapPin className="w-3.5 h-3.5 text-primary" />
                 <span>Pune, MH, India</span>
               </div>
               
-              <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-800 font-medium shadow-2xs">
-                <Globe className="w-3.5 h-3.5 text-emerald-600" />
+              <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-700 font-medium shadow-2xs">
+                <Globe className="w-3.5 h-3.5 text-emerald-700" />
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                 <span>Open to Remote Worldwide</span>
               </div>

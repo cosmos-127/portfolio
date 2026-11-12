@@ -195,7 +195,7 @@ export function Skills() {
                 stagger: 0.05,
                 duration: 0.5,
                 delay: 0.2 + i * 0.12,
-                ease: "power2.out",
+                ease: "power3.out",
                 clearProps: "transform,opacity",
               }
             );
@@ -210,7 +210,7 @@ export function Skills() {
     <section
       ref={sectionRef}
       id="skills"
-      className="py-28 md:py-36 bg-transparent section-divider-shimmer relative overflow-hidden"
+      className="py-28 md:py-36 bg-transparent section-divider relative overflow-hidden"
     >
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         
@@ -220,11 +220,11 @@ export function Skills() {
           className="mb-12 md:mb-16"
         >
           <div>
-            <div className="flex items-center gap-2.5 text-xs font-mono text-primary font-bold tracking-widest uppercase mb-3">
+            <div className="flex items-center gap-2.5 text-xs font-mono text-text-muted font-semibold tracking-wider uppercase mb-3">
               <span className="w-2 h-2 rounded-full bg-primary" />
               <TextScramble text="CORE SKILLS & TECHNICAL STACK" />
             </div>
-            <h2 className="font-gued font-bold text-3xl sm:text-4xl md:text-5xl lg:text-[3.25rem] text-text-main tracking-tight leading-[1.12]">
+            <h2 className="font-display font-bold text-h2 text-text-main tracking-tight leading-[1.12]">
               Technical skills & <span className="font-serif italic font-normal text-primary tracking-normal">architecture</span><span className="text-primary font-bold">.</span>
             </h2>
           </div>
@@ -263,7 +263,7 @@ export function Skills() {
                     <div className="flex items-center justify-between gap-2 pb-4 mb-4 border-b border-border-light/60 font-mono">
                       <div className="flex items-center gap-2">
                         <span className="w-1.5 h-1.5 rounded-full bg-primary" />
-                        <span className="text-text-muted text-[11px] tracking-widest uppercase font-semibold">
+                        <span className="text-text-muted text-2xs tracking-wider uppercase font-semibold">
                           {group.category}
                         </span>
                       </div>
@@ -273,12 +273,12 @@ export function Skills() {
                     </div>
 
                     {/* Category Title */}
-                    <h3 className="font-gued font-bold text-xl text-text-main tracking-tight mb-2">
+                    <h3 className="font-display font-bold text-xl text-text-main tracking-tight mb-2">
                       {group.title}
                     </h3>
 
                     {/* Architectural Synopsis directly on canvas */}
-                    <p className="font-sans text-xs text-text-muted leading-relaxed mb-6 min-h-[36px]">
+                    <p className="font-sans text-sm text-text-muted leading-relaxed mb-6 min-h-[4.25rem]">
                       {group.description}
                     </p>
 
@@ -307,7 +307,7 @@ export function Skills() {
         </div>
 
         {/* Bottom Architectural Summary Strip */}
-        <div className="mt-14 pt-6 border-t border-border-light/60 flex items-center justify-between gap-4 font-mono text-xs text-text-muted">
+        <div className="mt-14 pt-6 border-t border-border-light/60 flex items-center justify-between gap-4 font-sans text-sm text-text-muted">
           <div className="flex items-center gap-2">
             <Sparkles className="w-3.5 h-3.5 text-primary" />
             <span className="text-text-main font-semibold">Full-Stack AI Engineering:</span>

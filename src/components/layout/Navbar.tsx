@@ -66,7 +66,7 @@ export function Navbar() {
       <div className="fixed top-0 left-0 right-0 h-[2.5px] z-[100] bg-transparent pointer-events-none">
         <div
           ref={progressBarRef}
-          className="h-full bg-gradient-to-r from-primary via-rose-500 to-primary origin-left will-change-transform shadow-[0_0_10px_rgba(230,57,70,0.85)]"
+          className="h-full bg-primary origin-left will-change-transform shadow-glow"
           style={{ transform: "scaleX(0)" }}
         />
       </div>
@@ -104,10 +104,10 @@ export function Navbar() {
             <div className="relative flex items-center justify-center">
               <BrandIcon className="w-7 h-7 sm:w-7.5 sm:h-7.5 rounded-lg shadow-xs ring-1 ring-black/10 group-hover:ring-primary/40 group-hover:scale-105 transition-all duration-300" />
             </div>
-            <span className="font-secondary font-bold text-xl sm:text-2xl tracking-tight text-text-main group-hover:text-primary transition-colors">
+            <span className="font-display font-bold text-xl sm:text-2xl tracking-tight text-text-main group-hover:text-primary transition-colors">
               Gagan
             </span>
-            <span className="hidden sm:inline-block text-[10px] font-mono px-2 py-0.5 rounded-full bg-surface border border-border-light text-text-muted">
+            <span className="hidden sm:inline-block text-2xs font-mono px-2 py-0.5 rounded-full bg-surface border border-border-light text-text-muted">
               AI ENGINEER
             </span>
           </Link>
@@ -174,7 +174,7 @@ export function Navbar() {
             >
               <Link
                 href="#contact"
-                className="group flex items-center gap-1.5 text-xs font-mono bg-text-main text-white px-3.5 py-1.5 rounded-full hover:bg-primary transition-all duration-200 shadow-2xs"
+                className="group flex items-center gap-1.5 text-sm font-sans font-semibold bg-text-main text-white px-3.5 py-1.5 rounded-full hover:bg-primary-ink transition-all duration-200 shadow-2xs"
               >
                 <span>Get in touch</span>
                 <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-200" />
@@ -238,8 +238,8 @@ export function Navbar() {
             >
               {/* Subtle top specular sheen highlight */}
               <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent pointer-events-none z-20" />
-              <div className="flex flex-col gap-3 font-mono text-sm">
-                <div className="pb-3 border-b border-border-light text-xs text-text-muted">
+              <div className="flex flex-col gap-3 font-sans text-sm">
+                <div className="pb-3 border-b border-border-light font-mono text-xs tracking-wider text-text-muted">
                   <span>NAVIGATION</span>
                 </div>
                 {NAV_LINKS.map((link) => (
@@ -250,12 +250,12 @@ export function Navbar() {
                     className={cn(
                       "px-3 py-2 rounded-lg transition-colors flex items-center justify-between",
                       activeSection === link.href.substring(1)
-                        ? "bg-primary/10 text-primary font-bold"
+                        ? "bg-primary/10 text-primary font-semibold"
                         : "text-text-main hover:bg-surface"
                     )}
                   >
                     <span>{link.name}</span>
-                    <span className="text-xs text-text-muted font-light">→</span>
+                    <ArrowUpRight className="w-3.5 h-3.5 text-text-muted" />
                   </Link>
                 ))}
                 <div className="pt-3 border-t border-border-light mt-1 flex flex-col gap-2">
@@ -263,13 +263,13 @@ export function Navbar() {
                     onClick={() => {
                       toggleSound();
                     }}
-                    className="w-full flex items-center justify-between px-3 py-2 rounded-lg bg-surface border border-border-light text-xs text-text-main font-mono cursor-pointer"
+                    className="w-full flex items-center justify-between px-3 py-2 rounded-lg bg-surface border border-border-light text-sm text-text-main cursor-pointer"
                   >
                     <span className="flex items-center gap-2">
                       {soundActive ? <Volume2 className="w-3.5 h-3.5 text-primary" /> : <VolumeX className="w-3.5 h-3.5" />}
                       <span>Micro-Haptics</span>
                     </span>
-                    <span className={soundActive ? "text-emerald-600 font-bold" : "text-text-muted"}>
+                    <span className={soundActive ? "font-mono text-xs text-emerald-700 font-semibold" : "font-mono text-xs text-text-muted"}>
                       {soundActive ? "ENABLED" : "MUTED"}
                     </span>
                   </button>
@@ -277,7 +277,7 @@ export function Navbar() {
                   <Link
                     href="#contact"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="w-full flex items-center justify-center gap-2 text-center py-2.5 bg-primary text-white text-xs rounded-xl font-mono hover:bg-primary/90 transition-colors shadow-2xs"
+                    className="w-full flex items-center justify-center gap-2 text-center py-2.5 bg-primary-ink text-white text-sm font-semibold rounded-xl hover:bg-primary transition-colors shadow-2xs"
                   >
                     <span>Let&apos;s talk</span>
                     <ArrowUpRight className="w-3.5 h-3.5" />

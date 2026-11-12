@@ -43,7 +43,7 @@ export function Hero() {
     <section
       ref={containerRef}
       id="top"
-      className="relative min-h-[94vh] flex items-center pt-28 pb-20 overflow-hidden bg-grid-blueprint"
+      className="relative min-h-[94vh] flex items-center pt-28 pb-20 overflow-hidden"
     >
       {/* Hero Foreground Content */}
       <div className="max-w-7xl mx-auto px-6 w-full z-10 relative">
@@ -58,17 +58,17 @@ export function Hero() {
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.3 }}
-              className="glass-pill inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-mono text-text-muted shadow-2xs select-none hover:border-primary/30 transition-colors"
+              className="glass-pill inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-2xs sm:text-xs font-sans text-text-muted shadow-2xs select-none hover:border-primary/30 transition-colors"
             >
               <span className="relative flex h-2 w-2 shrink-0">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" />
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-primary" />
               </span>
-              <span className="text-text-main font-semibold tracking-tight text-[11px] sm:text-xs">
+              <span className="text-text-main font-semibold">
                 AI Systems Engineer
               </span>
-              <span className="text-text-muted text-[10px]">·</span>
-              <span className="text-text-muted text-[11px]">
+              <span>·</span>
+              <span>
                 LLMOps &amp; Autonomous Agents
               </span>
             </motion.div>
@@ -79,12 +79,12 @@ export function Hero() {
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.5, delay: 0.55 }}
-                className="text-text-muted font-mono text-sm tracking-wide"
+                className="text-text-muted font-sans text-base"
               >
                 Hi, I&apos;m
               </motion.p>
 
-              <h1 className="font-gued font-bold text-6xl sm:text-7xl md:text-8xl lg:text-[6.5rem] tracking-tight leading-[0.95]">
+              <h1 className="font-display font-bold text-display tracking-tight leading-[0.95]">
                 <motion.span
                   initial={{ y: 50, opacity: 0, filter: "blur(4px)" }}
                   animate={{ y: 0, opacity: 1, filter: "blur(0px)" }}
@@ -120,7 +120,7 @@ export function Hero() {
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 1.15 }}
-                className="font-serif italic text-2xl sm:text-3xl text-text-muted/90 font-normal tracking-normal pt-0.5"
+                className="font-serif italic text-2xl sm:text-3xl text-text-muted font-normal tracking-normal pt-0.5"
               >
                 Building AI systems that reason, retrieve &amp; act
               </motion.p>
@@ -140,7 +140,7 @@ export function Hero() {
               >
                 <Link
                   href="#projects"
-                  className="group inline-flex items-center gap-2 px-6 py-3 rounded-full bg-primary text-white font-mono text-xs tracking-wide shadow-sm shadow-primary/25 hover:shadow-lg hover:shadow-primary/35 transition-all duration-200 cursor-pointer"
+                  className="group inline-flex items-center gap-2 px-6 py-3 rounded-full bg-primary-ink text-white font-sans text-sm font-semibold shadow-sm shadow-primary/25 hover:shadow-lg hover:shadow-primary/35 transition-all duration-200 cursor-pointer"
                 >
                   <span>View Projects</span>
                   <ArrowDown className="w-3.5 h-3.5 group-hover:translate-y-1 transition-transform duration-200" />
@@ -156,7 +156,7 @@ export function Hero() {
                   href="https://github.com/cosmos-127"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="glass-pill inline-flex items-center gap-2 px-6 py-3 rounded-full text-text-main font-mono text-xs hover:border-text-main hover:bg-white transition-all duration-200 shadow-2xs cursor-pointer"
+                  className="glass-pill inline-flex items-center gap-2 px-6 py-3 rounded-full text-text-main font-sans text-sm font-semibold hover:border-text-main hover:bg-white transition-all duration-200 shadow-2xs cursor-pointer"
                 >
                   <GithubIcon className="w-3.5 h-3.5" />
                   <span>GitHub</span>

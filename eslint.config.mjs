@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Vendored engine, not ours to lint.
+    "src/lib/hairline/kernel.js",
   ]),
 ]);
 
